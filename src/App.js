@@ -4,11 +4,13 @@ import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import RestaurantsList from './pages/RestaurantsList'
 import Map from './pages/Map'
+import { LoadScript } from '@react-google-maps/api'
 
 function App () {
   return (
     <Router>
       <Navbar />
+      <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}/>
       <Routes>
         <Route path="/restaurants" element={<RestaurantsList />} />
         <Route path="/map" element={<Map/>} />

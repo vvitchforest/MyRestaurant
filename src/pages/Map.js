@@ -13,6 +13,44 @@ const Map = () => {
   const defaultCenter = {
     lat: 60.21978930158246, lng: 24.757250617314764
   }
+  const styles = {
+    hide: [
+      {
+        featureType: 'administrative',
+        elementType: 'geometry',
+        stylers: [
+          {
+            visibility: 'off'
+          }
+        ]
+      },
+      {
+        featureType: 'poi',
+        stylers: [
+          {
+            visibility: 'off'
+          }
+        ]
+      },
+      {
+        featureType: 'road',
+        elementType: 'labels.icon',
+        stylers: [
+          {
+            visibility: 'off'
+          }
+        ]
+      },
+      {
+        featureType: 'transit',
+        stylers: [
+          {
+            visibility: 'off'
+          }
+        ]
+      }
+    ]
+  }
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
@@ -50,6 +88,7 @@ const Map = () => {
           center={checkClick
             ? currentPos
             : defaultCenter}
+            options={{ streetViewControl: false, clickableIcons: false, styles: styles.hide }}
             onLoad={onLoad}
             onUnmount={onUnmount}>
             <Button onClick={panToLocation} style={{ paddingLeft: 250 }}>Current Location</Button>

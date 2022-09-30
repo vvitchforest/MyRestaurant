@@ -1,17 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 //  import { Container } from '@mui/material'
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
+import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
 import { Button } from '@mui/material'
 
 const Map = () => {
   const [currentPos, setCurrentPos] = useState({})
   const [checkClick, setClick] = useState(false)
+  const [libraries] = useState(['places', 'geometry'])
+  const placesList = []
+  const [placesFinal, setPlacesFinal] = useState([])
   const mapStyles = {
     height: '95vh',
     width: '100%'
   }
   const defaultCenter = {
-    lat: 60.21978930158246, lng: 24.757250617314764
+    lat: 60.21978930158246,
+    lng: 24.757250617314764
   }
   const styles = {
     hide: [
@@ -53,31 +57,75 @@ const Map = () => {
   }
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
+    libraries
   })
   const [map, setMap] = React.useState(null)
+  const mapRef = React.useRef()
+  /* const request = {
+    location: currentPos,
+    radius: '2000',
+    type: ['restaurant']
+  } */
 
   const onLoad = React.useCallback(function callback (map) {
-    const bounds = new window.google.maps.LatLngBounds(defaultCenter)
-    map.fitBounds(bounds)
+    /* const bounds = new window.google.maps.LatLngBounds(defaultCenter)
+    map.fitBounds(bounds) */
     setMap(map)
+    mapRef.current = map
   }, [])
 
   const onUnmount = React.useCallback(function callback (map) {
     setMap(null)
   }, [])
-  const getPos = position => {
-    if (navigator.geolocation) {
-      const currentPosition = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
+  /* const nearbySearch = React.useCallback(function callback (results, status) {
+    if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+      for (let i = 0; i < results.length; i++) {
+        createMarker(results[i])
       }
-      setCurrentPos(currentPosition)
     }
-  }
+  }, [])
+  const createMarker = (place) => {
+    console.log('Place', place)
+  } */
+  useEffect(() => {
+    const getPos = (position) => {
+      if (navigator.geolocation) {
+        const currentPosition = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        }
+        setCurrentPos(currentPosition)
+      }
+    }
+    navigator.geolocation.getCurrentPosition(getPos)
+  }, [])
   const panToLocation = () => {
     setClick(true)
-    navigator.geolocation.getCurrentPosition(getPos)
+    console.log('Current', currentPos)
+    if (currentPos !== {}) {
+      const request = {
+        location: currentPos,
+        radius: '2000',
+        type: ['restaurant']
+      }
+
+      const service = new window.google.maps.places.PlacesService(mapRef.current)
+      service.nearbySearch(request, callback)
+
+      function callback (results, status) {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          for (let i = 0; i < results.length; i++) {
+            createMarker(results[i])
+          }
+        }
+      }
+    }
+  }
+  const createMarker = (place) => {
+    console.log('Place', place)
+    placesList.push(place)
+    setPlacesFinal(placesList)
   }
   return isLoaded
     ? (
@@ -91,8 +139,26 @@ const Map = () => {
             options={{ streetViewControl: false, clickableIcons: false, styles: styles.hide }}
             onLoad={onLoad}
             onUnmount={onUnmount}>
-            <Button onClick={panToLocation} style={{ paddingLeft: 250 }}>Current Location</Button>
+            <Button onClick={() => panToLocation()} style={{ marginLeft: 250 }}>Current Location</Button>
             { console.log(map) }
+            {<Marker
+                icon={'https://www.robotwoods.com/dev/misc/bluecircle.png'}
+                position={currentPos}/>}
+                {checkClick
+                  ? placesFinal.map(function (results) {
+                    return (
+                      console.log('loc', results.geometry.location.lat()),
+                    <Marker clickable={true} key={results.place_id} position={{ lat: results.geometry.location.lat(), lng: results.geometry.location.lng() }}>
+                      { /* <InfoWindow
+                      position={{ lat: results.geometry.location.lat(), lng: results.geometry.location.lng() }}
+                      options={{ maxWidth: 300 }}>
+                      <span>{results.name}</span>
+                    </InfoWindow> */ }
+                      </Marker>
+                    )
+                  })
+                  : console.log('nothing', 'nothing')
+                }
            <></>
           </GoogleMap>
       )

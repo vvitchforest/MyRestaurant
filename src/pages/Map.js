@@ -4,6 +4,10 @@ import { GoogleMap } from "@react-google-maps/api";
 import Drawer from "../components/Drawer";
 import { useState } from "react";
 import "../Drawer.css";
+import logo from "./restaurant-image-placeholder.png";
+import restaurantMenuLogo from "./restaurant-menu.png";
+import restaurantDirectionsLogo from "./restaurant-directions.png";
+import { CenterFocusStrong } from "@mui/icons-material";
 
 const Map = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,12 +49,58 @@ const Map = () => {
             <button type="button" onClick={() => setIsOpen(false)}>
               Close
             </button>
-            <p>The drawer content!</p>
-            <input type="text" />
+            <div style={style}>
+              <img
+                src={logo}
+                width={"30%"}
+                height={"100%"}
+                alt="Restaurant logo"
+              />
+              <div style={padding}>
+                <p style={textStyle}>Open/closed</p>
+                <p style={textStyle}>Restaurant name</p>
+                <p style={textStyle}>Address</p>
+              </div>
+              <div style={iconStyle}>
+                <img src={restaurantMenuLogo}
+                alt="Restaurant menu logo"
+                height={"30%"}
+                width={"30%"}/>
+                <img src={restaurantDirectionsLogo}
+                alt="Restaurant menu logo"
+                height={"30%"}
+                width={"30%"}/>
+              </div>
+            </div>
           </div>
         </Drawer>
       </div>
     </div>
   );
 };
+
+const padding = {
+  padding: "12px",
+}
+
+const style = {
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: 'space-between',
+  backgroundColor: "#f1f1f1",
+  padding: "12px",
+};
+
+const textStyle = {
+  fontSize: '2vw',
+}
+
+const iconStyle = {
+  display: "flex",
+  alignItems: 'end',
+  flexDirection: "column",
+  justifyContent: 'space-around',
+  padding: "12px",
+};
+
 export default Map;

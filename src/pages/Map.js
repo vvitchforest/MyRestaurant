@@ -160,7 +160,7 @@ const Map = () => {
     ? (
       <div className="app">
       <div className="container">
-        <button
+        {/* <button
           type="button"
           onClick={() => {
             setIsOpen(!isOpen);
@@ -168,7 +168,7 @@ const Map = () => {
           }}
         >
           Trigger Drawer
-        </button>
+        </button> */}
         <GoogleMap
           id="map"
           mapContainerStyle={mapStyles}

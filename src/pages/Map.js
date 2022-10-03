@@ -1,27 +1,35 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box } from '@mui/material'
-import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import Drawer from "../components/Drawer";
 import "../Drawer.css";
 import logo from "./restaurant-image-placeholder.png";
 import restaurantMenuLogo from "./restaurant-menu.png";
 import restaurantDirectionsLogo from "./restaurant-directions.png";
 import { CenterFocusStrong } from "@mui/icons-material";
+import { IconButton } from "@mui/material";
 import { Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+// import RestaurantIcon from '@mui/icons-material/Restaurant'
+import MyLocationIcon from '@mui/icons-material/MyLocation'
 
 const Map = () => {
   const [currentPos, setCurrentPos] = useState({});
   const [checkClick, setClick] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [checkNextPage, setNextPage] = useState(false)
+  const [libraries] = useState(['places', 'geometry'])
+  const placesList = []
+  // let getNextPage
+  const [placesFinal, setPlacesFinal] = useState([])
   const mapStyles = {
     height: "95vh",
     width: "100%",
   };
   const defaultCenter = {
     lat: 60.21978930158246,
-    lng: 24.757250617314764,
-  };
+    lng: 24.757250617314764
+  }
   const styles = {
     hide: [
       {
@@ -54,48 +62,103 @@ const Map = () => {
         featureType: "transit",
         stylers: [
           {
-            visibility: "off",
-          },
-        ],
-      },
-    ],
-  };
+            visibility: 'off'
+          }
+        ]
+      }
+    ]
+  }
+  /* const icon = {
+    url: require('../restaurant icon.png'),
+    scaledSize: new window.google.maps.Size(90, 42)
+  } */
   const { isLoaded } = useJsApiLoader({
-    id: "google-map-script",
+    id: 'google-map-script',
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-  });
-  const [map, setMap] = React.useState(null);
+    libraries
+  })
+  const [map, setMap] = React.useState(null)
+  const mapRef = React.useRef()
+  /* const request = {
+    location: currentPos,
+    radius: '2000',
+    type: ['restaurant']
+  } */
 
-  const onLoad = React.useCallback(function callback(map) {
-    const bounds = new window.google.maps.LatLngBounds(defaultCenter);
-    map.fitBounds(bounds);
-    setMap(map);
-  }, []);
+  const onLoad = React.useCallback(function callback (map) {
+    /* const bounds = new window.google.maps.LatLngBounds(defaultCenter)
+    map.fitBounds(bounds) */
+    setMap(map)
+    mapRef.current = map
+  }, [])
 
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null);
-  }, []);
-  const getPos = (position) => {
-    if (navigator.geolocation) {
-      const currentPosition = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      };
-      setCurrentPos(currentPosition);
+  const onUnmount = React.useCallback(function callback (map) {
+    setMap(null)
+  }, [])
+  /* const nearbySearch = React.useCallback(function callback (results, status) {
+    if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+      for (let i = 0; i < results.length; i++) {
+        createMarker(results[i])
+      }
     }
-  };
+  }, [])
+  const createMarker = (place) => {
+    console.log('Place', place)
+  } */
+  useEffect(() => {
+    const getPos = (position) => {
+      if (navigator.geolocation) {
+        const currentPosition = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        }
+        setCurrentPos(currentPosition)
+      }
+    }
+    navigator.geolocation.getCurrentPosition(getPos)
+  }, [])
   const panToLocation = () => {
-    setClick(true);
-    navigator.geolocation.getCurrentPosition(getPos);
-  };
+    setClick(true)
+    console.log('Current', currentPos)
+    if (currentPos !== {}) {
+      const request = {
+        location: currentPos,
+        radius: '2000',
+        type: ['restaurant']
+      }
+
+      const service = new window.google.maps.places.PlacesService(mapRef.current)
+      service.nearbySearch(request, callback)
+
+      function callback (results, status, pagination) {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          for (let i = 0; i < results.length; i++) {
+            createMarker(results[i])
+          }
+          if (pagination && pagination.hasNextPage) {
+            pagination.nextPage()
+            setTimeout(function () {
+              setNextPage(true)
+            }, 3000)
+          }
+        }
+      }
+    }
+  }
+  const createMarker = (place) => {
+    console.log('Place', place)
+    placesList.push(place)
+    setPlacesFinal(placesList)
+  }
 
   const isRestaurantOpenBool = true;
   let isRestaurantOpen = "Open";
   let restaurantName = "Dreams Cafe";
   let restaurantAddress = "Karaportti 4, 02610 Espoo";
-
-  return isLoaded ? (
-    <div className="app">
+  
+  return isLoaded
+    ? (
+      <div className="app">
       <div className="container">
         <button
           type="button"
@@ -106,7 +169,6 @@ const Map = () => {
         >
           Trigger Drawer
         </button>
-
         <GoogleMap
           id="map"
           mapContainerStyle={mapStyles}

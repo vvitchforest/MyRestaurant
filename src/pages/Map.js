@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-//  import { Container } from '@mui/material'
+import { Box } from '@mui/material'
 import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import Drawer from "../components/Drawer";
 import "../Drawer.css";
@@ -153,7 +153,10 @@ const Map = () => {
                     backgroundColor: isRestaurantOpenBool
                       ? "#DAF7A6"
                       : "#FF8266",
-                    fontSize: "3vw",
+                    fontSize: "4vw",
+                    width: '50%',
+                    padding: '5px',
+                    borderRadius: 12,
                   }}
                 >
                   {isRestaurantOpen}
@@ -162,16 +165,21 @@ const Map = () => {
                 <p style={textStyle}>{restaurantAddress}</p>
               </div>
               <div style={iconContainerStyle}>
+                <Box sx={iconBoxStyle}>
                 <img
                   src={restaurantMenuLogo}
                   alt="Restaurant menu logo"
-                  style={iconStyle}
+                  style={{height: '100%', width: '100%'}}
+                  
                 />
+                </Box>
+                <Box sx={iconBoxStyle}>
                 <img
                   src={restaurantDirectionsLogo}
                   alt="Restaurant menu logo"
-                  style={iconStyle}
+                  style={{height: '100%', width: '100%'}}
                 />
+                </Box>
               </div>
             </div>
           </div>
@@ -197,6 +205,7 @@ const style = {
 
 const textStyle = {
   fontSize: "3vw",
+  padding: '5px',
 };
 
 const iconContainerStyle = {
@@ -208,15 +217,12 @@ const iconContainerStyle = {
   padding: "12px",
 };
 
-const iconStyle = {
-  minWidth: "20%",
-  maxWidth: "50%",
-  minHeight: "20%",
-  maxHeight: "50%",
-  width: "30%",
-  height: "30%",
+const iconBoxStyle = {
+  boxShadow: 3,
+  width: "40%",
+  height: "40%",
   border: "solid #000",
-  borderWidth: "2px",
+  borderWidth: "1px",
   borderColor: "#0250a3",
 };
 

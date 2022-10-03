@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react'
 //  import { Container } from '@mui/material'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
-import { Button } from '@mui/material'
+import { IconButton } from '@mui/material'
+// import RestaurantIcon from '@mui/icons-material/Restaurant'
+import MyLocationIcon from '@mui/icons-material/MyLocation'
 
 const Map = () => {
   const [currentPos, setCurrentPos] = useState({})
   const [checkClick, setClick] = useState(false)
+  const [checkNextPage, setNextPage] = useState(false)
   const [libraries] = useState(['places', 'geometry'])
   const placesList = []
+  // let getNextPage
   const [placesFinal, setPlacesFinal] = useState([])
   const mapStyles = {
     height: '95vh',
@@ -55,6 +59,10 @@ const Map = () => {
       }
     ]
   }
+  /* const icon = {
+    url: require('../restaurant icon.png'),
+    scaledSize: new window.google.maps.Size(90, 42)
+  } */
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -113,10 +121,16 @@ const Map = () => {
       const service = new window.google.maps.places.PlacesService(mapRef.current)
       service.nearbySearch(request, callback)
 
-      function callback (results, status) {
+      function callback (results, status, pagination) {
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
           for (let i = 0; i < results.length; i++) {
             createMarker(results[i])
+          }
+          if (pagination && pagination.hasNextPage) {
+            pagination.nextPage()
+            setTimeout(function () {
+              setNextPage(true)
+            }, 3000)
           }
         }
       }
@@ -139,7 +153,7 @@ const Map = () => {
             options={{ streetViewControl: false, clickableIcons: false, styles: styles.hide }}
             onLoad={onLoad}
             onUnmount={onUnmount}>
-            <Button onClick={() => panToLocation()} style={{ marginLeft: 250 }}>Current Location</Button>
+            <IconButton onClick={() => panToLocation()} style={{ marginLeft: 250 }} color={'primary'}><MyLocationIcon /></IconButton>
             { console.log(map) }
             {<Marker
                 icon={'https://www.robotwoods.com/dev/misc/bluecircle.png'}
@@ -147,8 +161,7 @@ const Map = () => {
                 {checkClick
                   ? placesFinal.map(function (results) {
                     return (
-                      console.log('loc', results.geometry.location.lat()),
-                    <Marker clickable={true} key={results.place_id} position={{ lat: results.geometry.location.lat(), lng: results.geometry.location.lng() }}>
+                    <Marker clickable={true} icon={{ url: require('../restaurant icon.png'), scaledSize: new window.google.maps.Size(50, 42) }} key={results.place_id} position={{ lat: results.geometry.location.lat(), lng: results.geometry.location.lng() }}>
                       { /* <InfoWindow
                       position={{ lat: results.geometry.location.lat(), lng: results.geometry.location.lng() }}
                       options={{ maxWidth: 300 }}>
@@ -159,6 +172,19 @@ const Map = () => {
                   })
                   : console.log('nothing', 'nothing')
                 }
+                {checkNextPage
+                  ? placesFinal.map(function (results) {
+                    return (
+                  <Marker clickable={true} icon={{ url: require('../restaurant icon.png'), scaledSize: new window.google.maps.Size(50, 42) }} key={results.place_id} position={{ lat: results.geometry.location.lat(), lng: results.geometry.location.lng() }}>
+                    { /* <InfoWindow
+                    position={{ lat: results.geometry.location.lat(), lng: results.geometry.location.lng() }}
+                    options={{ maxWidth: 300 }}>
+                    <span>{results.name}</span>
+                  </InfoWindow> */ }
+                    </Marker>
+                    )
+                  })
+                  : console.log('nothing', 'nothing')}
            <></>
           </GoogleMap>
       )

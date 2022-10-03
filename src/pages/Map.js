@@ -19,6 +19,12 @@ const Map = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [checkNextPage, setNextPage] = useState(false);
   const [libraries] = useState(["places", "geometry"]);
+
+  const [restaurantBusinessStatusBool, setRestaurantBusinessStatusBool] = useState(false)
+  const [restaurantBusinessStatus, setRestaurantBusinessStatus] = useState("unknown")
+  const [restaurantName, setRestaurantName] = useState("unknown")
+  const [restaurantAddress, setRestaurantAddress] = useState("unknown")
+
   const placesList = [];
   // let getNextPage
   const [placesFinal, setPlacesFinal] = useState([]);
@@ -153,10 +159,20 @@ const Map = () => {
     setPlacesFinal(placesList);
   };
 
-  const isRestaurantOpenBool = true;
-  let isRestaurantOpen = "Open";
-  let restaurantName = "Dreams Cafe";
-  let restaurantAddress = "Karaportti 4, 02610 Espoo";
+  
+
+  const setRestaurantInfo =(businessStatus, restaurantNameNew, restaurantAddressNew) => {
+    if(businessStatus != "OPERATIONAL") {
+      setRestaurantBusinessStatusBool(false);
+      setRestaurantBusinessStatus("Closed");
+    } else {
+      setRestaurantBusinessStatusBool(true);
+      setRestaurantBusinessStatus("Open");
+    }
+
+    setRestaurantName(restaurantNameNew);
+    setRestaurantAddress(restaurantAddressNew);
+  }
 
   return isLoaded ? (
     <div className="app">
@@ -211,6 +227,11 @@ const Map = () => {
                       lat: results.geometry.location.lat(),
                       lng: results.geometry.location.lng(),
                     }}
+                    onClick={() => {
+                      setRestaurantInfo(results.business_status, results.name, results.vicinity)
+                      setIsOpen(!isOpen);
+                      console.log(restaurantBusinessStatus, restaurantName, restaurantAddress);
+                    }}
                   >
                     {/* <InfoWindow
                       position={{ lat: results.geometry.location.lat(), lng: results.geometry.location.lng() }}
@@ -235,6 +256,11 @@ const Map = () => {
                       lat: results.geometry.location.lat(),
                       lng: results.geometry.location.lng(),
                     }}
+                    onClick={() => {
+                      setRestaurantInfo(results.business_status, results.name, results.vicinity)
+                      setIsOpen(!isOpen);
+                      console.log(restaurantBusinessStatus, restaurantName, restaurantAddress);
+                    }}
                   >
                     {/* <InfoWindow
                     position={{ lat: results.geometry.location.lat(), lng: results.geometry.location.lng() }}
@@ -247,7 +273,6 @@ const Map = () => {
             : console.log("nothing", "nothing")}
           <></>
         </GoogleMap>
-
         <Drawer
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
@@ -271,7 +296,7 @@ const Map = () => {
               <div style={{ padding: "12px", flex: 2 }}>
                 <p
                   style={{
-                    backgroundColor: isRestaurantOpenBool
+                    backgroundColor: restaurantBusinessStatusBool
                       ? "#DAF7A6"
                       : "#FF8266",
                     fontSize: "4vw",
@@ -280,7 +305,7 @@ const Map = () => {
                     borderRadius: 12,
                   }}
                 >
-                  {isRestaurantOpen}
+                  {restaurantBusinessStatus}
                 </p>
                 <p style={textStyle}>{restaurantName}</p>
                 <p style={textStyle}>{restaurantAddress}</p>

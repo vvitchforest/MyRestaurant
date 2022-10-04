@@ -3,14 +3,13 @@ import { Box } from "@mui/material";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import Drawer from "../components/Drawer";
 import "../Drawer.css";
-import logo from "./restaurant-image-placeholder.png";
-import restaurantMenuLogo from "./restaurant-menu.png";
-import restaurantDirectionsLogo from "./restaurant-directions.png";
+import DirectionsIcon from "@mui/icons-material/Directions";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
+import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import { CenterFocusStrong } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import { Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-// import RestaurantIcon from '@mui/icons-material/Restaurant'
 import MyLocationIcon from "@mui/icons-material/MyLocation";
 
 const Map = () => {
@@ -20,10 +19,12 @@ const Map = () => {
   const [checkNextPage, setNextPage] = useState(false);
   const [libraries] = useState(["places", "geometry"]);
 
-  const [restaurantBusinessStatusBool, setRestaurantBusinessStatusBool] = useState(false)
-  const [restaurantBusinessStatus, setRestaurantBusinessStatus] = useState("unknown")
-  const [restaurantName, setRestaurantName] = useState("unknown")
-  const [restaurantAddress, setRestaurantAddress] = useState("unknown")
+  const [restaurantBusinessStatusBool, setRestaurantBusinessStatusBool] =
+    useState(false);
+  const [restaurantBusinessStatus, setRestaurantBusinessStatus] =
+    useState("unknown");
+  const [restaurantName, setRestaurantName] = useState("unknown");
+  const [restaurantAddress, setRestaurantAddress] = useState("unknown");
 
   const placesList = [];
   // let getNextPage
@@ -159,10 +160,12 @@ const Map = () => {
     setPlacesFinal(placesList);
   };
 
-  
-
-  const setRestaurantInfo =(businessStatus, restaurantNameNew, restaurantAddressNew) => {
-    if(businessStatus != "OPERATIONAL") {
+  const setRestaurantInfo = (
+    businessStatus,
+    restaurantNameNew,
+    restaurantAddressNew
+  ) => {
+    if (businessStatus != "OPERATIONAL") {
       setRestaurantBusinessStatusBool(false);
       setRestaurantBusinessStatus("Closed");
     } else {
@@ -172,7 +175,7 @@ const Map = () => {
 
     setRestaurantName(restaurantNameNew);
     setRestaurantAddress(restaurantAddressNew);
-  }
+  };
 
   return isLoaded ? (
     <div className="app">
@@ -228,9 +231,17 @@ const Map = () => {
                       lng: results.geometry.location.lng(),
                     }}
                     onClick={() => {
-                      setRestaurantInfo(results.business_status, results.name, results.vicinity)
+                      setRestaurantInfo(
+                        results.business_status,
+                        results.name,
+                        results.vicinity
+                      );
                       setIsOpen(!isOpen);
-                      console.log(restaurantBusinessStatus, restaurantName, restaurantAddress);
+                      console.log(
+                        restaurantBusinessStatus,
+                        restaurantName,
+                        restaurantAddress
+                      );
                     }}
                   >
                     {/* <InfoWindow
@@ -257,9 +268,17 @@ const Map = () => {
                       lng: results.geometry.location.lng(),
                     }}
                     onClick={() => {
-                      setRestaurantInfo(results.business_status, results.name, results.vicinity)
+                      setRestaurantInfo(
+                        results.business_status,
+                        results.name,
+                        results.vicinity
+                      );
                       setIsOpen(!isOpen);
-                      console.log(restaurantBusinessStatus, restaurantName, restaurantAddress);
+                      console.log(
+                        restaurantBusinessStatus,
+                        restaurantName,
+                        restaurantAddress
+                      );
                     }}
                   >
                     {/* <InfoWindow
@@ -285,13 +304,16 @@ const Map = () => {
               </Button>
             </div>
             <div style={style}>
-              <div style={{ padding: "12px", flex: 1 }}>
-                <img
-                  src={logo}
-                  width={"100%"}
-                  height={"100%"}
-                  alt="Restaurant logo"
-                />
+              <div
+                style={{
+                  padding: "12px",
+                  flex: 1,
+                  border: "solid #000",
+                  borderWidth: "1px",
+                  borderColor: "#0250a3",
+                }}
+              >
+                <ImageOutlinedIcon sx={{ height: "100%", width: "100%" }} />
               </div>
               <div style={{ padding: "12px", flex: 2 }}>
                 <p
@@ -312,18 +334,10 @@ const Map = () => {
               </div>
               <div style={iconContainerStyle}>
                 <Box sx={iconBoxStyle}>
-                  <img
-                    src={restaurantMenuLogo}
-                    alt="Restaurant menu logo"
-                    style={{ height: "100%", width: "100%" }}
-                  />
+                  <RestaurantMenuIcon sx={{ height: "100%", width: "100%" }} />
                 </Box>
                 <Box sx={iconBoxStyle}>
-                  <img
-                    src={restaurantDirectionsLogo}
-                    alt="Restaurant menu logo"
-                    style={{ height: "100%", width: "100%" }}
-                  />
+                  <DirectionsIcon sx={{ height: "100%", width: "100%" }} />
                 </Box>
               </div>
             </div>
@@ -345,7 +359,6 @@ const style = {
   display: "flex",
   flexDirection: "row",
   justifyContent: "space-between",
-  // backgroundColor: "#f1f1f1",
 };
 
 const textStyle = {
@@ -363,11 +376,15 @@ const iconContainerStyle = {
 };
 
 const iconBoxStyle = {
+  display: "flex",
+  justifyContent: "space-around",
+  flexDirection: "column",
   boxShadow: 3,
   width: "40%",
   height: "40%",
   border: "solid #000",
   borderWidth: "1px",
+  borderRadius: "6px",
   borderColor: "#0250a3",
 };
 

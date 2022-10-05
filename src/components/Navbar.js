@@ -6,7 +6,9 @@ import {
   Drawer,
   List,
   Box,
-  Divider
+  Divider,
+  ToggleButtonGroup,
+  ToggleButton as MUIToggleButton
 } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -14,6 +16,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import HomeIcon from '@mui/icons-material/Home'
 import RestaurantIcon from '@mui/icons-material/Restaurant'
 import MapIcon from '@mui/icons-material/Map'
+import { styled } from "@mui/material/styles";
 
 import { Link } from 'react-router-dom'
 
@@ -25,6 +28,22 @@ const Navbar = () => {
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
   }
+
+  const ToggleButton = styled(MUIToggleButton)({
+    "&.Mui-selected, &.Mui-selected:hover": {
+      color: "white",
+      backgroundColor: '#42A5F5'
+    }
+  })
+
+  const [alignment, setAlignment] = useState('web');
+
+  const handleChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: string,
+  ) => {
+    setAlignment(newAlignment);
+  };
 
   return (
     <>
@@ -53,6 +72,16 @@ const Navbar = () => {
           >
             MyRestaurant
           </Typography>
+          <ToggleButtonGroup
+              sx={{marginLeft: "20px", marginRight: "20px", display: "flex", flex: 1, justifyContent: "flex-end"}}
+              value={alignment}
+              exclusive
+              onChange={handleChange}
+              aria-label="Platform"
+            >
+              <ToggleButton value="en">EN</ToggleButton>
+              <ToggleButton value="fi">FI</ToggleButton>
+          </ToggleButtonGroup>
           <List sx={{ display: { xs: 'none', md: 'flex' } }}>
             <NavItem text="Home" icon={<HomeIcon />} link={Link} to="/" />
             <NavItem

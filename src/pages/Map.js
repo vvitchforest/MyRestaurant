@@ -113,6 +113,7 @@ const Map = () => {
     console.log('Place', place)
   } */
   useEffect(() => {
+    
     const getPos = (position) => {
       if (navigator.geolocation) {
         const currentPosition = {

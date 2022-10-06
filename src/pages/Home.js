@@ -1,11 +1,6 @@
 import { React, useState, useEffect } from 'react'
 import sodexoMenuService from '../services/sodexomenu'
-import {
-  Container,
-  Box,
-  Paper,
-  Typography
-} from '@mui/material'
+import { Container, Box, Paper, Typography } from '@mui/material'
 import Moment from 'moment'
 import RestaurantMenu from '../components/RestaurantMenu'
 
@@ -18,7 +13,9 @@ const Home = () => {
   useEffect(() => {
     const getSodexoMenu = async () => {
       const menu = await sodexoMenuService.getMenu(currentDateApiFormat)
-      setMenu(menu.courses)
+      const menuObject = { name: menu.meta.ref_title, menu: menu.courses }
+      setMenu(menuObject)
+      console.log('menuObject', menuObject)
     }
     getSodexoMenu()
   }, [])
@@ -39,11 +36,20 @@ const Home = () => {
         <Typography varinat="h6" sx={{ p: 2 }}>
           {currentDate}
         </Typography>
-        <Paper elevation={3} sx={ { width: { xs: '100%', md: '50%' } } }>
-          { menu &&
-            <RestaurantMenu menu={menu}></RestaurantMenu>
-          }
-        </Paper>
+        {menu && (
+          <>
+            <Typography variant="h4" sx={{ pb: 2 }}>
+              {menu.name}
+            </Typography>
+
+            <Paper elevation={3} sx={{ width: { xs: '100%', md: '50%' } }}>
+              <RestaurantMenu
+                menu={menu.menu}
+                restaurantType="sodexo"
+              ></RestaurantMenu>
+            </Paper>
+          </>
+        )}
       </Box>
     </Container>
   )

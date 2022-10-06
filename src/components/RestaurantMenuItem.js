@@ -1,17 +1,35 @@
-import React from 'react'
+import { React, useState } from 'react'
 import PropTypes from 'prop-types'
-import { ListItem, Box, Grid, Typography, Divider } from '@mui/material'
+import {
+  ListItem,
+  Box,
+  Grid,
+  Typography,
+  Divider,
+  IconButton
+} from '@mui/material'
+import InfoIcon from '@mui/icons-material/Info'
+import CustomModal from '../components/CustomModal'
 
-const RestaurantMenuItem = ({ menuItem, mealType, price, dietInfo, dietCodes }) => {
+const RestaurantMenuItem = ({
+  menuItem,
+  mealType,
+  price,
+  dietInfo,
+  dietCodes,
+  restaurantType
+}) => {
+  const [modalOpen, setModalOpen] = useState(false)
+  const toggleModal = () => setModalOpen(!modalOpen)
+
   return (
     <>
       <ListItem>
-        <Box sx= {{ width: '100%' } }>
-          <Grid container sx={ { display: 'flex', justifyContent: 'flex-end' }}>
+        <Box sx={{ width: '100%' }}>
+          <Grid container sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Grid item xs>
               <Typography
                 color="text.secondary"
-                gutterBottom
                 variant="h6"
                 component="div"
                 textTransform="uppercase"
@@ -20,23 +38,51 @@ const RestaurantMenuItem = ({ menuItem, mealType, price, dietInfo, dietCodes }) 
               </Typography>
             </Grid>
             <Grid item>
-              <Typography gutterBottom variant="subtitle2" component="div" sx= { { pt: 1 }}>
+              <Typography
+                gutterBottom
+                variant="subtitle2"
+                component="div"
+                sx={{ pt: 1 }}
+              >
                 {price}
               </Typography>
             </Grid>
           </Grid>
+
           <Typography color="text.primary" variant="body2">
             {menuItem}
           </Typography>
-          <Typography color="text.secondary" variant="body2" sx={{ pt: 0.5 }}>
-            Allergies: {dietInfo}
-          </Typography>
-          <Typography color="text.secondary" variant="body2" sx={{ pt: 0.5 }}>
-            Dietcodes: {dietCodes}
-          </Typography>
+          <Grid
+            container
+            sx={{ display: 'flex', justifyContent: 'space-between' }}
+          >
+            <Grid item>
+              <Typography
+                color="text.secondary"
+                variant="body2"
+                sx={{ pt: 0.5 }}
+              >
+                {dietCodes}
+              </Typography>
+            </Grid>
+            <Grid item>
+              {restaurantType === 'sodexo' && (
+                <IconButton color='info' onClick={toggleModal}>
+                  <InfoIcon />
+                </IconButton>
+              )}
+            </Grid>
+          </Grid>
         </Box>
       </ListItem>
       <Divider variant="middle" />
+      <CustomModal
+        open={modalOpen}
+        handleClose={() => setModalOpen(false)}
+        title="Allergies"
+      >
+        <Typography>{dietInfo}</Typography>
+      </CustomModal>
     </>
   )
 }
@@ -45,7 +91,8 @@ RestaurantMenuItem.propTypes = {
   menuItem: PropTypes.string,
   mealType: PropTypes.string,
   price: PropTypes.string,
-  dietInfo: PropTypes.array,
-  dietCodes: PropTypes.string
+  dietInfo: PropTypes.string,
+  dietCodes: PropTypes.string,
+  restaurantType: PropTypes.string
 }
 export default RestaurantMenuItem

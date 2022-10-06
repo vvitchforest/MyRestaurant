@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import {
   AppBar,
   Toolbar,
@@ -6,7 +6,9 @@ import {
   Drawer,
   List,
   Box,
-  Divider
+  Divider,
+  ToggleButtonGroup,
+  ToggleButton as MUIToggleButton
 } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -14,16 +16,59 @@ import CloseIcon from '@mui/icons-material/Close'
 import HomeIcon from '@mui/icons-material/Home'
 import RestaurantIcon from '@mui/icons-material/Restaurant'
 import MapIcon from '@mui/icons-material/Map'
+import { styled } from '@mui/material/styles'
+import { useCookies } from 'react-cookie'
+import getTranslation from '../utils/Translations'
 
 import { Link } from 'react-router-dom'
 
 import NavItem from './NavItem'
 
 const Navbar = () => {
+  const [cookies, setCookie] = useCookies(['language'])
+  const [alignment, setAlignment] = useState(
+    cookies.language ? cookies.language : 'en'
+  )
   const [openDrawer, setOpenDrawer] = useState(false)
+
+  const changeLanguage = (newName) => {
+    console.log(`changeLanguage: ${newName}, cookies: ${cookies.language}`)
+    if (newName !== 'fi' && newName !== 'en') {
+      console.log('language not found. language set to en')
+      setCookie('language', 'en', { path: '/' })
+    } else setCookie('language', newName, { path: '/' })
+  }
+
+  useEffect(() => {
+    console.log('navbar useEffect runs')
+    if (!cookies.language) {
+      console.log('language not set. setting laguage to en')
+      changeLanguage('en')
+      handleChange('en')
+    } else console.log('language already set')
+  })
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
+  }
+
+  const ToggleButton = styled(MUIToggleButton)({
+    '&.Mui-selected, &.Mui-selected:hover': {
+      color: 'white',
+      backgroundColor: '#42A5F5'
+    }
+  })
+
+  const handleChange = (event, newAlignment) => {
+    if (newAlignment) {
+      console.log(`handleChange: ${newAlignment}`)
+      setAlignment(newAlignment)
+      changeLanguage(newAlignment)
+    } else {
+      console.log('handleChange else')
+      setAlignment('en')
+      changeLanguage('en')
+    }
   }
 
   return (
@@ -53,15 +98,50 @@ const Navbar = () => {
           >
             MyRestaurant
           </Typography>
+          <ToggleButtonGroup
+            sx={{
+              marginLeft: '20px',
+              marginRight: '20px',
+              display: 'flex',
+              flex: 1,
+              justifyContent: 'flex-end'
+            }}
+            value={alignment}
+            exclusive
+            onChange={handleChange}
+            aria-label="language"
+          >
+            <ToggleButton value="en">EN</ToggleButton>
+            <ToggleButton value="fi">FI</ToggleButton>
+          </ToggleButtonGroup>
           <List sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <NavItem text="Home" icon={<HomeIcon />} link={Link} to="/" />
             <NavItem
-              text="Restaurants"
+              text={getTranslation(
+                cookies.language ? cookies.language : 'en',
+                'home'
+              )}
+              icon={<HomeIcon />}
+              link={Link}
+              to="/"
+            />
+            <NavItem
+              text={getTranslation(
+                cookies.language ? cookies.language : 'en',
+                'restaurants'
+              )}
               icon={<RestaurantIcon />}
               link={Link}
               to="/restaurants"
             />
-            <NavItem text="Map" icon={<MapIcon />} link={Link} to="/map" />
+            <NavItem
+              text={getTranslation(
+                cookies.language ? cookies.language : 'en',
+                'map'
+              )}
+              icon={<MapIcon />}
+              link={Link}
+              to="/map"
+            />
           </List>
         </Toolbar>
       </AppBar>
@@ -92,21 +172,30 @@ const Navbar = () => {
           <Divider />
           <List>
             <NavItem
-              text="Home"
+              text={getTranslation(
+                cookies.language ? cookies.language : 'en',
+                'home'
+              )}
               icon={<HomeIcon />}
               link={Link}
               to="/"
               onClick={() => setOpenDrawer(false)}
             />
             <NavItem
-              text="Restaurants"
+              text={getTranslation(
+                cookies.language ? cookies.language : 'en',
+                'restaurants'
+              )}
               icon={<RestaurantIcon />}
               link={Link}
               to="/restaurants"
               onClick={() => setOpenDrawer(false)}
             />
             <NavItem
-              text="Map"
+              text={getTranslation(
+                cookies.language ? cookies.language : 'en',
+                'map'
+              )}
               icon={<MapIcon />}
               link={Link}
               to="/map"

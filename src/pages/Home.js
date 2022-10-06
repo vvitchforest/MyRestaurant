@@ -3,8 +3,12 @@ import sodexoMenuService from '../services/sodexomenu'
 import { Container, Box, Paper, Typography } from '@mui/material'
 import Moment from 'moment'
 import RestaurantMenu from '../components/RestaurantMenu'
+// import { useCookies } from 'react-cookie'
+// import getTranslation from '../utils/Translations'
 
 const Home = () => {
+  // const [cookies] = useCookies(['language'])
+
   const [menu, setMenu] = useState(null)
 
   const currentDateApiFormat = Moment().format('YYYY-MM-DD')
@@ -12,7 +16,7 @@ const Home = () => {
 
   useEffect(() => {
     const getSodexoMenu = async () => {
-      const menu = await sodexoMenuService.getMenu(currentDateApiFormat)
+      const menu = await sodexoMenuService.getMenu(currentDateApiFormat, '80', 'en')
       const menuObject = { name: menu.meta.ref_title, menu: menu.courses }
       setMenu(menuObject)
       console.log('menuObject', menuObject)

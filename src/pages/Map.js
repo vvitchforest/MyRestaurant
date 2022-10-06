@@ -11,6 +11,7 @@ import { IconButton } from "@mui/material";
 import { Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import MyLocationIcon from "@mui/icons-material/MyLocation";
+import { useCookies } from 'react-cookie';
 
 const Map = () => {
   const [currentPos, setCurrentPos] = useState({});
@@ -18,6 +19,7 @@ const Map = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [checkNextPage, setNextPage] = useState(false);
   const [libraries] = useState(["places", "geometry"]);
+  const [cookies] = useCookies(["language"]);
 
   const [restaurantBusinessStatusBool, setRestaurantBusinessStatusBool] =
     useState(false);
@@ -185,7 +187,7 @@ const Map = () => {
           type="button"
           onClick={() => {
             setIsOpen(!isOpen);
-            console.log("wtf");
+            console.log(`current language: ${cookies.language}`);
           }}
         >
           Trigger Drawer

@@ -18,6 +18,7 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 import MapIcon from "@mui/icons-material/Map";
 import { styled } from "@mui/material/styles";
 import { useCookies } from "react-cookie";
+import getTranslation from "../utils/Translations"
 
 import { Link } from "react-router-dom";
 
@@ -46,28 +47,6 @@ const Navbar = () => {
       handleChange("en");
     } else console.log("language already set");
   });
-
-  const languages = [
-    { code: "en", name: "English" },
-    { code: "fi", name: "Finnish" },
-  ];
-
-  const translations = {
-    en: {
-      map: "Map",
-      home: "Home",
-      restaurants: "Restaurants",
-    },
-    fi: {
-      map: "Kartta",
-      home: "Koti",
-      restaurants: "Ravintolat",
-    },
-  };
-
-  const getTranslation = (lang, text) => {
-    return translations[lang][text];
-  };
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer);
@@ -136,14 +115,14 @@ const Navbar = () => {
             <ToggleButton value="fi">FI</ToggleButton>
           </ToggleButtonGroup>
           <List sx={{ display: { xs: "none", md: "flex" } }}>
-            <NavItem text="Home" icon={<HomeIcon />} link={Link} to="/" />
+            <NavItem text={getTranslation(cookies.language ? cookies.language : "en", "home")} icon={<HomeIcon />} link={Link} to="/" />
             <NavItem
-              text="Restaurants"
+              text={getTranslation(cookies.language ? cookies.language : "en", "restaurants")}
               icon={<RestaurantIcon />}
               link={Link}
               to="/restaurants"
             />
-            <NavItem text="Map" icon={<MapIcon />} link={Link} to="/map" />
+            <NavItem text={getTranslation(cookies.language ? cookies.language : "en", "map")} icon={<MapIcon />} link={Link} to="/map" />
           </List>
         </Toolbar>
       </AppBar>
@@ -174,21 +153,21 @@ const Navbar = () => {
           <Divider />
           <List>
             <NavItem
-              text="Home"
+              text={getTranslation(cookies.language ? cookies.language : "en", "home")}
               icon={<HomeIcon />}
               link={Link}
               to="/"
               onClick={() => setOpenDrawer(false)}
             />
             <NavItem
-              text="Restaurants"
+              text={getTranslation(cookies.language ? cookies.language : "en", "restaurants")}
               icon={<RestaurantIcon />}
               link={Link}
               to="/restaurants"
               onClick={() => setOpenDrawer(false)}
             />
             <NavItem
-              text="Map"
+              text={getTranslation(cookies.language ? cookies.language : "en", "map")}
               icon={<MapIcon />}
               link={Link}
               to="/map"

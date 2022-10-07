@@ -1,18 +1,22 @@
 const translations = {
-    en: {
-      map: "Map",
-      home: "Home",
-      restaurants: "Restaurants",
-    },
-    fi: {
-      map: "Kartta",
-      home: "Koti",
-      restaurants: "Ravintolat",
-    },
-  };
+  en: {
+    map: 'Map',
+    home: 'Home',
+    restaurants: 'Restaurants',
+    closed: 'Closed',
+    open: 'Open'
+  },
+  fi: {
+    map: 'Kartta',
+    home: 'Koti',
+    restaurants: 'Ravintolat',
+    closed: 'Suljettu',
+    open: 'Avattu'
+  }
+}
 
-  const getTranslation = (lang, text) => {
-    return translations[lang][text];
-  };
+const getTranslation = (lang, text) => {
+  return translations[lang][text]
+}
 
-  export default getTranslation;
+export default getTranslation

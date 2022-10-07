@@ -9,7 +9,6 @@ import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined'
 import { IconButton, Button, Box } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import MyLocationIcon from '@mui/icons-material/MyLocation'
-import { useCookies } from 'react-cookie'
 
 const Map = () => {
   const [currentPos, setCurrentPos] = useState({})
@@ -17,7 +16,6 @@ const Map = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [checkNextPage, setNextPage] = useState(false)
   const [libraries] = useState(['places', 'geometry'])
-  const [cookies] = useCookies(['language'])
 
   const [restaurantBusinessStatusBool, setRestaurantBusinessStatusBool] =
     useState(false)
@@ -180,18 +178,7 @@ const Map = () => {
 
   return isLoaded
     ? (
-    <div className="app">
-      <div className="container">
-        <button
-          type="button"
-          onClick={() => {
-            setIsOpen(!isOpen)
-            console.log(`current language: ${cookies.language}`)
-          }}
-        >
-          Trigger Drawer
-        </button>
-        <GoogleMap
+      <><GoogleMap
           id="map"
           mapContainerStyle={mapStyles}
           zoom={13}
@@ -212,12 +199,6 @@ const Map = () => {
             <MyLocationIcon />
           </IconButton>
           {console.log(map)}
-          {
-            <Marker
-              icon={'https://www.robotwoods.com/dev/misc/bluecircle.png'}
-              position={currentPos}
-            />
-          }
           {checkClick
             ? placesFinal.map(function (results) {
               return (
@@ -292,8 +273,14 @@ const Map = () => {
               )
             })
             : console.log('nothing', 'nothing')}
+             {<Marker
+              icon={{ url: require('../bluecircle.png') }}
+              position={currentPos}
+            />}
           <></>
         </GoogleMap>
+        <div className="app">
+        <div className="container">
         <Drawer
           isOpen={isOpen}
           onClose={() => setIsOpen(false)}
@@ -346,7 +333,7 @@ const Map = () => {
           </div>
         </Drawer>
       </div>
-    </div>
+    </div></>
       )
     : (
     <></>

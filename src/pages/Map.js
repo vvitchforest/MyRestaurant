@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Box, IconButton, Button } from '@mui/material'
+import { Box, IconButton, Button, Drawer } from '@mui/material'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
-import Drawer from '../components/Drawer'
-import '../Drawer.css'
 import DirectionsIcon from '@mui/icons-material/Directions'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined'
@@ -15,10 +13,10 @@ import getTranslation from '../utils/Translations'
 const Map = () => {
   const [currentPos, setCurrentPos] = useState({})
   const [checkClick, setClick] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
   const [checkNextPage, setNextPage] = useState(false)
   const [libraries] = useState(['places', 'geometry'])
   const [cookies] = useCookies(['language'])
+  const [openDrawer, setOpenDrawer] = useState(false)
 
   const [restaurantBusinessStatusBool, setRestaurantBusinessStatusBool] =
     useState(false)
@@ -178,19 +176,12 @@ const Map = () => {
     setRestaurantAddress(restaurantAddressNew)
   }
 
+  const handleDrawerToggle = () => {
+    setOpenDrawer(!openDrawer)
+  }
+
   return isLoaded
     ? (
-    <div className="app">
-      <div className="container">
-        <button
-          type="button"
-          onClick={() => {
-            setIsOpen(!isOpen)
-            console.log(`current language: ${cookies.language}`)
-          }}
-        >
-          Trigger Drawer
-        </button>
         <GoogleMap
           id='map'
           mapContainerStyle={mapStyles}
@@ -238,7 +229,7 @@ const Map = () => {
                         results.name,
                         results.vicinity
                       )
-                      setIsOpen(!isOpen)
+                      handleDrawerToggle()
                       console.log(
                         restaurantBusinessStatus,
                         restaurantName,
@@ -275,7 +266,7 @@ const Map = () => {
                         results.name,
                         results.vicinity
                       )
-                      setIsOpen(!isOpen)
+                      handleDrawerToggle()
                       console.log(
                         restaurantBusinessStatus,
                         restaurantName,
@@ -293,15 +284,15 @@ const Map = () => {
             })
             : console.log('nothing', 'nothing')}
           <></>
-        </GoogleMap>
-        <Drawer
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          position='bottom'
+          <Drawer
+          anchor='bottom'
+          open={openDrawer}
+          onClose={() => setOpenDrawer(false)}
+          variant='temporary'
         >
           <div className='demo-content'>
             <div style={exitStyle}>
-              <Button type='button' onClick={() => setIsOpen(false)}>
+              <Button type='button' onClick={handleDrawerToggle}>
                 <CloseIcon />
               </Button>
             </div>
@@ -348,8 +339,7 @@ const Map = () => {
             </div>
           </div>
         </Drawer>
-      </div>
-    </div>
+        </GoogleMap>
       )
     : (
     <></>

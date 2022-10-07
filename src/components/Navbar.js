@@ -73,7 +73,7 @@ const Navbar = () => {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position='static'>
         <Toolbar
           sx={{
             display: 'flex',
@@ -81,20 +81,20 @@ const Navbar = () => {
           }}
         >
           <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
+            color='inherit'
+            aria-label='open drawer'
+            edge='start'
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { md: 'none' } }}
           >
             <MenuIcon />
           </IconButton>
           <Typography
-            color="#ffffff"
-            variant="h6"
+            color='#ffffff'
+            variant='h6'
             sx={{ textDecoration: 'none' }}
             component={Link}
-            to="/"
+            to='/'
           >
             MyRestaurant
           </Typography>
@@ -109,10 +109,10 @@ const Navbar = () => {
             value={alignment}
             exclusive
             onChange={handleChange}
-            aria-label="language"
+            aria-label='language'
           >
-            <ToggleButton value="en">EN</ToggleButton>
-            <ToggleButton value="fi">FI</ToggleButton>
+            <ToggleButton value='en'>EN</ToggleButton>
+            <ToggleButton value='fi'>FI</ToggleButton>
           </ToggleButtonGroup>
           <List sx={{ display: { xs: 'none', md: 'flex' } }}>
             <NavItem
@@ -122,7 +122,7 @@ const Navbar = () => {
               )}
               icon={<HomeIcon />}
               link={Link}
-              to="/"
+              to='/'
             />
             <NavItem
               text={getTranslation(
@@ -131,7 +131,7 @@ const Navbar = () => {
               )}
               icon={<RestaurantIcon />}
               link={Link}
-              to="/restaurants"
+              to='/restaurants'
             />
             <NavItem
               text={getTranslation(
@@ -140,7 +140,7 @@ const Navbar = () => {
               )}
               icon={<MapIcon />}
               link={Link}
-              to="/map"
+              to='/map'
             />
           </List>
         </Toolbar>
@@ -148,7 +148,7 @@ const Navbar = () => {
       <Drawer
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
-        variant="temporary"
+        variant='temporary'
         sx={{
           display: { xs: 'block', md: 'none' },
           '& .MuiDrawer-paper': { boxSizing: 'border-box', width: '75%' }
@@ -157,16 +157,16 @@ const Navbar = () => {
         <Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
             <IconButton
-              color="inherit"
-              aria-label="close drawer"
-              edge="start"
+              color='inherit'
+              aria-label='close drawer'
+              edge='start'
               onClick={handleDrawerToggle}
               sx={{ display: { md: 'none' } }}
             >
               <CloseIcon />
             </IconButton>
           </Box>
-          <Typography variant="h6" sx={{ flexGrow: 1, pl: 2, pb: 1 }}>
+          <Typography variant='h6' sx={{ flexGrow: 1, pl: 2, pb: 1 }}>
             MyRestaurant
           </Typography>
           <Divider />
@@ -178,7 +178,7 @@ const Navbar = () => {
               )}
               icon={<HomeIcon />}
               link={Link}
-              to="/"
+              to='/'
               onClick={() => setOpenDrawer(false)}
             />
             <NavItem
@@ -188,7 +188,7 @@ const Navbar = () => {
               )}
               icon={<RestaurantIcon />}
               link={Link}
-              to="/restaurants"
+              to='/restaurants'
               onClick={() => setOpenDrawer(false)}
             />
             <NavItem
@@ -198,7 +198,7 @@ const Navbar = () => {
               )}
               icon={<MapIcon />}
               link={Link}
-              to="/map"
+              to='/map'
               onClick={() => setOpenDrawer(false)}
             />
           </List>

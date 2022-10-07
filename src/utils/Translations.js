@@ -2,12 +2,16 @@ const translations = {
   en: {
     map: 'Map',
     home: 'Home',
-    restaurants: 'Restaurants'
+    restaurants: 'Restaurants',
+    closed: 'Closed',
+    open: 'Open'
   },
   fi: {
     map: 'Kartta',
     home: 'Koti',
-    restaurants: 'Ravintolat'
+    restaurants: 'Ravintolat',
+    closed: 'Suljettu',
+    open: 'Avattu'
   }
 }
 

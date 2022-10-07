@@ -3,25 +3,25 @@
  * Used for transitioning a component when it enters or leaves the DOM
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
 const useMountTransition = (isMounted, unmountDelay) => {
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false)
 
   useEffect(() => {
-    let timeoutId;
+    let timeoutId
 
     if (isMounted && !isTransitioning) {
-      setIsTransitioning(true);
+      setIsTransitioning(true)
     } else if (!isMounted && isTransitioning) {
-      timeoutId = setTimeout(() => setIsTransitioning(false), unmountDelay);
+      timeoutId = setTimeout(() => setIsTransitioning(false), unmountDelay)
     }
     return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [unmountDelay, isMounted, isTransitioning]);
+      clearTimeout(timeoutId)
+    }
+  }, [unmountDelay, isMounted, isTransitioning])
 
-  return isTransitioning;
-};
+  return isTransitioning
+}
 
-export default useMountTransition;
+export default useMountTransition

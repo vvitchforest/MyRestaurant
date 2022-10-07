@@ -180,16 +180,17 @@ const Map = () => {
 
   return isLoaded
     ? (
-      <div className='container'>
-        {/* <button
-          type='button'
+    <div className="app">
+      <div className="container">
+        <button
+          type="button"
           onClick={() => {
             setIsOpen(!isOpen)
             console.log(`current language: ${cookies.language}`)
           }}
         >
           Trigger Drawer
-        </button> */}
+        </button>
         <GoogleMap
           id='map'
           mapContainerStyle={mapStyles}
@@ -211,6 +212,12 @@ const Map = () => {
             <MyLocationIcon />
           </IconButton>
           {console.log(map)}
+          {
+            <Marker
+              icon={'https://www.robotwoods.com/dev/misc/bluecircle.png'}
+              position={currentPos}
+            />
+          }
           {checkClick
             ? placesFinal.map(function (results) {
               return (
@@ -248,13 +255,6 @@ const Map = () => {
               )
             })
             : console.log('nothing', 'nothing')}
-            {
-              <Marker
-                icon={'https://www.robotwoods.com/dev/misc/bluecircle.png'}
-                position={currentPos}
-
-              ></Marker>
-              }
           {checkNextPage
             ? placesFinal.map(function (results) {
               return (
@@ -349,7 +349,7 @@ const Map = () => {
           </div>
         </Drawer>
       </div>
-
+    </div>
       )
     : (
     <></>

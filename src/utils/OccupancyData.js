@@ -1,126 +1,98 @@
-export const temperaturesData = [
+export const occupancyData = [
   {
-    day: '1',
-    value: 57
+    hour: '0',
+    value: 0
   },
   {
-    day: '2',
-    value: 58
+    hour: '1',
+    value: 0
   },
   {
-    day: '3',
-    value: 57
+    hour: '2',
+    value: 0
   },
   {
-    day: '4',
-    value: 59
+    hour: '3',
+    value: 0
   },
   {
-    day: '5',
-    value: 63
+    hour: '4',
+    value: 0
   },
   {
-    day: '6',
-    value: 63
+    hour: '5',
+    value: 0
   },
   {
-    day: '7',
-    value: 63
+    hour: '6',
+    value: 3
   },
   {
-    day: '8',
-    value: 64
+    hour: '7',
+    value: 7
   },
   {
-    day: '9',
-    value: 64
+    hour: '8',
+    value: 5
   },
   {
-    day: '10',
-    value: 64
+    hour: '9',
+    value: 13
   },
   {
-    day: '11',
-    value: 69
+    hour: '10',
+    value: 17
   },
   {
-    day: '12',
-    value: 72
+    hour: '11',
+    value: 22
   },
   {
-    day: '13',
-    value: 75
+    hour: '12',
+    value: 50
   },
   {
-    day: '14',
-    value: 78
+    hour: '13',
+    value: 30
   },
   {
-    day: '15',
-    value: 76
+    hour: '14',
+    value: 20
   },
   {
-    day: '16',
-    value: 70
+    hour: '15',
+    value: 15
   },
   {
-    day: '17',
-    value: 65
+    hour: '16',
+    value: 9
   },
   {
-    day: '18',
-    value: 65
+    hour: '17',
+    value: 6
   },
   {
-    day: '19',
-    value: 68
+    hour: '18',
+    value: 27
   },
   {
-    day: '20',
-    value: 70
+    hour: '19',
+    value: 35
   },
   {
-    day: '21',
-    value: 73
+    hour: '20',
+    value: 40
   },
   {
-    day: '22',
-    value: 73
+    hour: '21',
+    value: 0
   },
   {
-    day: '23',
-    value: 75
+    hour: '22',
+    value: 0
   },
   {
-    day: '24',
-    value: 78
-  },
-  {
-    day: '25',
-    value: 76
-  },
-  {
-    day: '26',
-    value: 76
-  },
-  {
-    day: '27',
-    value: 80
-  },
-  {
-    day: '28',
-    value: 76
-  },
-  {
-    day: '29',
-    value: 75
-  },
-  {
-    day: '30',
-    value: 75
-  },
-  {
-    day: '31',
-    value: 74
+    hour: '23',
+    value: 0
   }
 ]

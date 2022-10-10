@@ -1,6 +1,6 @@
 /**
  * @Author Oskar Wiiala
- * This is just a temporary page to view occupancy histogram. This will be deleted when bar chart is completed.
+ * This is just a temporary page to view occupancy histogram.
  */
 import { React, useState } from 'react'
 import { Container, Box } from '@mui/material'
@@ -11,24 +11,22 @@ import {
   ValueAxis,
   VisualRange,
   Label,
-  ConstantLine
+  ConstantLine,
+  Size
 } from 'devextreme-react/chart'
-import { temperaturesData } from '../utils/OccupancyData.js'
+import { occupancyData } from '../utils/OccupancyData.js'
 
 const Occupancy = () => {
-  const [highAverage] = useState(77)
-  const [lowAverage] = useState(58)
+  const [highAverage] = useState(40)
+  const [lowAverage] = useState(15)
   const currentHour = new Date().getHours()
   console.log(currentHour)
 
   const customizePoint = (arg) => {
-    console.log(arg.data.day)
-    if (arg.data.day === '12') {
-      console.log('day 12')
-      return { color: '#ff7c7c', hoverStyle: { color: '#ff7c7c' } }
-    }
-    if (arg.value < lowAverage) {
-      return { color: '#8c8cff', hoverStyle: { color: '#8c8cff' } }
+    console.log(arg.data.hour, arg.data.value)
+    if (arg.data.hour === currentHour.toString()) {
+      console.log('current hour')
+      return { color: '#DA4949', hoverStyle: { color: '#DA4949' } }
     }
     return null
   }
@@ -40,17 +38,18 @@ const Occupancy = () => {
         <Chart
           id='chart'
           title='Occupancy histogram'
-          dataSource={temperaturesData}
+          dataSource={occupancyData}
           customizePoint={customizePoint}
         >
+          <Size height={150} />
           <Series
-            argumentField='day'
+            argumentField='hour'
             valueField='value'
             type='bar'
-            color='#e7d19a'
+            color='#1976D2'
           />
           <ValueAxis maxValueMargin={0.01}>
-            <VisualRange startValue={40} />
+            <VisualRange startValue={0} />
             <ConstantLine
               width={2}
               value={lowAverage}

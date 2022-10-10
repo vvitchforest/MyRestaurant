@@ -116,6 +116,12 @@ const Navbar = () => {
           </ToggleButtonGroup>
           <List sx={{ display: { xs: 'none', md: 'flex' } }}>
             <NavItem
+              text='Occupancy'
+              icon={<HomeIcon />}
+              link={Link}
+              to='/occupancy'
+            />
+            <NavItem
               text={getTranslation(
                 cookies.language ? cookies.language : 'en',
                 'home'

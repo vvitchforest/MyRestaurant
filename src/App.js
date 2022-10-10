@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import RestaurantsList from './pages/RestaurantsList'
 import Map from './pages/Map'
 import Menu from './pages/Menu'
+import Occupancy from './pages/Occupancy'
 
 function App () {
   return (
@@ -15,6 +16,7 @@ function App () {
         <Route path="/map" element={<Map/>} />
         <Route path="/menu" element={<Menu/>} />
         <Route path="/" element={<Home />} />
+        <Route path="/occupancy" element={<Occupancy />} />
       </Routes>
     </Router>
   )

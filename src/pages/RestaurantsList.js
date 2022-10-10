@@ -81,11 +81,10 @@ const RestaurantsList = () => {
       {isLoaded && checkPagination
         ? placesFinal.map(function (results) {
           return (
-            console.log('res', results.name),
-          <RestaurantCard key={results.place_id} name={results.name} address={results.vicinity} icon={results.photos[0].getUrl().length > 0 ? results.photos[0].getUrl() : ''} />
+          <RestaurantCard key={results.place_id} name={results.name} address={results.vicinity} icon={results.photos !== undefined ? results.photos[0].getUrl() : ''} />
           )
         })
-        : console.log()}
+        : 'Loading restaurants'}
     </div>
   )
 }

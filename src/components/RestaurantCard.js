@@ -4,7 +4,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import PropTypes from 'prop-types'
 
 const RestaurantCard = ({ name, address, icon }) => {
-  console.log('name', name)
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
         <Card sx={{ minWidth: 500, maxWidth: 500 }}>

@@ -1,98 +1,128 @@
+/**
+ * @Author Oskar Wiiala
+ * Data for restaurant occupancy histogram to be used with thermal camera data.
+ * Currently dummy data, but would eventually get values from thermal camera.
+ */
+
 export const occupancyData = [
   {
     hour: '0',
-    value: 0
+    valuePrediction: 0,
+    valueActual: 0
   },
   {
     hour: '1',
-    value: 0
+    valuePrediction: 0,
+    valueActual: 0
   },
   {
     hour: '2',
-    value: 0
+    valuePrediction: 0,
+    valueActual: 0
   },
   {
     hour: '3',
-    value: 0
+    valuePrediction: 0,
+    valueActual: 0
   },
   {
     hour: '4',
-    value: 0
+    valuePrediction: 0,
+    valueActual: 0
   },
   {
     hour: '5',
-    value: 0
+    valuePrediction: 0,
+    valueActual: 0
   },
   {
     hour: '6',
-    value: 3
+    valuePrediction: 0,
+    valueActual: 0
   },
   {
     hour: '7',
-    value: 7
+    valuePrediction: 5,
+    valueActual: 3
   },
   {
     hour: '8',
-    value: 5
+    valuePrediction: 13,
+    valueActual: 9
   },
   {
     hour: '9',
-    value: 13
+    valuePrediction: 15,
+    valueActual: 16
   },
   {
     hour: '10',
-    value: 17
+    valuePrediction: 20,
+    valueActual: 16
   },
   {
     hour: '11',
-    value: 22
+    valuePrediction: 30,
+    valueActual: 25
   },
   {
     hour: '12',
-    value: 50
+    valuePrediction: 50,
+    valueActual: 43
   },
   {
     hour: '13',
-    value: 30
+    valuePrediction: 35,
+    valueActual: 37
   },
   {
     hour: '14',
-    value: 20
+    valuePrediction: 17,
+    valueActual: 12
   },
   {
     hour: '15',
-    value: 15
+    valuePrediction: 9,
+    valueActual: 9
   },
   {
     hour: '16',
-    value: 9
+    valuePrediction: 4,
+    valueActual: 2
   },
   {
     hour: '17',
-    value: 6
+    valuePrediction: 0,
+    valueActual: 1
   },
   {
     hour: '18',
-    value: 27
+    valuePrediction: 0,
+    valueActual: 0
   },
   {
     hour: '19',
-    value: 35
+    valuePrediction: 0,
+    valueActual: 0
   },
   {
     hour: '20',
-    value: 40
+    valuePrediction: 0,
+    valueActual: 0
   },
   {
     hour: '21',
-    value: 0
+    valuePrediction: 0,
+    valueActual: 0
   },
   {
     hour: '22',
-    value: 0
+    valuePrediction: 0,
+    valueActual: 0
   },
   {
     hour: '23',
-    value: 0
+    valuePrediction: 0,
+    valueActual: 0
   }
 ]

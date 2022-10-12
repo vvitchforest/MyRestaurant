@@ -190,15 +190,17 @@ const Map = () => {
           options={{
             streetViewControl: false,
             clickableIcons: false,
-            styles: styles.hide
+            styles: styles.hide,
+            fullscreenControl: false
           }}
           onLoad={onLoad}
           onUnmount={onUnmount}
         >
           <IconButton
             onClick={() => panToLocation()}
-            style={{ marginLeft: 250 }}
+            style={{ marginLeft: 210 }}
             color={'primary'}
+            sx={{ margin: '10px', backgroundColor: 'white' }}
           >
             <MyLocationIcon />
           </IconButton>

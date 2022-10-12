@@ -5,8 +5,8 @@ import PropTypes from 'prop-types'
 
 const RestaurantCard = ({ name, address, icon }) => {
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
-        <Card sx={{ minWidth: 500, maxWidth: 500 }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', marginBottom: '10px', overflow: 'auto' }}>
+        <Card sx={{ minWidth: '50%', maxWidth: '100%' }}>
              <CardHeader
         action={
           <IconButton aria-label="settings">

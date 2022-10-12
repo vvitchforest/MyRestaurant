@@ -203,12 +203,6 @@ const Map = () => {
             <MyLocationIcon />
           </IconButton>
           {console.log(map)}
-          {
-            <Marker
-              icon={'https://www.robotwoods.com/dev/misc/bluecircle.png'}
-              position={currentPos}
-            />
-          }
           {checkClick
             ? placesFinal.map(function (results) {
               return (
@@ -283,6 +277,10 @@ const Map = () => {
               )
             })
             : console.log('nothing', 'nothing')}
+             {<Marker
+              icon={{ url: require('../bluecircle.png') }}
+              position={currentPos}
+            />}
           <></>
           <Drawer
           anchor='bottom'

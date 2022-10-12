@@ -23,6 +23,8 @@ import getTranslation from '../utils/Translations'
 import { Link } from 'react-router-dom'
 
 import NavItem from './NavItem'
+import { useDispatch } from 'react-redux'
+import * as actions from '../store/actions/index'
 
 const Navbar = () => {
   const [cookies, setCookie] = useCookies(['language'])
@@ -30,6 +32,7 @@ const Navbar = () => {
     cookies.language ? cookies.language : 'en'
   )
   const [openDrawer, setOpenDrawer] = useState(false)
+  const dispatch = useDispatch()
 
   const changeLanguage = (newName) => {
     console.log(`changeLanguage: ${newName}, cookies: ${cookies.language}`)
@@ -64,10 +67,12 @@ const Navbar = () => {
       console.log(`handleChange: ${newAlignment}`)
       setAlignment(newAlignment)
       changeLanguage(newAlignment)
+      dispatch(actions.setLanguage(newAlignment))
     } else {
       console.log('handleChange else')
       setAlignment('en')
       changeLanguage('en')
+      dispatch(actions.setLanguage('en'))
     }
   }
 

@@ -3,58 +3,77 @@ import sodexoMenuService from '../services/sodexomenu'
 import { Container, Box, Paper, Typography } from '@mui/material'
 import Moment from 'moment'
 import RestaurantMenu from '../components/RestaurantMenu'
-// import { useCookies } from 'react-cookie'
+import LoadingMenu from '../components/LoadingMenu'
+import { useCookies } from 'react-cookie'
 // import getTranslation from '../utils/Translations'
 
 const Home = () => {
-  // const [cookies] = useCookies(['language'])
-
+  const [cookies] = useCookies(['language'])
+  const [loading, setLoading] = useState(true)
   const [menu, setMenu] = useState(null)
 
   const currentDateApiFormat = Moment().format('YYYY-MM-DD')
   const currentDate = Moment().format('dddd DD-MM-YYYY')
 
+  const myLanguage = cookies.language ? cookies.language : 'en'
+
   useEffect(() => {
     const getSodexoMenu = async () => {
-      const menu = await sodexoMenuService.getMenu(currentDateApiFormat, '80', 'en')
-      const menuObject = { name: menu.meta.ref_title, menu: menu.courses }
-      setMenu(menuObject)
-      console.log('menuObject', menuObject)
+      setLoading(true)
+      try {
+        let menu
+        myLanguage === 'en'
+          ? (menu = await sodexoMenuService.getMenuEn(
+              currentDateApiFormat,
+              '80'
+            ))
+          : (menu = await sodexoMenuService.getMenuFi(
+              currentDateApiFormat,
+              '80'
+            ))
+        const menuObject = { name: menu.meta.ref_title, menu: menu.courses }
+        setMenu(menuObject)
+        console.log('menuObject', menuObject)
+      } catch (error) {
+        console.error(error.message)
+      }
+      setLoading(false)
     }
     getSodexoMenu()
-  }, [])
+  }, [myLanguage])
 
   console.log(menu)
   console.log(currentDateApiFormat)
 
   return (
     <Container>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          mt: 1
-        }}
-      >
-        <Typography varinat="h6" sx={{ p: 2 }}>
-          {currentDate}
-        </Typography>
-        {menu && (
-          <>
-            <Typography variant="h4" sx={{ pb: 2 }}>
-              {menu.name}
-            </Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            mt: 1
+          }}
+        >
+          <Typography varinat="h6" sx={{ p: 2 }}>
+            {currentDate}
+          </Typography>
+          {loading && <LoadingMenu restaurantType="sodexo" />}
+          {!loading && (
+            <>
+              <Typography variant="h4" sx={{ pb: 2 }}>
+                {menu?.name}
+              </Typography>
 
-            <Paper elevation={3} sx={{ width: { xs: '100%', md: '50%' } }}>
-              <RestaurantMenu
-                menu={menu.menu}
-                restaurantType="sodexo"
-              ></RestaurantMenu>
-            </Paper>
-          </>
-        )}
-      </Box>
+              <Paper elevation={3} sx={{ width: { xs: '100%', md: '50%' } }}>
+                <RestaurantMenu
+                  menu={menu?.menu}
+                  restaurantType="sodexo"
+                ></RestaurantMenu>
+              </Paper>
+            </>
+          )}
+        </Box>
     </Container>
   )
 }

@@ -9,7 +9,7 @@ const RestaurantsList = () => {
   const [currentPos, setCurrentPos] = useState({})
   const placesList = []
   const [checkIfPos, setCheckIfPos] = useState(false)
-  const [checkPagination, setCheckPagination] = useState(false)
+  const [checkPagination, setCheckPagination] = useState()
   const [placesFinal, setPlacesFinal] = useState([])
   const [libraries] = useState(['places', 'geometry'])
 
@@ -54,6 +54,8 @@ const RestaurantsList = () => {
             setTimeout(function () {
               setCheckPagination(true)
             }, 6000)
+          } else {
+            setCheckPagination(false)
           }
         }
       }
@@ -78,7 +80,7 @@ const RestaurantsList = () => {
           'restaurants'
         )}
       </h1>
-      {isLoaded && checkPagination
+      {(isLoaded && checkPagination) || (isLoaded && checkPagination === false)
         ? placesFinal.map(function (results) {
           return (
           <RestaurantCard key={results.place_id} name={results.name} address={results.vicinity} icon={results.photos !== undefined ? results.photos[0].getUrl() : ''} />

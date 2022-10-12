@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react'
+import { Box, IconButton, Button, Drawer } from '@mui/material'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
-import Drawer from '../components/Drawer'
-import '../Drawer.css'
 import DirectionsIcon from '@mui/icons-material/Directions'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined'
 // import { CenterFocusStrong } from '@mui/icons-material'
-import { IconButton, Button, Box } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import MyLocationIcon from '@mui/icons-material/MyLocation'
 import { useCookies } from 'react-cookie'
+import getTranslation from '../utils/Translations'
 
 const Map = () => {
   const [currentPos, setCurrentPos] = useState({})
   const [checkClick, setClick] = useState(false)
-  const [isOpen, setIsOpen] = useState(false)
   const [checkNextPage, setNextPage] = useState(false)
   const [libraries] = useState(['places', 'geometry'])
   const [cookies] = useCookies(['language'])
+  const [openDrawer, setOpenDrawer] = useState(false)
 
   const [restaurantBusinessStatusBool, setRestaurantBusinessStatusBool] =
     useState(false)
@@ -99,8 +98,7 @@ const Map = () => {
     mapRef.current = map
   }, [])
 
-  // eslint-disable-next-line space-before-function-paren
-  const onUnmount = React.useCallback(function callback(map) {
+  const onUnmount = React.useCallback(function callback (map) {
     setMap(null)
   }, [])
   /* const nearbySearch = React.useCallback(function callback (results, status) {
@@ -168,31 +166,24 @@ const Map = () => {
   ) => {
     if (businessStatus !== 'OPERATIONAL') {
       setRestaurantBusinessStatusBool(false)
-      setRestaurantBusinessStatus('Closed')
+      setRestaurantBusinessStatus('closed')
     } else {
       setRestaurantBusinessStatusBool(true)
-      setRestaurantBusinessStatus('Open')
+      setRestaurantBusinessStatus('open')
     }
 
     setRestaurantName(restaurantNameNew)
     setRestaurantAddress(restaurantAddressNew)
   }
 
+  const handleDrawerToggle = () => {
+    setOpenDrawer(!openDrawer)
+  }
+
   return isLoaded
     ? (
-    <div className="app">
-      <div className="container">
-        <button
-          type="button"
-          onClick={() => {
-            setIsOpen(!isOpen)
-            console.log(`current language: ${cookies.language}`)
-          }}
-        >
-          Trigger Drawer
-        </button>
         <GoogleMap
-          id="map"
+          id='map'
           mapContainerStyle={mapStyles}
           zoom={13}
           center={checkClick ? currentPos : defaultCenter}
@@ -212,12 +203,6 @@ const Map = () => {
             <MyLocationIcon />
           </IconButton>
           {console.log(map)}
-          {
-            <Marker
-              icon={'https://www.robotwoods.com/dev/misc/bluecircle.png'}
-              position={currentPos}
-            />
-          }
           {checkClick
             ? placesFinal.map(function (results) {
               return (
@@ -238,7 +223,7 @@ const Map = () => {
                         results.name,
                         results.vicinity
                       )
-                      setIsOpen(!isOpen)
+                      handleDrawerToggle()
                       console.log(
                         restaurantBusinessStatus,
                         restaurantName,
@@ -275,7 +260,7 @@ const Map = () => {
                         results.name,
                         results.vicinity
                       )
-                      setIsOpen(!isOpen)
+                      handleDrawerToggle()
                       console.log(
                         restaurantBusinessStatus,
                         restaurantName,
@@ -292,16 +277,20 @@ const Map = () => {
               )
             })
             : console.log('nothing', 'nothing')}
+             {<Marker
+              icon={{ url: require('../bluecircle.png') }}
+              position={currentPos}
+            />}
           <></>
-        </GoogleMap>
-        <Drawer
-          isOpen={isOpen}
-          onClose={() => setIsOpen(false)}
-          position="bottom"
+          <Drawer
+          anchor='bottom'
+          open={openDrawer}
+          onClose={() => setOpenDrawer(false)}
+          variant='temporary'
         >
-          <div className="demo-content">
+          <div className='demo-content'>
             <div style={exitStyle}>
-              <Button type="button" onClick={() => setIsOpen(false)}>
+              <Button type='button' onClick={handleDrawerToggle}>
                 <CloseIcon />
               </Button>
             </div>
@@ -329,7 +318,10 @@ const Map = () => {
                     borderRadius: 12
                   }}
                 >
-                  {restaurantBusinessStatus}
+                  {getTranslation(
+                    cookies.language ? cookies.language : 'en',
+                    restaurantBusinessStatus
+                  )}
                 </p>
                 <p style={textStyle}>{restaurantName}</p>
                 <p style={textStyle}>{restaurantAddress}</p>
@@ -345,8 +337,7 @@ const Map = () => {
             </div>
           </div>
         </Drawer>
-      </div>
-    </div>
+        </GoogleMap>
       )
     : (
     <></>

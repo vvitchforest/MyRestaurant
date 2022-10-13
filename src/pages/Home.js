@@ -46,7 +46,7 @@ const Home = () => {
     <Container sx={ { display: 'flex', justifyContent: 'center' }}>
       {loading && <Typography>Loading...</Typography>}
         {!loading && (
-            <Card elevation={3} sx={{ width: { xs: '100%', lg: '75%' }, mb: 4, mt: 2 }}>
+            <Card elevation={3} sx={{ width: { xs: '100%', md: '75%' }, mb: 4, mt: 2 }}>
             <RestaurantHeader
               name={getTranslation(cookies.language ? cookies.language : 'en', 'restaurant') + ' ' + menu?.name.slice(10)}
               address="Karakaari 7"

@@ -27,7 +27,7 @@ const RestaurantHeader = ({ name, address, postalcode }) => {
               <Typography variant="body2" sx={fontStyle}>{postalcode}</Typography>
               <Typography variant="body2" sx={{ color: 'green', fontWeight: 'bold', fontStyle } }>Open (placeholder)</Typography>
             </Grid>
-            <Grid item sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Grid item sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <Typography variant="h6">{getTranslation(cookies.language ? cookies.language : 'en', 'occupancy')}</Typography>
                 <OccupancyHistogram width={mediumScreen ? 600 : 300 } height={mediumScreen ? 300 : 100} />
             </Grid>

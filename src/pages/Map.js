@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, IconButton, Button, Drawer } from '@mui/material'
+import { Box, IconButton, Button, Drawer, Rating } from '@mui/material'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
 import DirectionsIcon from '@mui/icons-material/Directions'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
@@ -18,12 +18,14 @@ const Map = () => {
   const [cookies] = useCookies(['language'])
   const [openDrawer, setOpenDrawer] = useState(false)
 
-  const [restaurantBusinessStatusBool, setRestaurantBusinessStatusBool] =
-    useState(false)
+  const [restaurantRating, setRestaurantRating] = useState(0)
   const [restaurantBusinessStatus, setRestaurantBusinessStatus] =
-    useState('unknown')
+     useState('unknown')
   const [restaurantName, setRestaurantName] = useState('unknown')
   const [restaurantAddress, setRestaurantAddress] = useState('unknown')
+  const [restaurantLat, setRestaurantLat] = useState()
+  const [restaurantLng, setRestaurantLng] = useState()
+  const [distance, setDistance] = useState()
 
   const placesList = []
   // let getNextPage
@@ -159,21 +161,67 @@ const Map = () => {
     setPlacesFinal(placesList)
   }
 
-  const setRestaurantInfo = (
-    businessStatus,
-    restaurantNameNew,
-    restaurantAddressNew
-  ) => {
-    if (businessStatus !== 'OPERATIONAL') {
-      setRestaurantBusinessStatusBool(false)
-      setRestaurantBusinessStatus('closed')
-    } else {
-      setRestaurantBusinessStatusBool(true)
-      setRestaurantBusinessStatus('open')
+  const getDirections = (lat, lng) => {
+    const directionService = new window.google.maps.DirectionsService()
+    const directionRenderer = new window.google.maps.DirectionsRenderer()
+
+    directionRenderer.setMap(mapRef.current)
+
+    const request = {
+      origin: currentPos,
+      destination: { lat, lng },
+      travelMode: 'WALKING'
     }
 
-    setRestaurantName(restaurantNameNew)
-    setRestaurantAddress(restaurantAddressNew)
+    directionService.route(request, function (result, status) {
+      if (status === 'OK') {
+        directionRenderer.setDirections(result)
+      }
+    })
+    setOpenDrawer(false)
+  }
+
+  const setRestaurantInfo = (
+    placeId
+  ) => {
+    console.log('PlaceId', placeId)
+    const request = {
+      placeId: placeId,
+      fields: ['name', 'rating', 'formatted_phone_number', 'formatted_address', 'opening_hours', 'utc_offset_minutes', 'geometry']
+    }
+
+    const service = new window.google.maps.places.PlacesService(
+      mapRef.current
+    )
+    const directionService = new window.google.maps.DirectionsService()
+    service.getDetails(request, callback)
+
+    function callback (results, status) {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        console.log('Res', results)
+        setRestaurantName(results.name)
+        setRestaurantAddress(results.formatted_address)
+        setRestaurantRating(results.rating)
+        setRestaurantLat(results.geometry.location.lat())
+        setRestaurantLng(results.geometry.location.lng())
+        if (results.opening_hours.isOpen() === true) {
+          setRestaurantBusinessStatus('open')
+        } else {
+          setRestaurantBusinessStatus('closed')
+        }
+      }
+    }
+    const directionRequest = {
+      origin: currentPos,
+      destination: { lat: restaurantLat, lng: restaurantLng },
+      travelMode: 'WALKING'
+    }
+
+    directionService.route(directionRequest, function (result, status) {
+      if (status === 'OK') {
+        setDistance(result.routes[0].legs[0].distance.text)
+      }
+    })
   }
 
   const handleDrawerToggle = () => {
@@ -219,16 +267,9 @@ const Map = () => {
                     }}
                     onClick={() => {
                       setRestaurantInfo(
-                        results.business_status,
-                        results.name,
-                        results.vicinity
+                        results.place_id
                       )
                       handleDrawerToggle()
-                      console.log(
-                        restaurantBusinessStatus,
-                        restaurantName,
-                        restaurantAddress
-                      )
                     }}
                   >
                     {/* <InfoWindow
@@ -256,16 +297,9 @@ const Map = () => {
                     }}
                     onClick={() => {
                       setRestaurantInfo(
-                        results.business_status,
-                        results.name,
-                        results.vicinity
+                        results.place_id
                       )
                       handleDrawerToggle()
-                      console.log(
-                        restaurantBusinessStatus,
-                        restaurantName,
-                        restaurantAddress
-                      )
                     }}
                   >
                     {/* <InfoWindow
@@ -309,7 +343,7 @@ const Map = () => {
               <div style={{ padding: '12px', flex: 2 }}>
                 <p
                   style={{
-                    backgroundColor: restaurantBusinessStatusBool
+                    backgroundColor: restaurantBusinessStatus === 'open'
                       ? '#DAF7A6'
                       : '#FF8266',
                     fontSize: '4vw',
@@ -325,13 +359,17 @@ const Map = () => {
                 </p>
                 <p style={textStyle}>{restaurantName}</p>
                 <p style={textStyle}>{restaurantAddress}</p>
+                <p style={textStyle}>{distance}</p>
+                <Rating name='half-rating-read' value={restaurantRating === undefined ? 0 : restaurantRating} defaultValue={0} precision={0.5} readOnly />
               </div>
               <div style={iconContainerStyle}>
                 <Box sx={iconBoxStyle}>
                   <RestaurantMenuIcon sx={{ height: '100%', width: '100%' }} />
                 </Box>
                 <Box sx={iconBoxStyle}>
-                  <DirectionsIcon sx={{ height: '100%', width: '100%' }} />
+                  <IconButton sx={{ height: '100%', width: '100%' }} onClick={() => getDirections(restaurantLat, restaurantLng)}>
+                    <DirectionsIcon/>
+                  </IconButton>
                 </Box>
               </div>
             </div>

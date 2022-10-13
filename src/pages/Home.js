@@ -43,7 +43,7 @@ const Home = () => {
   console.log(currentDateApiFormat)
 
   return (
-    <Container >
+    <Container sx={ { display: 'flex', justifyContent: 'center' }}>
       {loading && <Typography>Loading...</Typography>}
         {!loading && (
             <Card elevation={3} sx={{ width: { xs: '100%', lg: '75%' }, mb: 4, mt: 2 }}>

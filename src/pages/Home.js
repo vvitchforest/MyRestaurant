@@ -5,6 +5,7 @@ import Moment from 'moment'
 import RestaurantMenu from '../components/RestaurantMenu'
 import LoadingMenu from '../components/LoadingMenu'
 import { useCookies } from 'react-cookie'
+import getTranslation from '../utils/Translations'
 // import getTranslation from '../utils/Translations'
 
 const Home = () => {
@@ -13,7 +14,9 @@ const Home = () => {
   const [menu, setMenu] = useState(null)
 
   const currentDateApiFormat = Moment().format('YYYY-MM-DD')
-  const currentDate = Moment().format('dddd DD-MM-YYYY')
+  // const currentDate = Moment().format('dddd DD-MM-YYYY')
+  const currentDateNoDay = Moment().format('DD-MM-YYYY')
+  const currentDay = Moment().format('dddd').toLocaleLowerCase()
 
   const myLanguage = cookies.language ? cookies.language : 'en'
 
@@ -56,7 +59,7 @@ const Home = () => {
           }}
         >
           <Typography varinat="h6" sx={{ p: 2 }}>
-            {currentDate}
+          {`${getTranslation(cookies.language ? cookies.language : 'en', currentDay)} ${currentDateNoDay}`}
           </Typography>
           {loading && <LoadingMenu restaurantType="sodexo" />}
           {!loading && (

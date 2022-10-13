@@ -45,12 +45,18 @@ const RestaurantsList = () => {
       service.nearbySearch(request, callback)
 
       function callback (results, status, pagination) {
+        console.log('callback ok1, status: ', status)
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          console.log('callback ok2')
           for (let i = 0; i < results.length; i++) {
             createRestaurantList(results[i])
+            console.log('callback ok3')
+            console.log('isloaded1?: ', isLoaded)
           }
           if (pagination && pagination.hasNextPage) {
+            console.log('callback ok4')
             pagination.nextPage()
+            console.log('isloaded2?: ', isLoaded)
             setTimeout(function () {
               setCheckPagination(true)
             }, 6000)

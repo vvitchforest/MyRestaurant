@@ -18,9 +18,12 @@ import {
   CommonSeriesSettings
 } from 'devextreme-react/chart'
 import { occupancyData } from '../utils/OccupancyData.js'
+import { useCookies } from 'react-cookie'
+import getTranslation from '../utils/Translations'
 
 // args should only contain width and height
 const OccupancyHistogram = (args) => {
+  const [cookies] = useCookies(['language'])
   const [highAverage] = useState(40)
   const [lowAverage] = useState(15)
   const [width, setWidth] = useState()
@@ -74,8 +77,18 @@ const OccupancyHistogram = (args) => {
           valueField='valuePrediction'
           color='#1976D24D'
         />
-        <ArgumentAxis title="hour of day"/>
-        <ValueAxis title="people">
+        <ArgumentAxis
+          title={getTranslation(
+            cookies.language ? cookies.language : 'en',
+            'hourofday'
+          )}
+        />
+        <ValueAxis
+          title={getTranslation(
+            cookies.language ? cookies.language : 'en',
+            'people'
+          )}
+        >
           <VisualRange startValue={0} />
           <ConstantLine
             width={2}
@@ -83,7 +96,12 @@ const OccupancyHistogram = (args) => {
             color='#8c8cff'
             dashStyle='dash'
           >
-            <Label text='Low Average' />
+            <Label
+              text={getTranslation(
+                cookies.language ? cookies.language : 'en',
+                'lowaverage'
+              )}
+            />
           </ConstantLine>
           <ConstantLine
             width={2}
@@ -91,7 +109,12 @@ const OccupancyHistogram = (args) => {
             color='#ff7c7c'
             dashStyle='dash'
           >
-            <Label text='High Average' />
+            <Label
+              text={getTranslation(
+                cookies.language ? cookies.language : 'en',
+                'highaverage'
+              )}
+            />
           </ConstantLine>
         </ValueAxis>
         <Legend visible={false} />

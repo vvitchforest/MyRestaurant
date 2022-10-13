@@ -7,7 +7,6 @@ import { React } from 'react'
 import OccupancyHistogram from '../components/OccupancyHistogram.js'
 
 const Occupancy = () => {
-  console.log('occupancy')
   return (
       <OccupancyHistogram width={300} height={150} />
   )

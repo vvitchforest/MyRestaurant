@@ -35,9 +35,7 @@ const Navbar = () => {
   const dispatch = useDispatch()
 
   const changeLanguage = (newName) => {
-    console.log(`changeLanguage: ${newName}, cookies: ${cookies.language}`)
     if (newName !== 'fi' && newName !== 'en') {
-      console.log('language not found. language set to en')
       setCookie('language', 'en', { path: '/' })
     } else setCookie('language', newName, { path: '/' })
   }
@@ -45,7 +43,6 @@ const Navbar = () => {
   useEffect(() => {
     console.log('navbar useEffect runs')
     if (!cookies.language) {
-      console.log('language not set. setting laguage to en')
       changeLanguage('en')
       handleChange('en')
     } else console.log('language already set')
@@ -64,12 +61,10 @@ const Navbar = () => {
 
   const handleChange = (event, newAlignment) => {
     if (newAlignment) {
-      console.log(`handleChange: ${newAlignment}`)
       setAlignment(newAlignment)
       changeLanguage(newAlignment)
       dispatch(actions.setLanguage(newAlignment))
     } else {
-      console.log('handleChange else')
       setAlignment('en')
       changeLanguage('en')
       dispatch(actions.setLanguage('en'))

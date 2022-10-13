@@ -49,8 +49,6 @@ const Home = () => {
             <Card elevation={3} sx={{ width: { xs: '100%', lg: '75%' }, mb: 4, mt: 2 }}>
             <RestaurantHeader
               name={getTranslation(cookies.language ? cookies.language : 'en', 'restaurant') + ' ' + menu?.name.slice(10)}
-              photo="assets/placeholder-image.jpg"
-              alt={getTranslation(cookies.language ? cookies.language : 'en', 'restaurant') + ' ' + menu?.name.slice(10)}
               address="Karakaari 7"
               postalcode="02610 Espoo"
             />

@@ -51,7 +51,7 @@ const RestaurantMenuItem = ({
             </Grid>
           </Grid>
 
-          <Typography color="text.primary" variant="body2">
+          <Typography color="text.primary" variant="body2" sx={{ fontSize: '1rem' } }>
             {menuItem}
           </Typography>
           <Grid
@@ -69,8 +69,8 @@ const RestaurantMenuItem = ({
             </Grid>
             <Grid item>
               {restaurantType === 'sodexo' && (
-                <IconButton color='info' onClick={toggleModal}>
-                  <InfoIcon />
+                <IconButton color='info' onClick={toggleModal} >
+                  <InfoIcon sx={ { height: '2rem', width: '2rem' } }/>
                 </IconButton>
               )}
             </Grid>

@@ -4,14 +4,20 @@ const translations = {
     home: 'Home',
     restaurants: 'Restaurants',
     closed: 'Closed',
-    open: 'Open'
+    open: 'Open',
+    restaurant: 'Restaurant',
+    occupancy: 'Visitors',
+    menu: 'Menu today'
   },
   fi: {
     map: 'Kartta',
     home: 'Koti',
     restaurants: 'Ravintolat',
     closed: 'Suljettu',
-    open: 'Avattu'
+    open: 'Avattu',
+    restaurant: 'Ravintola',
+    occupancy: 'Kävijät',
+    menu: 'Päivän ruokalista'
   }
 }
 

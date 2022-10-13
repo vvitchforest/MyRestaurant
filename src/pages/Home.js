@@ -1,21 +1,24 @@
 import { React, useState, useEffect } from 'react'
 import sodexoMenuService from '../services/sodexomenu'
-import { Container, Box, Paper, Typography } from '@mui/material'
+import { Card, Container, Typography } from '@mui/material'
 import Moment from 'moment'
+import 'moment/locale/fi'
 import RestaurantMenu from '../components/RestaurantMenu'
-import LoadingMenu from '../components/LoadingMenu'
+import RestaurantHeader from '../components/RestaurantHeader'
 import { useCookies } from 'react-cookie'
-// import getTranslation from '../utils/Translations'
+import getTranslation from '../utils/Translations'
 
 const Home = () => {
   const [cookies] = useCookies(['language'])
   const [loading, setLoading] = useState(true)
   const [menu, setMenu] = useState(null)
 
+  const myLanguage = cookies.language ? cookies.language : 'en'
+
+  Moment.locale(`${cookies.language ? cookies.language : 'en'}`)
   const currentDateApiFormat = Moment().format('YYYY-MM-DD')
   const currentDate = Moment().format('dddd DD-MM-YYYY')
-
-  const myLanguage = cookies.language ? cookies.language : 'en'
+  console.log(currentDate)
 
   useEffect(() => {
     const getSodexoMenu = async () => {
@@ -40,34 +43,30 @@ const Home = () => {
   console.log(currentDateApiFormat)
 
   return (
-    <Container>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          mt: 1
-        }}
-      >
-        <Typography varinat="h6" sx={{ p: 2 }}>
-          {currentDate}
-        </Typography>
-        {loading && <LoadingMenu restaurantType="sodexo" />}
+    <Container >
+      {loading && <Typography>Loading...</Typography>}
         {!loading && (
-          <>
-            <Typography variant="h4" sx={{ pb: 2 }}>
-              {menu?.name}
+            <Card elevation={3} sx={{ width: { xs: '100%', lg: '75%' }, mb: 4, mt: 2 }}>
+            <RestaurantHeader
+              name={getTranslation(cookies.language ? cookies.language : 'en', 'restaurant') + ' ' + menu?.name.slice(10)}
+              photo="assets/placeholder-image.jpg"
+              alt={getTranslation(cookies.language ? cookies.language : 'en', 'restaurant') + ' ' + menu?.name.slice(10)}
+              address="Karakaari 7"
+              postalcode="02610 Espoo"
+            />
+            <Typography variant="h5"
+            sx={{ pl: 2 }}>
+              {getTranslation(cookies.language ? cookies.language : 'en', 'menu')}
             </Typography>
-
-            <Paper elevation={3} sx={{ width: { xs: '100%', md: '50%' } }}>
+            <Typography varinat="h6" sx={{ pl: 2, textTransform: 'capitalize' }}>
+              {currentDate}
+            </Typography>
               <RestaurantMenu
                 menu={menu?.menu}
                 restaurantType="sodexo"
               ></RestaurantMenu>
-            </Paper>
-          </>
+            </Card>
         )}
-      </Box>
     </Container>
   )
 }

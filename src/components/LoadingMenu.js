@@ -39,7 +39,7 @@ const LoadingMenu = ({ restaurantType }) => {
   })
 
   return (
-    <Box sx={{ width: { xs: '100%', md: '50%' } }}>
+    <Box >
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
         <Skeleton style={{ height: '70px', width: '50%' }} />
       </Box>

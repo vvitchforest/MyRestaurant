@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import RestaurantCard from '../components/RestaurantCard'
 import getTranslation from '../utils/Translations'
+import { CircularProgress, Box } from '@mui/material'
 
 const RestaurantsList = () => {
   const [cookies] = useCookies(['language'])
@@ -45,18 +46,12 @@ const RestaurantsList = () => {
       service.nearbySearch(request, callback)
 
       function callback (results, status, pagination) {
-        console.log('callback ok1, status: ', status)
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-          console.log('callback ok2')
           for (let i = 0; i < results.length; i++) {
             createRestaurantList(results[i])
-            console.log('callback ok3')
-            console.log('isloaded1?: ', isLoaded)
           }
           if (pagination && pagination.hasNextPage) {
-            console.log('callback ok4')
             pagination.nextPage()
-            console.log('isloaded2?: ', isLoaded)
             setTimeout(function () {
               setCheckPagination(true)
             }, 6000)
@@ -89,10 +84,15 @@ const RestaurantsList = () => {
       {(isLoaded && checkPagination) || (isLoaded && checkPagination === false)
         ? placesFinal.map(function (results) {
           return (
-          <RestaurantCard key={results.place_id} name={results.name} address={results.vicinity} icon={results.photos !== undefined ? results.photos[0].getUrl() : ''} />
+          <RestaurantCard key={results.place_id} name={results.name} address={results.vicinity} icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/tcwRcDq/image-not-available.jpg'} />
           )
         })
-        : 'Loading restaurants'}
+        : <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '50px', alignItems: 'center' }}>
+          {getTranslation(
+            cookies.language ? cookies.language : 'en',
+            'loadingrestaurants'
+          )}<CircularProgress sx={{ marginTop: '50px' }}/>
+          </Box>}
     </div>
   )
 }

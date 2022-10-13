@@ -13,12 +13,11 @@ const Home = () => {
   const [loading, setLoading] = useState(true)
   const [menu, setMenu] = useState(null)
 
-  const myLanguage = cookies.language ? cookies.language : 'en'
-
   Moment.locale(`${cookies.language ? cookies.language : 'en'}`)
   const currentDateApiFormat = Moment().format('YYYY-MM-DD')
   const currentDate = Moment().format('dddd DD-MM-YYYY')
-  console.log(currentDate)
+
+  const myLanguage = cookies.language ? cookies.language : 'en'
 
   useEffect(() => {
     const getSodexoMenu = async () => {
@@ -52,12 +51,8 @@ const Home = () => {
               address="Karakaari 7"
               postalcode="02610 Espoo"
             />
-            <Typography variant="h5"
-            sx={{ pl: 2 }}>
-              {getTranslation(cookies.language ? cookies.language : 'en', 'menu')}
-            </Typography>
-            <Typography varinat="h6" sx={{ pl: 2, textTransform: 'capitalize' }}>
-              {currentDate}
+            <Typography variant="h6" sx={{ pl: 2, textTransform: 'capitalize' }}>
+            {currentDate}
             </Typography>
               <RestaurantMenu
                 menu={menu?.menu}

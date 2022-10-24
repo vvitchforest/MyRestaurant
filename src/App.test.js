@@ -5,7 +5,7 @@ import App from './App'
 // eslint-disable-next-line no-undef
 test('renders learn react link', () => {
   render(<App />)
-  const linkElement = screen.getByRole('button', { name: /learn react/i })
+  const linkElement = screen.getByRole('link', { name: /learn react/i })
   // eslint-disable-next-line no-undef
   expect(linkElement).toBeInTheDocument()
 })

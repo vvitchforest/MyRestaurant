@@ -84,7 +84,7 @@ const RestaurantsList = () => {
       {(isLoaded && checkPagination) || (isLoaded && checkPagination === false)
         ? placesFinal.map(function (results) {
           return (
-          <RestaurantCard key={results.place_id} name={results.name} address={results.vicinity} icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/tcwRcDq/image-not-available.jpg'} />
+          <RestaurantCard key={results.place_id} name={results.name} address={results.vicinity} icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'} />
           )
         })
         : <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '50px', alignItems: 'center' }}>

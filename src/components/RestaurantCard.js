@@ -14,8 +14,8 @@ import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
 
 const RestaurantCard = ({ name, address, icon }) => {
-  console.log(icon)
   const [cookies] = useCookies(['language'])
+
   return (
     <Box
       sx={{
@@ -26,8 +26,8 @@ const RestaurantCard = ({ name, address, icon }) => {
         paddingBottom: '10px'
       }}
     >
-      <Card sx={{ minWidth: '50%', maxWidth: '100%', boxShadow: 3 }}>
-        <Box sx={{ width: '100%', height: '100%' }}>
+      <Card sx={{ width: { xs: '90%', sm: '65%', md: '50%', lg: '40%' } }}>
+        <Box>
           <CardHeader
             action={
               <IconButton
@@ -43,9 +43,8 @@ const RestaurantCard = ({ name, address, icon }) => {
             subheader={address}
           />
           <CardMedia
-            sx={{ width: '100%', height: '50%' }}
             component='img'
-            height='200'
+            height='225'
             image={icon}
             alt={getTranslation(
               cookies.language ? cookies.language : 'en',

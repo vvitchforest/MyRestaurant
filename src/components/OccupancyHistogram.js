@@ -28,6 +28,7 @@ const OccupancyHistogram = (args) => {
   const currentHour = new Date().getHours()
 
   function screen (width) {
+    console.log('width: ', width, args.width)
     return width < 700 ? 'sm' : 'lg'
   }
 

@@ -38,7 +38,7 @@ const RestaurantsList = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '2000',
+        radius: '800',
         type: ['restaurant']
       }
 
@@ -83,8 +83,16 @@ const RestaurantsList = () => {
       </h1>
       {(isLoaded && checkPagination) || (isLoaded && checkPagination === false)
         ? placesFinal.map(function (results) {
+          console.log('results: ', results)
           return (
-          <RestaurantCard key={results.place_id} name={results.name} address={results.vicinity} icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'} />
+          <RestaurantCard
+            key={results.place_id}
+            name={results.name}
+            address={results.vicinity}
+            icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
+            rating={results.rating !== undefined ? results.rating : 0}
+            userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
+          />
           )
         })
         : <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '50px', alignItems: 'center' }}>

@@ -8,7 +8,7 @@ import OccupancyHistogram from '../components/OccupancyHistogram.js'
 
 const Occupancy = () => {
   return (
-      <OccupancyHistogram width={300} height={150} />
+      <OccupancyHistogram />
   )
 }
 

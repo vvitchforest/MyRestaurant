@@ -3,8 +3,7 @@
  * Occupacy histogram component for thermal camera data to be used by Nokia restaurant.
  */
 
-import { React, useEffect, useState } from 'react'
-import { Box } from '@mui/material'
+import { React, useState } from 'react'
 import {
   Chart,
   Series,
@@ -14,27 +13,23 @@ import {
   VisualRange,
   Label,
   ConstantLine,
-  Size,
   CommonSeriesSettings
 } from 'devextreme-react/chart'
 import { occupancyData } from '../utils/OccupancyData.js'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
+import ResponsiveBox, { Row } from 'devextreme-react/responsive-box'
 
 // args should only contain width and height
 const OccupancyHistogram = (args) => {
   const [cookies] = useCookies(['language'])
   const [highAverage] = useState(40)
   const [lowAverage] = useState(15)
-  const [width, setWidth] = useState()
-  const [height, setHeight] = useState()
   const currentHour = new Date().getHours()
 
-  useEffect(() => {
-    console.log('occupancy histogram: ', args)
-    setWidth(args.width ? args.width : 300)
-    setHeight(args.height ? args.height : 150)
-  })
+  function screen (width) {
+    return width < 700 ? 'sm' : 'lg'
+  }
 
   // Customizes actual value and prediction value color for bar when it is at current hour
   const customizePoint = (arg) => {
@@ -58,14 +53,14 @@ const OccupancyHistogram = (args) => {
   }
 
   return (
-    <Box sx={{ overflowX: 'auto', padding: '20px' }}>
+    <ResponsiveBox singleColumnScreen='sm' screenByWidth={screen}>
+      <Row ratio={1}>
       <Chart
         id='chart'
         title='Occupancy histogram'
         dataSource={occupancyData}
         customizePoint={customizePoint}
       >
-        <Size width={width} height={height} />
         <CommonSeriesSettings
           argumentField='hour'
           type='bar'
@@ -119,7 +114,8 @@ const OccupancyHistogram = (args) => {
         </ValueAxis>
         <Legend visible={false} />
       </Chart>
-    </Box>
+      </Row>
+    </ResponsiveBox>
   )
 }
 

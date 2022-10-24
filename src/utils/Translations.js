@@ -1,3 +1,8 @@
+/**
+ * @Author Oskar Wiiala
+ * All translations for the app are here
+ */
+
 const translations = {
   en: {
     map: 'Map',
@@ -21,14 +26,15 @@ const translations = {
     ariapicturerestaurant: 'picture of the restaurant',
     restaurant: 'Restaurant',
     occupancy: 'Visitors',
-    menu: 'Menu today'
+    menu: 'Menu today',
+    openinghours: 'Opening hours'
   },
   fi: {
     map: 'Kartta',
     home: 'Koti',
     restaurants: 'Ravintolat',
     closed: 'Suljettu',
-    open: 'Avattu',
+    open: 'Avoinna',
     people: 'ihmiset',
     hourofday: 'tunnit',
     highaverage: 'korkea keskiarvo',
@@ -45,7 +51,8 @@ const translations = {
     ariapicturerestaurant: 'kuva ravintolasta',
     restaurant: 'Ravintola',
     occupancy: 'Kävijät',
-    menu: 'Päivän ruokalista'
+    menu: 'Päivän ruokalista',
+    openinghours: 'Aukioloajat'
   }
 }
 

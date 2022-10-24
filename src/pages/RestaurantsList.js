@@ -92,6 +92,7 @@ const RestaurantsList = () => {
             icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
             rating={results.rating !== undefined ? results.rating : 0}
             userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
+            isOpen={results.opening_hours.isOpen !== false ? 'open' : 'closed'}
           />
           )
         })

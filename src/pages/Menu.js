@@ -2,6 +2,7 @@ import { React, useEffect, useState } from 'react'
 import foodandcoMenuService from '../services/foodandcomenu'
 import { Container, Box, Paper, Typography } from '@mui/material'
 import Moment from 'moment'
+import 'moment/locale/fi'
 import RestaurantMenu from '../components/RestaurantMenu'
 import LoadingMenu from '../components/LoadingMenu'
 import { useCookies } from 'react-cookie'
@@ -12,6 +13,7 @@ const Menu = () => {
   const [todayMenu, setTodayMenu] = useState(null)
 
   const myLanguage = cookies.language ? cookies.language : 'en'
+  Moment.locale(`${cookies.language ? cookies.language : 'en'}`)
   const currentDate = Moment().format('dddd DD-MM-YYYY')
 
   useEffect(() => {
@@ -53,10 +55,13 @@ const Menu = () => {
           mt: 1
         }}
       >
-        <Typography varinat="h6" sx={{ p: 2 }}>
+        <Typography varinat="h6" sx={{ p: 2, textTransform: 'capitalize' }}>
           {currentDate}
         </Typography>
-        {loading && <LoadingMenu restaurantType="foodandco"/> }
+        {loading &&
+        <Box sx={{ width: { xs: '100%', md: '50%' } }}>
+          <LoadingMenu restaurantType="foodandco"/>
+        </Box>}
         {!loading && (
           <>
             <Typography variant="h4" sx={{ pb: 2 }}>

@@ -1,22 +1,21 @@
 import { React, useState, useEffect } from 'react'
 import sodexoMenuService from '../services/sodexomenu'
-import { Container, Box, Paper, Typography } from '@mui/material'
+import { Card, Container, Typography } from '@mui/material'
 import Moment from 'moment'
+import 'moment/locale/fi'
 import RestaurantMenu from '../components/RestaurantMenu'
-import LoadingMenu from '../components/LoadingMenu'
+import RestaurantHeader from '../components/RestaurantHeader'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
-// import getTranslation from '../utils/Translations'
 
 const Home = () => {
   const [cookies] = useCookies(['language'])
   const [loading, setLoading] = useState(true)
   const [menu, setMenu] = useState(null)
 
+  Moment.locale(`${cookies.language ? cookies.language : 'en'}`)
   const currentDateApiFormat = Moment().format('YYYY-MM-DD')
-  // const currentDate = Moment().format('dddd DD-MM-YYYY')
-  const currentDateNoDay = Moment().format('DD-MM-YYYY')
-  const currentDay = Moment().format('dddd').toLocaleLowerCase()
+  const currentDate = Moment().format('dddd DD-MM-YYYY')
 
   const myLanguage = cookies.language ? cookies.language : 'en'
 
@@ -24,16 +23,10 @@ const Home = () => {
     const getSodexoMenu = async () => {
       setLoading(true)
       try {
-        let menu
-        myLanguage === 'en'
-          ? (menu = await sodexoMenuService.getMenuEn(
-              currentDateApiFormat,
-              '80'
-            ))
-          : (menu = await sodexoMenuService.getMenuFi(
-              currentDateApiFormat,
-              '80'
-            ))
+        const menu = myLanguage === 'en'
+          ? await sodexoMenuService.getMenuEn(currentDateApiFormat, '80')
+          : await sodexoMenuService.getMenuFi(currentDateApiFormat, '80')
+
         const menuObject = { name: menu.meta.ref_title, menu: menu.courses }
         setMenu(menuObject)
         console.log('menuObject', menuObject)
@@ -49,34 +42,24 @@ const Home = () => {
   console.log(currentDateApiFormat)
 
   return (
-    <Container>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            mt: 1
-          }}
-        >
-          <Typography varinat="h6" sx={{ p: 2 }}>
-          {`${getTranslation(cookies.language ? cookies.language : 'en', currentDay)} ${currentDateNoDay}`}
-          </Typography>
-          {loading && <LoadingMenu restaurantType="sodexo" />}
-          {!loading && (
-            <>
-              <Typography variant="h4" sx={{ pb: 2 }}>
-                {menu?.name}
-              </Typography>
-
-              <Paper elevation={3} sx={{ width: { xs: '100%', md: '50%' } }}>
-                <RestaurantMenu
-                  menu={menu?.menu}
-                  restaurantType="sodexo"
-                ></RestaurantMenu>
-              </Paper>
-            </>
-          )}
-        </Box>
+    <Container sx={ { display: 'flex', justifyContent: 'center' }}>
+      {loading && <Typography>Loading...</Typography>}
+        {!loading && (
+            <Card elevation={3} sx={{ width: { xs: '100%', md: '75%' }, mb: 4, mt: 2 }}>
+            <RestaurantHeader
+              name={getTranslation(cookies.language ? cookies.language : 'en', 'restaurant') + ' ' + menu?.name.slice(10)}
+              address="Karakaari 7"
+              postalcode="02610 Espoo"
+            />
+            <Typography variant="h6" sx={{ pl: 2, textTransform: 'capitalize' }}>
+            {currentDate}
+            </Typography>
+              <RestaurantMenu
+                menu={menu?.menu}
+                restaurantType="sodexo"
+              ></RestaurantMenu>
+            </Card>
+        )}
     </Container>
   )
 }

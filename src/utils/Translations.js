@@ -18,7 +18,10 @@ const translations = {
     sunday: 'Sunday',
     loadingrestaurants: 'Loading restaurants...',
     ariasettings: 'settings',
-    ariapicturerestaurant: 'picture of the restaurant'
+    ariapicturerestaurant: 'picture of the restaurant',
+    restaurant: 'Restaurant',
+    occupancy: 'Visitors',
+    menu: 'Menu today'
   },
   fi: {
     map: 'Kartta',
@@ -39,7 +42,10 @@ const translations = {
     sunday: 'Sunnuntai',
     loadingrestaurants: 'Ladataan ravintoloita...',
     ariasettings: 'asetukset',
-    ariapicturerestaurant: 'kuva ravintolasta'
+    ariapicturerestaurant: 'kuva ravintolasta',
+    restaurant: 'Ravintola',
+    occupancy: 'Kävijät',
+    menu: 'Päivän ruokalista'
   }
 }
 

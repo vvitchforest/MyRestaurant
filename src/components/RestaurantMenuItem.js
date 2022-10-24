@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 import CustomModal from '../components/CustomModal'
+import { useCookies } from 'react-cookie'
 
 const RestaurantMenuItem = ({
   menuItem,
@@ -19,6 +20,7 @@ const RestaurantMenuItem = ({
   dietCodes,
   restaurantType
 }) => {
+  const [cookies] = useCookies(['language'])
   const [modalOpen, setModalOpen] = useState(false)
   const toggleModal = () => setModalOpen(!modalOpen)
 
@@ -49,7 +51,7 @@ const RestaurantMenuItem = ({
             </Grid>
           </Grid>
 
-          <Typography color="text.primary" variant="body2">
+          <Typography color="text.primary" variant="body2" sx={{ fontSize: '1rem' } }>
             {menuItem}
           </Typography>
           <Grid
@@ -67,8 +69,8 @@ const RestaurantMenuItem = ({
             </Grid>
             <Grid item>
               {restaurantType === 'sodexo' && (
-                <IconButton color='info' onClick={toggleModal}>
-                  <InfoIcon />
+                <IconButton color='info' onClick={toggleModal} >
+                  <InfoIcon sx={ { height: '2rem', width: '2rem' } }/>
                 </IconButton>
               )}
             </Grid>
@@ -79,7 +81,7 @@ const RestaurantMenuItem = ({
       <CustomModal
         open={modalOpen}
         handleClose={() => setModalOpen(false)}
-        title="Allergies"
+        title={cookies.language === 'en' ? 'Allergies' : 'Allergiat'}
       >
         <Typography>{dietInfo}</Typography>
       </CustomModal>

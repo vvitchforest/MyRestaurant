@@ -21,7 +21,9 @@ const translations = {
     ariapicturerestaurant: 'picture of the restaurant',
     restaurant: 'Restaurant',
     occupancy: 'Visitors',
-    menu: 'Menu today'
+    menu: 'Lunch menu today',
+    menuNull: 'There is no menu available for today.',
+    menuError: 'Cannot get menu...'
   },
   fi: {
     map: 'Kartta',
@@ -45,7 +47,9 @@ const translations = {
     ariapicturerestaurant: 'kuva ravintolasta',
     restaurant: 'Ravintola',
     occupancy: 'Kävijät',
-    menu: 'Päivän ruokalista'
+    menu: 'Päivän lounas',
+    menuNull: 'Tälle päivälle ei ole näytettävää ruokalistaa.',
+    menuError: 'Ruokalistan latauksessa tapahtui virhe...'
   }
 }
 

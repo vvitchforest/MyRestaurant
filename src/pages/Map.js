@@ -4,6 +4,7 @@ import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
 import DirectionsIcon from '@mui/icons-material/Directions'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined'
+import DirectionsModal from '../components/DirectionsModal'
 // import { CenterFocusStrong } from '@mui/icons-material'
 import CloseIcon from '@mui/icons-material/Close'
 import MyLocationIcon from '@mui/icons-material/MyLocation'
@@ -17,6 +18,8 @@ const Map = () => {
   const [libraries] = useState(['places', 'geometry'])
   const [cookies] = useCookies(['language'])
   const [openDrawer, setOpenDrawer] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
+  const toggleModal = () => setModalOpen(!modalOpen)
 
   const [restaurantRating, setRestaurantRating] = useState(0)
   const [restaurantBusinessStatus, setRestaurantBusinessStatus] =
@@ -131,7 +134,7 @@ const Map = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '10',
+        radius: '800',
         type: ['restaurant']
       }
 
@@ -159,26 +162,6 @@ const Map = () => {
     console.log('Place', place)
     placesList.push(place)
     setPlacesFinal(placesList)
-  }
-
-  const getDirections = (lat, lng) => {
-    const directionService = new window.google.maps.DirectionsService()
-    const directionRenderer = new window.google.maps.DirectionsRenderer()
-
-    directionRenderer.setMap(mapRef.current)
-
-    const request = {
-      origin: currentPos,
-      destination: { lat, lng },
-      travelMode: 'WALKING'
-    }
-
-    directionService.route(request, function (result, status) {
-      if (status === 'OK') {
-        directionRenderer.setDirections(result)
-      }
-    })
-    setOpenDrawer(false)
   }
 
   const setRestaurantInfo = (
@@ -369,7 +352,7 @@ const Map = () => {
                   <RestaurantMenuIcon sx={{ height: '100%', width: '100%' }} />
                 </Box>
                 <Box sx={iconBoxStyle}>
-                  <IconButton sx={{ height: '100%', width: '100%' }} onClick={() => getDirections(restaurantLat, restaurantLng)}>
+                  <IconButton sx={{ height: '100%', width: '100%' }} onClick={toggleModal}>
                     <DirectionsIcon/>
                   </IconButton>
                 </Box>
@@ -377,12 +360,21 @@ const Map = () => {
             </div>
           </div>
         </Drawer>
+        <DirectionsModal
+        open={modalOpen}
+        handleClose={() => setModalOpen(false)}
+        setOpenDrawer={setOpenDrawer}
+        currentPos={currentPos}
+        restaurantLat={restaurantLat}
+        restaurantLng={restaurantLng}
+        mapRef={mapRef} />
         </GoogleMap>
       )
     : (
     <></>
       )
 }
+// onClick={() => getDirections(restaurantLat, restaurantLng)}
 
 const exitStyle = {
   display: 'flex',

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Box, IconButton, Button, Drawer, Rating } from '@mui/material'
+import { Box, IconButton, Button, Drawer, Rating, Typography, CardMedia } from '@mui/material'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
 import DirectionsIcon from '@mui/icons-material/Directions'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
-import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined'
 import DirectionsModal from '../components/DirectionsModal'
 // import { CenterFocusStrong } from '@mui/icons-material'
 import CloseIcon from '@mui/icons-material/Close'
@@ -24,6 +23,7 @@ const Map = () => {
   const [restaurantRating, setRestaurantRating] = useState(0)
   const [restaurantBusinessStatus, setRestaurantBusinessStatus] =
      useState('unknown')
+  const [restaurantIcon, setRestaurantIcon] = useState()
   const [restaurantName, setRestaurantName] = useState('unknown')
   const [restaurantAddress, setRestaurantAddress] = useState('unknown')
   const [restaurantLat, setRestaurantLat] = useState()
@@ -251,6 +251,7 @@ const Map = () => {
                       lng: results.geometry.location.lng()
                     }}
                     onClick={() => {
+                      setRestaurantIcon(results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png')
                       setRestaurantInfo(
                         results.place_id
                       )
@@ -281,6 +282,7 @@ const Map = () => {
                       lng: results.geometry.location.lng()
                     }}
                     onClick={() => {
+                      setRestaurantIcon(results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png')
                       setRestaurantInfo(
                         results.place_id
                       )
@@ -302,72 +304,76 @@ const Map = () => {
             />}
           <></>
           <Drawer
-          anchor='bottom'
-          open={openDrawer}
-          onClose={() => setOpenDrawer(false)}
-          variant='temporary'
-        >
-          <div className='demo-content'>
-            <div style={exitStyle}>
-              <Button type='button' onClick={handleDrawerToggle}>
-                <CloseIcon />
-              </Button>
-            </div>
-            <div style={style}>
-              <div
-                style={{
-                  padding: '12px',
-                  flex: 1,
-                  border: 'solid #000',
-                  borderWidth: '1px',
-                  borderColor: '#0250a3'
-                }}
-              >
-                <ImageOutlinedIcon sx={{ height: '100%', width: '100%' }} />
-              </div>
-              <div style={{ padding: '12px', flex: 2 }}>
-                <p
-                  style={{
-                    backgroundColor: restaurantBusinessStatus === 'open'
-                      ? '#DAF7A6'
-                      : '#FF8266',
-                    fontSize: '4vw',
-                    width: '50%',
-                    padding: '5px',
-                    borderRadius: 12
+            anchor='bottom'
+            open={openDrawer}
+            onClose={() => setOpenDrawer(false)}
+            variant='temporary'
+          >
+            <Box>
+              <Box sx={exitStyle}>
+                <Button type='button' onClick={handleDrawerToggle}>
+                  <CloseIcon sx={closeIconStyle} />
+                </Button>
+              </Box>
+              <Box sx={style}>
+                <Box
+                  sx={{
+                    pl: '12px',
+                    pb: '12px',
+                    flex: 1
                   }}
                 >
+                  <CardMedia
+                    sx={{ pt: '12px', height: { xs: '95%' } }}
+                    component='img'
+                    height='225'
+                    image={restaurantIcon}
+                    alt={getTranslation(
+                      cookies.language ? cookies.language : 'en',
+                      'ariapicturerestaurant'
+                    )}
+                  />
+                </Box>
+                <Box sx={{ padding: '12px', flex: 2 }}>
+                  <Typography
+                    variant='body1' sx={restaurantNameStyle}
+                    style={{
+                      backgroundColor: restaurantBusinessStatus === 'open'
+                        ? '#DAF7A6'
+                        : '#FF8266',
+                      width: '100%',
+                      borderRadius: 12
+                    }}
+                  >
                   {getTranslation(
                     cookies.language ? cookies.language : 'en',
                     restaurantBusinessStatus
                   )}
-                </p>
-                <p style={textStyle}>{restaurantName}</p>
-                <p style={textStyle}>{restaurantAddress}</p>
-                <p style={textStyle}>{distance}</p>
-                <Rating name='half-rating-read' value={restaurantRating === undefined ? 0 : restaurantRating} defaultValue={0} precision={0.5} readOnly />
-              </div>
-              <div style={iconContainerStyle}>
-                <Box sx={iconBoxStyle}>
-                  <RestaurantMenuIcon sx={{ height: '100%', width: '100%' }} />
+                  </Typography>
+                  <Typography variant='body1' sx={restaurantNameStyle}>{restaurantName}</Typography>
+                  <Typography variant='body2' color='text.secondary' sx={restaurantAddressStyle}>{restaurantAddress}</Typography>
+                  <Typography variant='body2' color='text.secondary' sx={restaurantAddressStyle}>{distance}</Typography>
+                  <Rating name='half-rating-read' value={restaurantRating === undefined ? 0 : restaurantRating} defaultValue={0} precision={0.5} readOnly />
                 </Box>
-                <Box sx={iconBoxStyle}>
-                  <IconButton sx={{ height: '100%', width: '100%' }} onClick={toggleModal}>
-                    <DirectionsIcon/>
+                <Box sx={iconContainerStyle}>
+                  <IconButton sx={iconButtonStyle} >
+                    <RestaurantMenuIcon sx={iconStyle} />
+                  </IconButton>
+                  <IconButton sx={iconButtonStyle} onClick={toggleModal}>
+                    <DirectionsIcon sx={iconStyle} />
                   </IconButton>
                 </Box>
-              </div>
-            </div>
-          </div>
-        </Drawer>
-        <DirectionsModal
-        open={modalOpen}
-        handleClose={() => setModalOpen(false)}
-        setOpenDrawer={setOpenDrawer}
-        currentPos={currentPos}
-        restaurantLat={restaurantLat}
-        restaurantLng={restaurantLng}
-        mapRef={mapRef} />
+              </Box>
+            </Box>
+          </Drawer>
+          <DirectionsModal
+            open={modalOpen}
+            handleClose={() => setModalOpen(false)}
+            setOpenDrawer={setOpenDrawer}
+            currentPos={currentPos}
+            restaurantLat={restaurantLat}
+            restaurantLng={restaurantLng}
+            mapRef={mapRef} />
         </GoogleMap>
       )
     : (
@@ -387,8 +393,13 @@ const style = {
   justifyContent: 'space-between'
 }
 
-const textStyle = {
-  fontSize: '3vw',
+const restaurantNameStyle = {
+  fontSize: { xs: '5vw', sm: '3vw', md: '2.5vw', lg: '2.5vw' },
+  padding: '5px'
+}
+
+const restaurantAddressStyle = {
+  fontSize: { xs: '4vw', sm: '2vw', md: '1.8vw', lg: '1.8vw' },
   padding: '5px'
 }
 
@@ -398,16 +409,27 @@ const iconContainerStyle = {
   flex: 1,
   flexDirection: 'column',
   justifyContent: 'space-around',
-  padding: '12px'
+  pl: '12px',
+  pr: '12px'
 }
 
-const iconBoxStyle = {
+const closeIconStyle = {
+  width: { xs: '25px', sm: '40px', md: '58px', lg: '65px' },
+  height: { xs: '25px', sm: '40px', md: '58px', lg: '65px' }
+}
+
+const iconStyle = {
+  width: { xs: '80%', sm: '50px', md: '75px', lg: '100px' },
+  height: { xs: '80%', sm: '50px', md: '75px', lg: '100px' }
+}
+
+const iconButtonStyle = {
   display: 'flex',
   justifyContent: 'space-around',
   flexDirection: 'column',
   boxShadow: 3,
-  width: '40%',
-  height: '40%',
+  width: { xs: '80%', sm: '75px', md: '100px', lg: '40%' },
+  height: { xs: '40%', sm: '75px', md: '100px', lg: '40%' },
   border: 'solid #000',
   borderWidth: '1px',
   borderRadius: '6px',

@@ -26,15 +26,16 @@ const RestaurantMenuItem = ({
 
   return (
     <>
-      <ListItem>
+      <ListItem sx={{ pl: { xs: 2, sm: 5 } }}>
         <Box sx={{ width: '100%' }}>
           <Grid container sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Grid item xs>
               <Typography
                 color="text.secondary"
-                variant="h6"
+                variant="subtitle2"
                 component="div"
                 textTransform="uppercase"
+                fontSize="1.125rem"
               >
                 {mealType}
               </Typography>
@@ -44,21 +45,25 @@ const RestaurantMenuItem = ({
                 gutterBottom
                 variant="subtitle2"
                 component="div"
-                sx={{ pt: 1 }}
+                fontSize="1rem"
               >
                 {price}
               </Typography>
             </Grid>
           </Grid>
 
-          <Typography color="text.primary" variant="body2" sx={{ fontSize: '1rem' } }>
-            {menuItem}
-          </Typography>
           <Grid
             container
             sx={{ display: 'flex', justifyContent: 'space-between' }}
           >
-            <Grid item>
+            <Grid item sx={{ flex: 8 }}>
+              <Typography
+                color="text.primary"
+                variant="body2"
+                sx={{ fontSize: '1rem' }}
+              >
+                {menuItem}
+              </Typography>
               <Typography
                 color="text.secondary"
                 variant="body2"
@@ -67,10 +72,10 @@ const RestaurantMenuItem = ({
                 {dietCodes}
               </Typography>
             </Grid>
-            <Grid item>
+            <Grid item sx={{ flex: 1 }}>
               {restaurantType === 'sodexo' && (
-                <IconButton color='info' onClick={toggleModal} >
-                  <InfoIcon sx={ { height: '2rem', width: '2rem' } }/>
+                <IconButton color="info" onClick={toggleModal}>
+                  <InfoIcon sx={{ height: '2.25rem', width: '2.25rem', pl: 2 }} />
                 </IconButton>
               )}
             </Grid>

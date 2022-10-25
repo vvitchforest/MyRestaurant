@@ -27,7 +27,9 @@ const translations = {
     restaurant: 'Restaurant',
     occupancy: 'Visitors',
     menu: 'Menu today',
-    openinghours: 'Opening hours'
+    openinghours: 'Opening hours',
+    choosetraveloption: 'Choose travel option',
+    cancel: 'Cancel'
   },
   fi: {
     map: 'Kartta',
@@ -52,7 +54,9 @@ const translations = {
     restaurant: 'Ravintola',
     occupancy: 'Kävijät',
     menu: 'Päivän ruokalista',
-    openinghours: 'Aukioloajat'
+    openinghours: 'Aukioloajat',
+    choosetraveloption: 'Valitse matkavaihtoehto',
+    cancel: 'Peru'
   }
 }
 

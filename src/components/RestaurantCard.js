@@ -8,7 +8,8 @@ import {
   IconButton,
   Typography,
   Rating,
-  Collapse
+  Collapse,
+  Button
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
@@ -16,6 +17,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import PropTypes from 'prop-types'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
+import { useDispatch } from 'react-redux'
+import * as actions from '../store/actions/index'
+import CustomModal from './CustomModal'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
@@ -29,23 +33,81 @@ const ExpandMore = styled((props) => {
 }))
 
 const RestaurantCard = ({
+  placeId,
   name,
   address,
   icon,
   rating,
   userRatingsTotal,
-  isOpen
+  isOpen,
+  // openingHours,
+  onClick
 }) => {
   console.log('openNow: ', isOpen)
   const [cookies] = useCookies(['language'])
   const [expanded, setExpanded] = useState(false)
+  const [openingHours, setOpeningHours] = useState([])
+  const [reviews, setReviews] = useState([])
+  const [modalOpen, setModalOpen] = useState(false)
+  const toggleModal = () => setModalOpen(!modalOpen)
+  const dispatch = useDispatch()
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
+    dispatch(actions.setOpeningHours(!expanded))
+    dispatch(actions.setPlaceId(placeId))
   }
+  const getPlaceDetails = () => {
+    const request = {
+      placeId: placeId,
+      fields: ['opening_hours']
+    }
 
+    const service = new window.google.maps.places.PlacesService(
+      document.createElement('div')
+    )
+    service.getDetails(request, callback)
+
+    function callback (results, status) {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        if (results.opening_hours !== undefined) {
+          setOpeningHours(results.opening_hours.weekday_text)
+        } else {
+          setOpeningHours(['Not available'])
+        }
+      }
+    }
+  }
+  if (expanded === true) {
+    getPlaceDetails()
+    dispatch(actions.setOpeningHours(false))
+  }
+  const handleReviews = () => {
+    const request = {
+      placeId: placeId,
+      fields: ['reviews']
+    }
+
+    const service = new window.google.maps.places.PlacesService(
+      document.createElement('div')
+    )
+    service.getDetails(request, callback)
+
+    function callback (results, status) {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        if (results.reviews !== undefined) {
+          setReviews(results.reviews)
+        } else {
+          setReviews(['Not available'])
+        }
+      }
+    }
+    toggleModal()
+  }
   return (
     <Box
+    key={placeId}
+    onClick={onClick}
       sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -95,7 +157,8 @@ const RestaurantCard = ({
               precision={0.5}
               readOnly
             />
-            <Typography
+            <Button
+            onClick={handleReviews}
               sx={{
                 alignSelf: 'center',
                 textDecoration: 'underline',
@@ -105,7 +168,7 @@ const RestaurantCard = ({
               color='text.secondary'
             >
               {userRatingsTotal}
-            </Typography>
+            </Button>
           </Box>
           <CardMedia
             component='img'
@@ -135,21 +198,64 @@ const RestaurantCard = ({
           <Collapse in={expanded} timeout='auto' unmountOnExit>
             <CardContent>
               <Typography variant='body2' color='text.secondary'>
-                PLACEHOLDER OPENING HOURS
+                OPENING HOURS
               </Typography>
-              <Typography variant='body2' color='text.secondary'>
-                Monday: 9:00 - 18:00
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>
-                Tuesday: 9:00 - 18:00
-              </Typography>
-              <Typography variant='body2' color='text.secondary'>Wednesday: 9:00 - 18:00</Typography>
-              <Typography variant='body2' color='text.secondary'>Thursday: 9:00 - 18:00</Typography>
-              <Typography variant='body2' color='text.secondary'>Friday: 9:00 - 18:00</Typography>
-              <Typography variant='body2' color='text.secondary'>Saturday: 10:00 - 16:00</Typography>
-              <Typography variant='body2' color='text.secondary'>Sunday: closed</Typography>
+              {openingHours.map(function (results) {
+                return (
+                 <Typography key={results} variant='body2' color='text.secondary'>
+                    {results}
+                  </Typography>
+                )
+              })
+              }
             </CardContent>
           </Collapse>
+          <CustomModal
+          open={modalOpen}
+          handleClose={() => setModalOpen(false)}
+          title={cookies.language === 'en' ? 'Reviews' : 'Arvostelut'}
+          >
+          {reviews.map(function (results) {
+            return (
+              <Card key={results.time} sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                flexDirection: 'column',
+                marginBottom: '10px',
+                overflow: 'auto',
+                paddingBottom: '10px'
+              }}>
+              <CardHeader
+              action={
+              <IconButton
+                aria-label={getTranslation(
+                  cookies.language ? cookies.language : 'en',
+                  'ariasettings'
+                )}
+              >
+                </IconButton>
+              }
+              title={results.author_name}
+              subheader={results.relative_time_description}
+              />
+              <CardContent>
+              <Rating
+              sx={{ marginBottom: '10px' }}
+              name='half-rating-read'
+              value={results.rating}
+              defaultValue={0}
+              precision={0.5}
+              readOnly
+              />
+              <Typography variant='body2'>
+              {results.text}
+              </Typography>
+              </CardContent>
+              </Card>
+            )
+          })
+          }
+          </CustomModal>
         </Box>
       </Card>
     </Box>
@@ -157,12 +263,15 @@ const RestaurantCard = ({
 }
 
 RestaurantCard.propTypes = {
+  placeId: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   address: PropTypes.string.isRequired,
   icon: PropTypes.string.isRequired,
   rating: PropTypes.number.isRequired,
   userRatingsTotal: PropTypes.number.isRequired,
-  isOpen: PropTypes.string.isRequired
+  isOpen: PropTypes.string.isRequired,
+  // openingHours: PropTypes.array.isRequired,
+  onClick: PropTypes.any.isRequired
 }
 
 export default RestaurantCard

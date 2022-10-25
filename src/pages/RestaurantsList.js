@@ -4,6 +4,8 @@ import { useCookies } from 'react-cookie'
 import RestaurantCard from '../components/RestaurantCard'
 import getTranslation from '../utils/Translations'
 import { CircularProgress, Box } from '@mui/material'
+// import { useDispatch, useSelector } from 'react-redux'
+// import * as actions from '../store/actions/index'
 
 const RestaurantsList = () => {
   const [cookies] = useCookies(['language'])
@@ -13,6 +15,11 @@ const RestaurantsList = () => {
   const [checkPagination, setCheckPagination] = useState()
   const [placesFinal, setPlacesFinal] = useState([])
   const [libraries] = useState(['places', 'geometry'])
+  // const expanded = useSelector(state => state.userinterface.expanded)
+  // const placeId = useSelector(state => state.userinterface.placeId)
+  // const dispatch = useDispatch()
+  // const [openingHours, setOpeningHours] = useState([])
+  // const [selectedCard, setSelectedCard] = useState(new Set())
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -38,7 +45,7 @@ const RestaurantsList = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '800',
+        radius: '60',
         type: ['restaurant']
       }
 
@@ -72,6 +79,41 @@ const RestaurantsList = () => {
     placesList.push(place)
     setPlacesFinal(placesList)
   }
+  // Will leave these here for now (ignore)
+  /*  const getPlaceDetails = () => {
+    console.log('PlaceId', placeId)
+    const request = {
+      placeId: placeId,
+      fields: ['opening_hours']
+    }
+
+    const service = new window.google.maps.places.PlacesService(
+      document.createElement('div')
+    )
+    service.getDetails(request, callback)
+
+    function callback (results, status) {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        console.log('Res', results.opening_hours.weekday_text)
+        setOpeningHours(results.opening_hours.weekday_text)
+      }
+    }
+  }
+  if (expanded === true) {
+    getPlaceDetails()
+    dispatch(actions.setOpeningHours(false))
+  }
+  const handleOnClick = (id) => {
+    setSelectedCard(selectedCard => {
+      selectedCard = new Set(selectedCard)
+      if (selectedCard.has(id)) {
+        selectedCard.delete(id)
+      } else {
+        selectedCard.add(id)
+      }
+      return selectedCard
+    })
+  } */
 
   return (
     <div>
@@ -87,12 +129,15 @@ const RestaurantsList = () => {
           return (
           <RestaurantCard
             key={results.place_id}
+            placeId={results.place_id}
             name={results.name}
             address={results.vicinity}
             icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
             rating={results.rating !== undefined ? results.rating : 0}
             userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
-            isOpen={results.opening_hours.isOpen !== false ? 'open' : 'closed'}
+            isOpen={results.opening_hours !== undefined && results.opening_hours.isOpen() !== false ? 'open' : 'closed'}
+            // openingHours={openingHours.length > 0 && selectedCard.has(results.place_id) ? openingHours : ['Not available']}
+            // onClick={(e) => handleOnClick(results.place_id)}
           />
           )
         })

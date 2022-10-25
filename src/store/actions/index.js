@@ -1,3 +1,5 @@
 export {
-  setLanguage
+  setLanguage,
+  setOpeningHours,
+  setPlaceId
 } from './userinterface'

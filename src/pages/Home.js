@@ -45,13 +45,19 @@ const Home = () => {
     <Container sx={ { display: 'flex', justifyContent: 'center' }}>
       {loading && <Typography>Loading...</Typography>}
         {!loading && (
-            <Card elevation={3} sx={{ width: { xs: '100%', md: '75%' }, mb: 4, mt: 2 }}>
+            <Card elevation={3} sx={{ width: { xs: '100%', md: '75%', lg: '60%' }, mb: 2, mt: 2 }}>
             <RestaurantHeader
               name={getTranslation(cookies.language ? cookies.language : 'en', 'restaurant') + ' ' + menu?.name.slice(10)}
               address="Karakaari 7"
               postalcode="02610 Espoo"
             />
-            <Typography variant="h6" sx={{ pl: 2, textTransform: 'capitalize' }}>
+            <Typography
+              variant="h5"
+              sx={{ pl: { xs: 2, sm: 5 } }}
+            >
+              {myLanguage === 'en' ? 'Menu of the day' : 'Päivän ruokalista'}
+            </Typography>
+            <Typography sx={{ pl: { xs: 2, sm: 5 }, textTransform: 'capitalize' }}>
             {currentDate}
             </Typography>
               <RestaurantMenu

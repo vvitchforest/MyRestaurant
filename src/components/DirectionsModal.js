@@ -63,7 +63,28 @@ const DirectionsModal = ({
       setOpenDrawer(false)
       handleClose()
     } else if (type === 'bus') {
-      console.log('bus not yet implemented')
+      const directionService = new window.google.maps.DirectionsService()
+      const directionRenderer = new window.google.maps.DirectionsRenderer()
+
+      directionRenderer.setMap(mapRef.current)
+
+      const request = {
+        origin: currentPos,
+        destination: { lat, lng },
+        travelMode: 'TRANSIT',
+        transitOptions: {
+          departureTime: new Date(),
+          modes: ['BUS'],
+          routingPreference: 'FEWER_TRANSFERS'
+        }
+      }
+
+      directionService.route(request, function (result, status) {
+        if (status === 'OK') {
+          directionRenderer.setDirections(result)
+          console.log('dir', result)
+        }
+      })
       setOpenDrawer(false)
       handleClose()
     } else {

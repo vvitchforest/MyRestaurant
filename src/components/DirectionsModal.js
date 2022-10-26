@@ -1,5 +1,5 @@
 /**
- * @Author Oskar Wiiala
+ * @Author Oskar Wiiala, Teemu Tirkkonen
  * Modal for choosing travel option to specific restaurant in map
  */
 

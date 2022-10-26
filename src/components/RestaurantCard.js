@@ -9,7 +9,14 @@ import {
   Typography,
   Rating,
   Collapse,
-  Button
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
@@ -47,6 +54,7 @@ const RestaurantCard = ({
   const [cookies] = useCookies(['language'])
   const [expanded, setExpanded] = useState(false)
   const [openingHours, setOpeningHours] = useState([])
+  const [tableRows, setTableRows] = useState([])
   const [reviews, setReviews] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const toggleModal = () => setModalOpen(!modalOpen)
@@ -59,7 +67,7 @@ const RestaurantCard = ({
   }
   const getPlaceDetails = () => {
     const request = {
-      placeId: placeId,
+      placeId,
       fields: ['opening_hours']
     }
 
@@ -72,6 +80,7 @@ const RestaurantCard = ({
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         if (results.opening_hours !== undefined) {
           setOpeningHours(results.opening_hours.weekday_text)
+          createTableRows(openingHours)
         } else {
           setOpeningHours(['Not available'])
         }
@@ -84,7 +93,7 @@ const RestaurantCard = ({
   }
   const handleReviews = () => {
     const request = {
-      placeId: placeId,
+      placeId,
       fields: ['reviews']
     }
 
@@ -104,10 +113,28 @@ const RestaurantCard = ({
     }
     toggleModal()
   }
+
+  // creates table rows for opening hours
+  const createTableRows = (data) => {
+    const tableRowsTemp = []
+    for (let i = 0; data.length > i; i++) {
+      const data1 = data[i]
+      // gets characters of a string before character ':' and then translates it
+      const day = getTranslation(cookies.language ? cookies.language : 'en', data1.substring(0, data1.indexOf(':')).toLowerCase())
+      // gets characters of a string after character ' '
+      let hours = data1.substring(data1.indexOf(' ') + 1)
+      if (hours === 'Closed') {
+        hours = getTranslation(cookies.language ? cookies.language : 'en', 'closed')
+      }
+      tableRowsTemp.push({ day, hours })
+    }
+    setTableRows(tableRowsTemp)
+  }
+
   return (
     <Box
-    key={placeId}
-    onClick={onClick}
+      key={placeId}
+      onClick={onClick}
       sx={{
         display: 'flex',
         justifyContent: 'center',
@@ -158,7 +185,7 @@ const RestaurantCard = ({
               readOnly
             />
             <Button
-            onClick={handleReviews}
+              onClick={handleReviews}
               sx={{
                 alignSelf: 'center',
                 textDecoration: 'underline',
@@ -197,64 +224,77 @@ const RestaurantCard = ({
           </CardContent>
           <Collapse in={expanded} timeout='auto' unmountOnExit>
             <CardContent>
-              <Typography variant='body2' color='text.secondary'>
-                OPENING HOURS
-              </Typography>
-              {openingHours.map(function (results) {
-                return (
-                 <Typography key={results} variant='body2' color='text.secondary'>
-                    {results}
-                  </Typography>
-                )
-              })
-              }
+              <TableContainer component={Paper}>
+                <Table size='small' aria-label='dense table with opening hours'>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>{getTranslation(cookies.language ? cookies.language : 'en', 'day')}</TableCell>
+                      <TableCell align='right'>{getTranslation(cookies.language ? cookies.language : 'en', 'hours')}</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {tableRows.map((row) => (
+                      <TableRow
+                        key={row.day}
+                        sx={{
+                          '&:last-child td, &:last-child th': { border: 0 }
+                        }}
+                      >
+                        <TableCell component='th' scope='row'>
+                          {row.day}
+                        </TableCell>
+                        <TableCell align='right'>{row.hours}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
             </CardContent>
           </Collapse>
           <CustomModal
-          open={modalOpen}
-          handleClose={() => setModalOpen(false)}
-          title={cookies.language === 'en' ? 'Reviews' : 'Arvostelut'}
+            open={modalOpen}
+            handleClose={() => setModalOpen(false)}
+            title={cookies.language === 'en' ? 'Reviews' : 'Arvostelut'}
           >
-          {reviews.map(function (results) {
-            return (
-              <Card key={results.time} sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                flexDirection: 'column',
-                marginBottom: '10px',
-                overflow: 'auto',
-                paddingBottom: '10px'
-              }}>
-              <CardHeader
-              action={
-              <IconButton
-                aria-label={getTranslation(
-                  cookies.language ? cookies.language : 'en',
-                  'ariasettings'
-                )}
-              >
-                </IconButton>
-              }
-              title={results.author_name}
-              subheader={results.relative_time_description}
-              />
-              <CardContent>
-              <Rating
-              sx={{ marginBottom: '10px' }}
-              name='half-rating-read'
-              value={results.rating}
-              defaultValue={0}
-              precision={0.5}
-              readOnly
-              />
-              <Typography variant='body2'>
-              {results.text}
-              </Typography>
-              </CardContent>
-              </Card>
-            )
-          })
-          }
+            {reviews.map(function (results) {
+              return (
+                <Card
+                  key={results.time}
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    marginBottom: '10px',
+                    overflow: 'auto',
+                    paddingBottom: '10px'
+                  }}
+                >
+                  <CardHeader
+                    action={
+                      <IconButton
+                        aria-label={getTranslation(
+                          cookies.language ? cookies.language : 'en',
+                          'ariasettings'
+                        )}
+                      ></IconButton>
+                    }
+                    title={results.author_name}
+                    subheader={results.relative_time_description}
+                  />
+                  <CardContent>
+                    <Rating
+                      sx={{ marginBottom: '10px' }}
+                      name='half-rating-read'
+                      value={results.rating}
+                      defaultValue={0}
+                      precision={0.5}
+                      readOnly
+                    />
+                    <Typography variant='body2'>{results.text}</Typography>
+                  </CardContent>
+                </Card>
+              )
+            })}
           </CustomModal>
         </Box>
       </Card>
@@ -271,7 +311,7 @@ RestaurantCard.propTypes = {
   userRatingsTotal: PropTypes.number.isRequired,
   isOpen: PropTypes.string.isRequired,
   // openingHours: PropTypes.array.isRequired,
-  onClick: PropTypes.any.isRequired
+  onClick: PropTypes.any
 }
 
 export default RestaurantCard

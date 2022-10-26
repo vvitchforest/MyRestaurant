@@ -134,7 +134,7 @@ const Map = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '50',
+        radius: '2000',
         type: ['restaurant']
       }
 
@@ -169,7 +169,7 @@ const Map = () => {
   ) => {
     console.log('PlaceId', placeId)
     const request = {
-      placeId: placeId,
+      placeId,
       fields: ['name', 'rating', 'formatted_phone_number', 'formatted_address', 'opening_hours', 'utc_offset_minutes', 'geometry']
     }
 

@@ -29,7 +29,9 @@ const translations = {
     menu: 'Menu today',
     openinghours: 'Opening hours',
     choosetraveloption: 'Choose travel option',
-    cancel: 'Cancel'
+    cancel: 'Cancel',
+    day: 'Day',
+    hours: 'Hours'
   },
   fi: {
     map: 'Kartta',
@@ -56,7 +58,9 @@ const translations = {
     menu: 'Päivän ruokalista',
     openinghours: 'Aukioloajat',
     choosetraveloption: 'Valitse matkavaihtoehto',
-    cancel: 'Peru'
+    cancel: 'Peru',
+    day: 'Päivä',
+    hours: 'Tunnit'
   }
 }
 

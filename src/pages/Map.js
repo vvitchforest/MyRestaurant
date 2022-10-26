@@ -134,7 +134,7 @@ const Map = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '50',
+        radius: '80',
         type: ['restaurant']
       }
 
@@ -192,19 +192,18 @@ const Map = () => {
         } else {
           setRestaurantBusinessStatus('closed')
         }
+        const directionRequest = {
+          origin: currentPos,
+          destination: { lat: results.geometry.location.lat(), lng: results.geometry.location.lng() },
+          travelMode: 'WALKING'
+        }
+        directionService.route(directionRequest, function (result, status) {
+          if (status === 'OK') {
+            setDistance(result.routes[0].legs[0].distance.text)
+          }
+        })
       }
     }
-    const directionRequest = {
-      origin: currentPos,
-      destination: { lat: restaurantLat, lng: restaurantLng },
-      travelMode: 'WALKING'
-    }
-
-    directionService.route(directionRequest, function (result, status) {
-      if (status === 'OK') {
-        setDistance(result.routes[0].legs[0].distance.text)
-      }
-    })
   }
 
   const handleDrawerToggle = () => {

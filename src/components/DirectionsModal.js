@@ -99,7 +99,7 @@ const DirectionsModal = ({
       sx={{
         '& .MuiDialog-paper': {
           boxSizing: 'border-box',
-          width: { xs: '100%', md: '50%' }
+          width: '300px'
         }
       }}
     >

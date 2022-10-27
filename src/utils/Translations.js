@@ -34,7 +34,8 @@ const translations = {
     cancel: 'Cancel',
     day: 'Day',
     hours: 'Hours',
-    unavailable: 'Unavailable'
+    unavailable: 'Unavailable',
+    distance: 'Distance:'
   },
   fi: {
     map: 'Kartta',
@@ -66,7 +67,8 @@ const translations = {
     cancel: 'Peru',
     day: 'Päivä',
     hours: 'Tunnit',
-    unavailable: 'Ei saatavilla'
+    unavailable: 'Ei saatavilla',
+    distance: 'Etäisyys:'
   }
 }
 

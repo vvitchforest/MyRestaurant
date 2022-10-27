@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, IconButton, Button, Drawer, Rating, Typography, CardMedia } from '@mui/material'
+import { Box, IconButton, Drawer, Rating, Typography, CardMedia } from '@mui/material'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
 import DirectionsIcon from '@mui/icons-material/Directions'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
@@ -134,7 +134,7 @@ const Map = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '100',
+        radius: '1000',
         type: ['restaurant']
       }
 
@@ -211,13 +211,14 @@ const Map = () => {
   }
 
   const restaurantOpenStyle = {
-    fontSize: { xs: '5vw', sm: '3vw', md: '2.5vw', lg: '2.5vw' },
-    padding: '5px',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    ml: '12px',
+    mr: '12px',
     backgroundColor: restaurantBusinessStatus === 'open'
       ? '#DAF7A6'
-      : '#FF8266',
-    width: '100%',
-    borderRadius: 12
+      : '#FF8266'
   }
 
   return isLoaded
@@ -318,44 +319,44 @@ const Map = () => {
             onClose={() => setOpenDrawer(false)}
             variant='temporary'
           >
-            <Box>
-              <Box sx={exitStyle}>
-                <Button type='button' onClick={handleDrawerToggle}>
-                  <CloseIcon sx={closeIconStyle} />
-                </Button>
-              </Box>
-              <Box sx={style}>
-                <Box
+            <Box sx={restaurantOpenStyle}>
+              <Typography variant='body1' sx={{ fontSize: { xs: '5vw', sm: '3vw', md: '2.5vw', lg: '2.5vw' }, pl: '6px', alignSelf: 'center' }}>
+                {getTranslation(
+                  cookies.language ? cookies.language : 'en',
+                  restaurantBusinessStatus
+                )}
+              </Typography>
+              <IconButton type='button' onClick={handleDrawerToggle}>
+                <CloseIcon sx={closeIconStyle} />
+              </IconButton>
+            </Box>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row', md: 'row', lg: 'row' } }}>
+              <Box
+                sx={{
+                  flex: 1,
+                  pl: '12px',
+                  pr: '12px'
+                }}
+              >
+                <CardMedia
                   sx={{
-                    pl: '12px',
-                    pb: '12px',
-                    flex: 1
+                    height: { xs: '20%', sm: '95%', md: '95%', lg: '95%' },
+                    maxHeight: { xs: '100px', sm: '350px', md: '350px', lg: '350px' }
                   }}
-                >
-                  <CardMedia
-                    sx={{ pt: '12px', height: { xs: '95%' } }}
-                    component='img'
-                    height='225'
-                    image={restaurantIcon}
-                    alt={getTranslation(
-                      cookies.language ? cookies.language : 'en',
-                      'ariapicturerestaurant'
-                    )}
+                  component='img'
+                  height='225'
+                  image={restaurantIcon}
+                  alt={getTranslation(cookies.language ? cookies.language : 'en', 'ariapicturerestaurant')}
                   />
-                </Box>
-                <Box sx={{ padding: '12px', flex: 2 }}>
-                  <Typography
-                    variant='body1' sx={restaurantOpenStyle}
-                  >
-                  {getTranslation(
-                    cookies.language ? cookies.language : 'en',
-                    restaurantBusinessStatus
-                  )}
-                  </Typography>
+              </Box>
+              <Box sx={{ display: 'flex', flex: 2, flexDirection: 'row' }}>
+                <Box sx={{ padding: '12px', flex: 3 }}>
                   <Typography variant='body1' sx={restaurantNameStyle}>{restaurantName}</Typography>
                   <Typography variant='body2' color='text.secondary' sx={restaurantAddressStyle}>{restaurantAddress}</Typography>
-                  <Typography variant='body2' color='text.secondary' sx={restaurantAddressStyle}>{distance === undefined ? 0 : distance}</Typography>
-                  <Rating name='half-rating-read' value={restaurantRating === undefined ? 0 : restaurantRating} defaultValue={0} precision={0.5} readOnly />
+                  <Box sx={{ display: 'flex', justifyContent: { sm: 'space-between', md: 'space-between', lg: 'space-between' }, flexDirection: { xs: 'column', sm: 'row', md: 'row', lg: 'row' } }}>
+                    <Rating name='half-rating-read' value={restaurantRating === undefined ? 0 : restaurantRating} defaultValue={0} precision={0.5} readOnly sx={{ alignSelf: { sm: 'center', md: 'center', lg: 'center' } }} />
+                    <Typography variant='body2' color='text.secondary' sx={restaurantAddressStyle}>{getTranslation(cookies.language ? cookies.language : 'en', 'distance')} {distance === undefined ? 0 : distance}</Typography>
+                  </Box>
                 </Box>
                 <Box sx={iconContainerStyle}>
                   <IconButton sx={iconButtonStyle} >
@@ -382,18 +383,6 @@ const Map = () => {
     <></>
       )
 }
-// onClick={() => getDirections(restaurantLat, restaurantLng)}
-
-const exitStyle = {
-  display: 'flex',
-  justifyContent: 'flex-end'
-}
-
-const style = {
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between'
-}
 
 const restaurantNameStyle = {
   fontSize: { xs: '5vw', sm: '3vw', md: '2.5vw', lg: '2.5vw' },
@@ -416,13 +405,13 @@ const iconContainerStyle = {
 }
 
 const closeIconStyle = {
-  width: { xs: '25px', sm: '40px', md: '58px', lg: '65px' },
-  height: { xs: '25px', sm: '40px', md: '58px', lg: '65px' }
+  width: '25px',
+  height: '25px'
 }
 
 const iconStyle = {
-  width: { xs: '80%', sm: '50px', md: '75px', lg: '100px' },
-  height: { xs: '80%', sm: '50px', md: '75px', lg: '100px' }
+  width: { xs: '80%', sm: '80%', md: '80%', lg: '80%' },
+  height: { xs: '80%', sm: '80%', md: '80%', lg: '80%' }
 }
 
 const iconButtonStyle = {
@@ -430,8 +419,8 @@ const iconButtonStyle = {
   justifyContent: 'space-around',
   flexDirection: 'column',
   boxShadow: 3,
-  width: { xs: '80%', sm: '75px', md: '100px', lg: '40%' },
-  height: { xs: '40%', sm: '75px', md: '100px', lg: '40%' },
+  width: { xs: '80%', sm: '65%', md: '58%', lg: '45%' },
+  height: { xs: '45%', sm: '45%', md: '45%', lg: '45%' },
   border: 'solid #000',
   borderWidth: '1px',
   borderRadius: '6px',

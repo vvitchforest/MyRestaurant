@@ -224,6 +224,8 @@ const RestaurantCard = ({
           </CardContent>
           <Collapse in={expanded} timeout='auto' unmountOnExit>
             <CardContent>
+              {(tableRows.length === 0) && getTranslation(cookies.language ? cookies.language : 'en', 'unavailable')}
+              {tableRows.length > 0 &&
               <TableContainer component={Paper}>
                 <Table size='small' aria-label='dense table with opening hours'>
                   <TableHead>
@@ -249,6 +251,7 @@ const RestaurantCard = ({
                   </TableBody>
                 </Table>
               </TableContainer>
+              }
             </CardContent>
           </Collapse>
           <CustomModal

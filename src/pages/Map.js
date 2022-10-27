@@ -187,28 +187,37 @@ const Map = () => {
         setRestaurantRating(results.rating)
         setRestaurantLat(results.geometry.location.lat())
         setRestaurantLng(results.geometry.location.lng())
-        if (results.opening_hours.isOpen() === true) {
+        if (results.opening_hours?.isOpen() === true) {
           setRestaurantBusinessStatus('open')
         } else {
           setRestaurantBusinessStatus('closed')
         }
+        const directionRequest = {
+          origin: currentPos,
+          destination: { lat: results.geometry.location.lat(), lng: results.geometry.location.lng() },
+          travelMode: 'WALKING'
+        }
+        directionService.route(directionRequest, function (result, status) {
+          if (status === 'OK') {
+            setDistance(result.routes[0].legs[0].distance.text)
+          }
+        })
       }
     }
-    const directionRequest = {
-      origin: currentPos,
-      destination: { lat: restaurantLat, lng: restaurantLng },
-      travelMode: 'WALKING'
-    }
-
-    directionService.route(directionRequest, function (result, status) {
-      if (status === 'OK') {
-        setDistance(result.routes[0].legs[0].distance.text)
-      }
-    })
   }
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
+  }
+
+  const restaurantOpenStyle = {
+    fontSize: { xs: '5vw', sm: '3vw', md: '2.5vw', lg: '2.5vw' },
+    padding: '5px',
+    backgroundColor: restaurantBusinessStatus === 'open'
+      ? '#DAF7A6'
+      : '#FF8266',
+    width: '100%',
+    borderRadius: 12
   }
 
   return isLoaded
@@ -336,14 +345,7 @@ const Map = () => {
                 </Box>
                 <Box sx={{ padding: '12px', flex: 2 }}>
                   <Typography
-                    variant='body1' sx={restaurantNameStyle}
-                    style={{
-                      backgroundColor: restaurantBusinessStatus === 'open'
-                        ? '#DAF7A6'
-                        : '#FF8266',
-                      width: '100%',
-                      borderRadius: 12
-                    }}
+                    variant='body1' sx={restaurantOpenStyle}
                   >
                   {getTranslation(
                     cookies.language ? cookies.language : 'en',
@@ -352,7 +354,7 @@ const Map = () => {
                   </Typography>
                   <Typography variant='body1' sx={restaurantNameStyle}>{restaurantName}</Typography>
                   <Typography variant='body2' color='text.secondary' sx={restaurantAddressStyle}>{restaurantAddress}</Typography>
-                  <Typography variant='body2' color='text.secondary' sx={restaurantAddressStyle}>{distance}</Typography>
+                  <Typography variant='body2' color='text.secondary' sx={restaurantAddressStyle}>{distance === undefined ? 0 : distance}</Typography>
                   <Rating name='half-rating-read' value={restaurantRating === undefined ? 0 : restaurantRating} defaultValue={0} precision={0.5} readOnly />
                 </Box>
                 <Box sx={iconContainerStyle}>

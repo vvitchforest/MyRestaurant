@@ -33,7 +33,8 @@ const translations = {
     choosetraveloption: 'Choose travel option',
     cancel: 'Cancel',
     day: 'Day',
-    hours: 'Hours'
+    hours: 'Hours',
+    unavailable: 'Unavailable'
   },
   fi: {
     map: 'Kartta',
@@ -64,7 +65,8 @@ const translations = {
     choosetraveloption: 'Valitse matkavaihtoehto',
     cancel: 'Peru',
     day: 'Päivä',
-    hours: 'Tunnit'
+    hours: 'Tunnit',
+    unavailable: 'Ei saatavilla'
   }
 }
 

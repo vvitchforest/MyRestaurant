@@ -60,7 +60,7 @@ const RestaurantMenuItem = ({
               <Typography
                 color="text.primary"
                 variant="body2"
-                sx={{ fontSize: '1rem' }}
+                sx={{ fontSize: '1rem', pr: 1 }}
               >
                 {menuItem}
               </Typography>
@@ -75,14 +75,14 @@ const RestaurantMenuItem = ({
             <Grid item sx={{ flex: 1 }}>
               {restaurantType === 'sodexo' && (
                 <IconButton color="info" onClick={toggleModal}>
-                  <InfoIcon sx={{ height: '2.25rem', width: '2.25rem', pl: 2 }} />
+                  <InfoIcon sx={{ height: '2.25rem', width: '2.25rem' }} />
                 </IconButton>
               )}
             </Grid>
           </Grid>
         </Box>
       </ListItem>
-      <Divider variant="middle" />
+      <Divider sx={{ ml: { xs: 2, sm: 5 }, mr: 2 }}/>
       <CustomModal
         open={modalOpen}
         handleClose={() => setModalOpen(false)}

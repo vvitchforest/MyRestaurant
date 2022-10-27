@@ -8,6 +8,7 @@ import RestaurantHeader from '../components/RestaurantHeader'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
 import Notification from '../components/Notification'
+import FilterMenu from '../components/FilterMenu'
 import { TbFaceIdError } from 'react-icons/tb'
 
 const Home = () => {
@@ -15,10 +16,11 @@ const Home = () => {
   const [loading, setLoading] = useState(true)
   const [menu, setMenu] = useState(null)
   const [alert, setAlert] = useState(null)
+  const [filterDiets, setFilterDiets] = useState('')
 
   const myLanguage = cookies.language ? cookies.language : 'en'
   Moment.locale(myLanguage)
-  const currentDateApiFormat = Moment().format('YYYY-MM-DD')
+  const currentDateApiFormat = Moment().format('2022-MM-DD')
   const currentDate = Moment().format('dddd DD-MM-YYYY')
 
   useEffect(() => {
@@ -41,43 +43,66 @@ const Home = () => {
     getSodexoMenu()
   }, [myLanguage])
 
+  console.log(filterDiets)
+
+  /* I tried this: Object.values(menu)?.filter((menuItem) =>
+  filterDiets.every(diet => menuItem?.recipes?.hideAll?.dietcodes.includes(diet)) */
+
+  const menuToShow = !filterDiets.length
+    ? menu
+    : {
+        ...Object.values(menu)?.filter((menuItem) =>
+          menuItem?.recipes?.hideAll?.dietcodes.includes(filterDiets))
+      }
+  console.log(menuToShow)
+
+  const handleFilterChange = (event) => {
+    setFilterDiets(event.target.value)
+  }
+
   if (loading) {
     return (
     <Box width='100%' height='92vh' display='flex' justifyContent='center' alignItems='center'>
       <CircularProgress/>
     </Box>)
   }
+
   return (
-      <Container sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Card
-            elevation={3}
-            sx={{ width: { xs: '100%', md: '75%', lg: '60%' }, mb: 2, mt: 2 }}
-          >
-            <RestaurantHeader
-              name={`${getTranslation(myLanguage, 'restaurant')} Nokia One`}
-              address="Karakaari 7"
-              postalcode="02610 Espoo"
-            />
-            <Typography variant="h5" sx={{ pl: { xs: 2, sm: 5 } }}>
-              {getTranslation(myLanguage, 'menu')}
-            </Typography>
-            <Typography sx={{ pl: { xs: 2, sm: 5 }, textTransform: 'capitalize' }}>
-              {currentDate}
-            </Typography>
+    <Container sx={{ display: 'flex', justifyContent: 'center' }}>
+      <Card
+        elevation={3}
+        sx={{ width: { xs: '100%', md: '75%', lg: '60%' }, mb: 2, mt: 2 }}
+        >
+        <RestaurantHeader
+        name={`${getTranslation(myLanguage, 'restaurant')} Nokia One`}
+        address="Karakaari 7"
+        postalcode="02610 Espoo"
+        />
+        <Typography variant="h5" sx={{ pl: { xs: 2, sm: 5 } }}>
+          {getTranslation(myLanguage, 'menu')}
+          </Typography>
+          <Typography sx={{ pl: { xs: 2, sm: 5 }, textTransform: 'capitalize' }}>
+            {currentDate}
+          </Typography>
             {menu
               ? (
+                <>
+                  <Box width='100%' display='flex' justifyContent='flex-end'>
+                    <FilterMenu filterValues={filterDiets} handleChange={handleFilterChange} />
+                  </Box>
                   <RestaurantMenu
-                    menu={menu}
+                    menu={menuToShow}
                     restaurantType="sodexo"
                   />
+                </>
                 )
               : (
-                  <Notification
-                    alert={alert}
-                  />
+                <Notification
+                  alert={alert}
+                />
                 )
           }
-          </Card>
+        </Card>
       </Container>
   )
 }

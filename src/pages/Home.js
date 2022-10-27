@@ -20,7 +20,7 @@ const Home = () => {
 
   const myLanguage = cookies.language ? cookies.language : 'en'
   Moment.locale(myLanguage)
-  const currentDateApiFormat = Moment().format('2022-MM-DD')
+  const currentDateApiFormat = Moment().format('YYYY-MM-DD')
   const currentDate = Moment().format('dddd DD-MM-YYYY')
 
   useEffect(() => {

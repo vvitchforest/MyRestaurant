@@ -45,7 +45,7 @@ const RestaurantsList = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '100',
+        radius: '500',
         type: ['restaurant']
       }
 

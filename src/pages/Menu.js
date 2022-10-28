@@ -24,7 +24,7 @@ const Menu = () => {
     const getFoodAndCoMenu = async () => {
       setLoading(true)
       try {
-        const menuFromAPI = await foodandcoMenuService.getMenu('3202', myLanguage)
+        const menuFromAPI = await foodandcoMenuService.getMenu('3208', myLanguage)
         const restaurantName = menuFromAPI.RestaurantName
         const formattedMenuArray = formatMenu(menuFromAPI)
         const menuObject = { ...formattedMenuArray }

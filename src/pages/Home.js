@@ -87,9 +87,9 @@ const Home = () => {
             {menu
               ? (
                 <>
-                  <Box width='100%' display='flex' justifyContent='flex-end'>
-                    <FilterMenu filterValues={filterDiets} handleChange={handleFilterChange} />
-                  </Box>
+                <Box display='flex' justifyContent='flex-start'>
+                  <FilterMenu filterValues={filterDiets} handleChange={handleFilterChange} clearFilter={() => setFilterDiets('')} clearButtonDisplay={!filterDiets.length ? 'none' : 'block'}/>
+                </Box>
                   <RestaurantMenu
                     menu={menuToShow}
                     restaurantType="sodexo"

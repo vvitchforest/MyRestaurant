@@ -259,6 +259,7 @@ const RestaurantCard = ({
             handleClose={() => setModalOpen(false)}
             title={cookies.language === 'en' ? 'Reviews' : 'Arvostelut'}
           >
+            Only 5 latest reviews are shown
             {reviews.map(function (results) {
               return (
                 <Card

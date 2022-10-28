@@ -158,12 +158,20 @@ const Map = () => {
       }
     }
   }
+
+  /**
+   * Creates an array of restaurants. Array is used to create markers
+   * @param {*} place an individual restaurant with all available data
+   */
   const createMarker = (place) => {
     console.log('Place', place)
     placesList.push(place)
     setPlacesFinal(placesList)
   }
 
+  /**
+   * @param {*} placeId Id of restaurant
+   */
   const setRestaurantInfo = (
     placeId
   ) => {
@@ -179,6 +187,10 @@ const Map = () => {
     const directionService = new window.google.maps.DirectionsService()
     service.getDetails(request, callback)
 
+    /**
+     * @param {*} results data of restaurant, such as name, address, rating etc.
+     * @param {*} status whether or not everything was successful
+     */
     function callback (results, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         console.log('Res', results)
@@ -206,6 +218,7 @@ const Map = () => {
     }
   }
 
+  // Handles opening and closing of restaurant
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
   }
@@ -341,7 +354,7 @@ const Map = () => {
                 <CardMedia
                   sx={{
                     height: { xs: '20%', sm: '95%', md: '95%', lg: '95%' },
-                    maxHeight: { xs: '100px', sm: '350px', md: '350px', lg: '350px' }
+                    maxHeight: { xs: '100px', sm: '250px', md: '250px', lg: '250px' }
                   }}
                   component='img'
                   height='225'

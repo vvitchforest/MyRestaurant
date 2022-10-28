@@ -3,11 +3,31 @@ import React, { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import RestaurantCard from '../components/RestaurantCard'
 import getTranslation from '../utils/Translations'
-import { CircularProgress, Box } from '@mui/material'
+import { CircularProgress, Box, FormControl, InputLabel, Select, OutlinedInput, MenuItem, useTheme, Chip } from '@mui/material'
 // import { useDispatch, useSelector } from 'react-redux'
 // import * as actions from '../store/actions/index'
 
 const RestaurantsList = () => {
+  const ITEM_HEIGHT = 48
+  const ITEM_PADDING_TOP = 8
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250
+      }
+    }
+  }
+
+  const types = [
+    'All',
+    'Bar',
+    'Bakery',
+    'Restaurant',
+    'Meal_delivery',
+    'Meal_takeaway',
+    'Cafe'
+  ]
   const [cookies] = useCookies(['language'])
   const [currentPos, setCurrentPos] = useState({})
   const placesList = []
@@ -15,6 +35,9 @@ const RestaurantsList = () => {
   const [checkPagination, setCheckPagination] = useState()
   const [placesFinal, setPlacesFinal] = useState([])
   const [libraries] = useState(['places', 'geometry'])
+  const theme = useTheme()
+  const [restaurantTypes, setRestaurantTypes] = useState([])
+  const [placesFiltered, setPlacesFiltered] = useState([])
   // const expanded = useSelector(state => state.userinterface.expanded)
   // const placeId = useSelector(state => state.userinterface.placeId)
   // const dispatch = useDispatch()
@@ -79,6 +102,34 @@ const RestaurantsList = () => {
     placesList.push(place)
     setPlacesFinal(placesList)
   }
+  const getStyles = (type, restaurantTypes, theme) => {
+    return {
+      fontWeight:
+      restaurantTypes.indexOf(type) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium
+    }
+  }
+  const handleChange = (event) => {
+    const {
+      target: { value }
+    } = event
+    setRestaurantTypes(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value
+    )
+  }
+  const filterRestaurants = (arr, type) => {
+    console.log('restaurants', arr.filter((el) => el.types.includes(type.toLowerCase())))
+    return setPlacesFiltered(arr.filter((el) => el.types.includes(type.toLowerCase())))
+  }
+  useEffect(() => {
+    if (restaurantTypes.length > 0) {
+      for (let i = 0; i < restaurantTypes.length; i++) {
+        filterRestaurants(placesFinal, restaurantTypes[i])
+      }
+    }
+  }, [restaurantTypes])
   // Will leave these here for now (ignore)
   /*  const getPlaceDetails = () => {
     console.log('PlaceId', placeId)
@@ -122,8 +173,37 @@ const RestaurantsList = () => {
           cookies.language ? cookies.language : 'en',
           'restaurants'
         )}
+          <FormControl sx={{ display: 'flex', justifyContent: 'center', m: 1, width: 300 }}>
+        <InputLabel id="demo-multiple-chip-label">Select type</InputLabel>
+        <Select
+          labelId="demo-multiple-chip-label"
+          id="demo-multiple-chip"
+          multiple
+          value={restaurantTypes}
+          onChange={handleChange}
+          input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+          renderValue={(selected) => (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+              {selected.map((value) => (
+                <Chip key={value} label={value} />
+              ))}
+            </Box>
+          )}
+          MenuProps={MenuProps}
+        >
+          {types.map((type) => (
+            <MenuItem
+              key={type}
+              value={type}
+              style={getStyles(type, restaurantTypes, theme)}
+            >
+              {type}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
       </h1>
-      {(isLoaded && checkPagination) || (isLoaded && checkPagination === false)
+      {(isLoaded && checkPagination && restaurantTypes.length === 0) || (isLoaded && checkPagination === false && restaurantTypes.length === 0)
         ? placesFinal.map(function (results) {
           console.log('results: ', results)
           return (
@@ -141,12 +221,47 @@ const RestaurantsList = () => {
           />
           )
         })
-        : <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '50px', alignItems: 'center' }}>
+        : restaurantTypes.length === 0 && <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '50px', alignItems: 'center' }}>
           {getTranslation(
             cookies.language ? cookies.language : 'en',
             'loadingrestaurants'
           )}<CircularProgress sx={{ marginTop: '50px' }}/>
           </Box>}
+          {(isLoaded && restaurantTypes.length > 0 && !restaurantTypes.includes('All'))
+            ? placesFiltered.map(function (results) {
+              console.log('results: ', results)
+              return (
+            <RestaurantCard
+              key={results.place_id}
+              placeId={results.place_id}
+              name={results.name}
+              address={results.vicinity}
+              icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
+              rating={results.rating !== undefined ? results.rating : 0}
+              userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
+              isOpen={results.opening_hours !== undefined && results.opening_hours.isOpen() !== false ? 'open' : 'closed'}
+              // openingHours={openingHours.length > 0 && selectedCard.has(results.place_id) ? openingHours : ['Not available']}
+              // onClick={(e) => handleOnClick(results.place_id)}
+            />
+              )
+            })
+            : restaurantTypes.includes('All') && placesFinal.map(function (results) {
+              console.log('results: ', results)
+              return (
+            <RestaurantCard
+              key={results.place_id}
+              placeId={results.place_id}
+              name={results.name}
+              address={results.vicinity}
+              icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
+              rating={results.rating !== undefined ? results.rating : 0}
+              userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
+              isOpen={results.opening_hours !== undefined && results.opening_hours.isOpen() !== false ? 'open' : 'closed'}
+              // openingHours={openingHours.length > 0 && selectedCard.has(results.place_id) ? openingHours : ['Not available']}
+              // onClick={(e) => handleOnClick(results.place_id)}
+            />
+              )
+            })}
     </div>
   )
 }

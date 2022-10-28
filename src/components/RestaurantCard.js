@@ -1,3 +1,9 @@
+/**
+ * @Author Teemu Tirkkonen
+ * @Author Oskar Wiiala
+ * Card component displaying individual restaurant info. Used in RestaurantList.js
+ */
+
 import React, { useState } from 'react'
 import {
   Box,
@@ -28,6 +34,7 @@ import { useDispatch } from 'react-redux'
 import * as actions from '../store/actions/index'
 import CustomModal from './CustomModal'
 
+// Handles MUI Collapse component expansion when clicking "Opening hours" dropdown icon
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
   return <IconButton {...other} />
@@ -39,6 +46,17 @@ const ExpandMore = styled((props) => {
   })
 }))
 
+/**
+ * @param {string} placeId of restaurant
+ * @param {string} name of restaurant
+ * @param {string} address of restaurant
+ * @param {string} icon URL image of restaurant
+ * @param {number} rating of restaurant (0-5)
+ * @param {number} userRatingsTotal total ratings of restaurant
+ * @param {string} isOpen is restaurant open/closed
+ * @param {any} onClick handles click of card box. Currently unused???
+ * @returns restaurant card component
+ */
 const RestaurantCard = ({
   placeId,
   name,
@@ -50,7 +68,6 @@ const RestaurantCard = ({
   // openingHours,
   onClick
 }) => {
-  console.log('openNow: ', isOpen)
   const [cookies] = useCookies(['language'])
   const [expanded, setExpanded] = useState(false)
   const [openingHours, setOpeningHours] = useState([])

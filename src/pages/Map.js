@@ -29,6 +29,7 @@ const Map = () => {
   const [restaurantLat, setRestaurantLat] = useState()
   const [restaurantLng, setRestaurantLng] = useState()
   const [distance, setDistance] = useState()
+  const [restaurantWebsite, setRestaurantWebsite] = useState()
 
   const placesList = []
   // let getNextPage
@@ -134,7 +135,7 @@ const Map = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '100',
+        radius: '300',
         type: ['restaurant']
       }
 
@@ -170,7 +171,7 @@ const Map = () => {
     console.log('PlaceId', placeId)
     const request = {
       placeId,
-      fields: ['name', 'rating', 'formatted_phone_number', 'formatted_address', 'opening_hours', 'utc_offset_minutes', 'geometry']
+      fields: ['name', 'rating', 'formatted_phone_number', 'formatted_address', 'opening_hours', 'utc_offset_minutes', 'geometry', 'website']
     }
 
     const service = new window.google.maps.places.PlacesService(
@@ -187,6 +188,7 @@ const Map = () => {
         setRestaurantRating(results.rating)
         setRestaurantLat(results.geometry.location.lat())
         setRestaurantLng(results.geometry.location.lng())
+        setRestaurantWebsite(results.website)
         if (results.opening_hours?.isOpen() === true) {
           setRestaurantBusinessStatus('open')
         } else {
@@ -208,6 +210,15 @@ const Map = () => {
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
+  }
+  const openWebsite = () => {
+    if (restaurantWebsite !== undefined) {
+      return (
+        window.open(restaurantWebsite)
+      )
+    } else {
+      window.alert('Not available')
+    }
   }
 
   const restaurantOpenStyle = {
@@ -358,7 +369,7 @@ const Map = () => {
                   <Rating name='half-rating-read' value={restaurantRating === undefined ? 0 : restaurantRating} defaultValue={0} precision={0.5} readOnly />
                 </Box>
                 <Box sx={iconContainerStyle}>
-                  <IconButton sx={iconButtonStyle} >
+                  <IconButton sx={iconButtonStyle} onClick={openWebsite}>
                     <RestaurantMenuIcon sx={iconStyle} />
                   </IconButton>
                   <IconButton sx={iconButtonStyle} onClick={toggleModal}>

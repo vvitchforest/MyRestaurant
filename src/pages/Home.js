@@ -1,16 +1,15 @@
 import { React, useState, useEffect } from 'react'
 import sodexoMenuService from '../services/sodexomenu'
 import foodandcoMenuService from '../services/foodandcomenu'
-import { Card, Container, Typography, Box, CircularProgress, Tabs, Tab } from '@mui/material'
+import { Container, Box, CircularProgress, Tabs, Tab } from '@mui/material'
 import Moment from 'moment'
-import 'moment/locale/fi'
 import RestaurantMenu from '../components/RestaurantMenu'
-import RestaurantHeader from '../components/RestaurantHeader'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
 import Notification from '../components/Notification'
 import TabPanel from '../components/TabPanel'
 import FilterMenu from '../components/FilterMenu'
+import RestaurantSection from '../components/RestaurantSection'
 import { TbFaceIdError } from 'react-icons/tb'
 
 const Home = () => {
@@ -23,9 +22,7 @@ const Home = () => {
   const [tabValue, setTabValue] = useState(0)
 
   const myLanguage = cookies.language ? cookies.language : 'en'
-  Moment.locale(myLanguage)
   const currentDateApiFormat = Moment().format('YYYY-MM-DD')
-  const currentDate = Moment().format('dddd DD-MM-YYYY')
 
   useEffect(() => {
     const getSodexoMenu = async () => {
@@ -115,69 +112,49 @@ const Home = () => {
         <Tab label="Metropolia"/>
       </Tabs>
       <TabPanel value={tabValue} index={0}>
-        <Box display="flex" justifyContent="center">
-          <Card
-            elevation={3}
-            sx={{ width: { xs: '100%', md: '75%', lg: '60%' }, mb: 2, mt: 2 }}
-            >
-            <RestaurantHeader
-            name={`${getTranslation(myLanguage, 'restaurant')} Nokia One`}
-            address="Karakaari 7"
-            postalcode="02610 Espoo"
-            />
-            <Typography variant="h5" sx={{ pl: { xs: 2, sm: 5 } }}>
-              {getTranslation(myLanguage, 'menu')}
-              </Typography>
-              <Typography sx={{ pl: { xs: 2, sm: 5 }, textTransform: 'capitalize' }}>
-                {currentDate}
-              </Typography>
-                {menu
-                  ? (
-                    <>
-                    <Box display='flex' justifyContent='flex-start'>
-                      <FilterMenu filterValues={filterDiets} handleChange={handleFilterChange} clearFilter={() => setFilterDiets('')} clearButtonDisplay={!filterDiets.length ? 'none' : 'block'}/>
-                    </Box>
-                      <RestaurantMenu
-                        menu={menuToShow}
-                        restaurantType="sodexo"
-                      />
-                    </>
-                    )
-                  : (
-                    <Notification
-                      alert={alert}
+        <RestaurantSection
+          name={`${getTranslation(myLanguage, 'restaurant')} Nokia One`}
+          address="Karakaari 7"
+          postalcode="02610 Espoo"
+          >
+            {menu
+              ? (
+                <>
+                  <FilterMenu
+                    filterValues={filterDiets}
+                    handleChange={handleFilterChange}
+                    clearFilter={() => setFilterDiets('')}
+                    clearButtonDisplay={!filterDiets.length ? 'none' : 'block'}/>
+                  <RestaurantMenu
+                    menu={menuToShow}
+                    restaurantType="sodexo"
                     />
-                    )
+                </>
+                )
+              : (
+                  <Notification alert={alert} />
+                )
               }
-            </Card>
-          </Box>
+          </RestaurantSection>
         </TabPanel>
         <TabPanel value={tabValue} index={1}>
-          <Box display="flex" justifyContent="center">
-            <Card elevation={3}
-            sx={{ width: { xs: '100%', md: '75%', lg: '60%' }, mb: 2, mt: 2 }}>
-              <Typography varinat="h6" sx={{ p: 2, textTransform: 'capitalize' }}>
-                {currentDate}
-              </Typography>
-              <Typography variant="h4" sx={{ pb: 2, textAlign: 'center' }}>
-                {todayMenu?.name}
-              </Typography>
-              {todayMenu
-                ? (
+        <RestaurantSection
+          name={todayMenu?.name}
+          address="Karakaari 7"
+          postalcode="02610 Espoo"
+          >
+            {todayMenu
+              ? (
                   <RestaurantMenu
                     menu={todayMenu.menu}
                     restaurantType="foodandco"
                   />
-                  )
-                : (
-                <Notification
-                    alert={alert}
-                />
-                  )
-          }
-
-            </Card>
-          </Box>
+                )
+              : (
+                  <Notification alert={alert} />
+                )
+              }
+          </RestaurantSection>
         </TabPanel>
         <TabPanel value={tabValue} index={2}>Metropolia</TabPanel>
       </Container>

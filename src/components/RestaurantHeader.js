@@ -40,7 +40,8 @@ const RestaurantHeader = ({ name, address, postalcode }) => {
               {getTranslation(myLanguage, 'open')}
             </Typography>
           </Grid>
-          <Grid item xs={12} sx={{ pb: 0 }}>
+          {name?.includes('Nokia One') &&
+          (<Grid item xs={12} sx={{ pb: 0 }}>
             <Box
               sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}
             >
@@ -49,7 +50,8 @@ const RestaurantHeader = ({ name, address, postalcode }) => {
                 height={mediumScreen ? 237 : 100}
               />
             </Box>
-          </Grid>
+          </Grid>)
+          }
         </Grid>
       </CardContent>
     </Box>

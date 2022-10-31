@@ -30,7 +30,7 @@ const FilterMenu = ({ filterValues, handleChange, clearFilter, clearButtonDispla
   }
 
   return (
-    <Box width='100%' display='flex' justifyContent='flex-start' sx={{ pl: { xs: 2, sm: 5 } }}>
+    <Box width='100%' display='flex' justifyContent='flex-start' sx={{ pl: { xs: 2, sm: 5 }, '& .MuiSelect-select': { p: 1.25 }, '& .MuiInputLabel-formControl': { lineHeight: '0.8em' } }}>
       <FormControl sx={{ mt: 2, width: { xs: '50%', sm: '25%' }, '& svg': { color: '#1976d2' } }}>
         <InputLabel id="filter-label">Filter diets</InputLabel>
         <Select
@@ -45,9 +45,12 @@ const FilterMenu = ({ filterValues, handleChange, clearFilter, clearButtonDispla
           <MenuItem value="G">Gluten free</MenuItem>
           <MenuItem value="M">Milk free</MenuItem>
           <MenuItem value="L">Lactose free</MenuItem>
+          <MenuItem value="VL">Low lactose</MenuItem>
         </Select>
       </FormControl>
-      <Button size='small' onClick={clearFilter} sx={{ display: `${clearButtonDisplay}` }}>Clear</Button>
+      <Box height='inherit' display='flex' alignItems='flex-end' sx={{ ml: 1 } }>
+        <Button variant="outlined" onClick={clearFilter} sx={{ display: `${clearButtonDisplay}`, p: 1 }}>Clear filter</Button>
+      </Box>
     </Box>
 
   )

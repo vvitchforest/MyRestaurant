@@ -29,6 +29,7 @@ const RestaurantsList = () => {
     'Cafe'
   ]
   const [cookies] = useCookies(['language'])
+  const language = cookies.language ? cookies.language : 'en'
   const [currentPos, setCurrentPos] = useState({})
   const placesList = []
   const [checkIfPos, setCheckIfPos] = useState(false)
@@ -170,7 +171,7 @@ const RestaurantsList = () => {
     <div>
       <h1>
         {getTranslation(
-          cookies.language ? cookies.language : 'en',
+          language,
           'restaurants'
         )}
           <FormControl sx={{ display: 'flex', justifyContent: 'center', m: 1, width: 300 }}>
@@ -223,7 +224,7 @@ const RestaurantsList = () => {
         })
         : restaurantTypes.length === 0 && <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '50px', alignItems: 'center' }}>
           {getTranslation(
-            cookies.language ? cookies.language : 'en',
+            language,
             'loadingrestaurants'
           )}<CircularProgress sx={{ marginTop: '50px' }}/>
           </Box>}

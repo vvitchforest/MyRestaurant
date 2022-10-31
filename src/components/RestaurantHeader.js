@@ -45,8 +45,8 @@ const RestaurantHeader = ({ name, address, postalcode }) => {
               sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}
             >
               <OccupancyHistogram
-                width={mediumScreen ? 475 : 300}
-                height={mediumScreen ? 237 : 100}
+                width={mediumScreen ? 475 : 250}
+                height={mediumScreen ? 237 : 175}
               />
             </Box>
           </Grid>

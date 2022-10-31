@@ -31,6 +31,7 @@ const DirectionsModal = ({
   mapRef
 }) => {
   const [cookies] = useCookies(['language'])
+  const language = cookies.language ? cookies.language : 'en'
   const [selectedType, setSelectedType] = useState()
   const [disabled, setDisabled] = useState(true)
   const [colorWalk, setColorWalk] = useState('default')
@@ -104,7 +105,7 @@ const DirectionsModal = ({
       }}
     >
       <Box
-        style={{
+        sx={{
           backgroundColor: 'white',
           padding: '1rem 1.5rem',
           maxWidth: '100vw'
@@ -118,7 +119,7 @@ const DirectionsModal = ({
         >
           <Typography variant='h6'>
             {getTranslation(
-              cookies.language ? cookies.language : 'en',
+              language,
               'choosetraveloption'
             )}
           </Typography>
@@ -173,7 +174,7 @@ const DirectionsModal = ({
             }}
           >
             {getTranslation(
-              cookies.language ? cookies.language : 'en',
+              language,
               'cancel'
             )}
           </Button>

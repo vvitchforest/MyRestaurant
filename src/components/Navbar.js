@@ -28,8 +28,9 @@ import * as actions from '../store/actions/index'
 
 const Navbar = () => {
   const [cookies, setCookie] = useCookies(['language'])
+  const language = cookies.language ? cookies.language : 'en'
   const [alignment, setAlignment] = useState(
-    cookies.language ? cookies.language : 'en'
+    language
   )
   const [openDrawer, setOpenDrawer] = useState(false)
   const dispatch = useDispatch()
@@ -117,7 +118,7 @@ const Navbar = () => {
           <List sx={{ display: { xs: 'none', md: 'flex' } }}>
             <NavItem
               text={getTranslation(
-                cookies.language ? cookies.language : 'en',
+                language,
                 'home'
               )}
               icon={<HomeIcon />}
@@ -126,7 +127,7 @@ const Navbar = () => {
             />
             <NavItem
               text={getTranslation(
-                cookies.language ? cookies.language : 'en',
+                language,
                 'restaurants'
               )}
               icon={<RestaurantIcon />}
@@ -135,7 +136,7 @@ const Navbar = () => {
             />
             <NavItem
               text={getTranslation(
-                cookies.language ? cookies.language : 'en',
+                language,
                 'map'
               )}
               icon={<MapIcon />}
@@ -173,7 +174,7 @@ const Navbar = () => {
           <List>
             <NavItem
               text={getTranslation(
-                cookies.language ? cookies.language : 'en',
+                language,
                 'home'
               )}
               icon={<HomeIcon />}
@@ -183,7 +184,7 @@ const Navbar = () => {
             />
             <NavItem
               text={getTranslation(
-                cookies.language ? cookies.language : 'en',
+                language,
                 'restaurants'
               )}
               icon={<RestaurantIcon />}
@@ -193,7 +194,7 @@ const Navbar = () => {
             />
             <NavItem
               text={getTranslation(
-                cookies.language ? cookies.language : 'en',
+                language,
                 'map'
               )}
               icon={<MapIcon />}

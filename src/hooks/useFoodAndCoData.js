@@ -9,6 +9,7 @@ export const useFoodAndCoData = (restaurantId) => {
   const [alert, setAlert] = useState(null)
   const [loading, setLoading] = useState(true)
   const [cookies] = useCookies(['language'])
+
   const myLanguage = cookies.language ? cookies.language : 'en'
 
   useEffect(() => {

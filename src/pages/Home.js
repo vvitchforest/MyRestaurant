@@ -31,8 +31,10 @@ const Home = () => {
     ? dreamsCafeMenu?.menu
     : {
         ...Object.values(dreamsCafeMenu?.menu)?.filter((menuItem) =>
-          menuItem?.diets.includes(filterDiets))
+          menuItem?.diets.split(' ,').some(diet => diet === filterDiets))
       }
+
+  console.log('fileted', filterDiets)
 
   const campusRestaurants = [
     {

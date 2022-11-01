@@ -1,89 +1,32 @@
-import { React, useState, useEffect } from 'react'
-import sodexoMenuService from '../services/sodexomenu'
-import foodandcoMenuService from '../services/foodandcomenu'
+import { React, useState } from 'react'
 import { Container, Box, CircularProgress, Tabs, Tab } from '@mui/material'
 import Moment from 'moment'
 import RestaurantMenu from '../components/RestaurantMenu'
-import { useCookies } from 'react-cookie'
-import getTranslation from '../utils/Translations'
 import Notification from '../components/Notification'
 import TabPanel from '../components/TabPanel'
 import FilterMenu from '../components/FilterMenu'
 import RestaurantSection from '../components/RestaurantSection'
-import { TbFaceIdError } from 'react-icons/tb'
+import { useCookies } from 'react-cookie'
+import { useSodexoData } from '../hooks/useSodexoData'
+import { useFoodAndCoData } from '../hooks/useFoodAndCoData'
+import getTranslation from '../utils/Translations'
 
 const Home = () => {
   const [cookies] = useCookies(['language'])
-  const [loading, setLoading] = useState(true)
-  const [menu, setMenu] = useState(null)
-  const [todayMenu, setTodayMenu] = useState(null)
-  const [alert, setAlert] = useState(null)
   const [filterDiets, setFilterDiets] = useState('')
   const [tabValue, setTabValue] = useState(0)
 
   const myLanguage = cookies.language ? cookies.language : 'en'
   const currentDateApiFormat = Moment().format('YYYY-MM-DD')
 
-  useEffect(() => {
-    const getSodexoMenu = async () => {
-      setLoading(true)
-      try {
-        const menuFromAPI =
-          myLanguage === 'en'
-            ? await sodexoMenuService.getMenuEn(currentDateApiFormat, '80')
-            : await sodexoMenuService.getMenuFi(currentDateApiFormat, '80')
-
-        setMenu(menuFromAPI.courses)
-        if (menu === null) setAlert({ variant: 'info', message: getTranslation(myLanguage, 'menuNull') })
-      } catch (error) {
-        setAlert({ variant: 'error', message: getTranslation(myLanguage, 'menuError'), icon: <TbFaceIdError /> })
-        console.log(error)
-      }
-      setLoading(false)
-    }
-    getSodexoMenu()
-  }, [myLanguage])
-
-  useEffect(() => {
-    const getFoodAndCoMenu = async () => {
-      setLoading(true)
-      try {
-        const menuFromAPI = await foodandcoMenuService.getMenu('3202', myLanguage)
-        const restaurantName = menuFromAPI.RestaurantName
-        const formattedMenuArray = formatMenu(menuFromAPI)
-        const menuObject = { ...formattedMenuArray }
-        setTodayMenu({ name: restaurantName, menu: menuObject })
-        if (todayMenu === null) setAlert({ variant: 'info', message: getTranslation(myLanguage, 'menuNull') })
-      } catch (error) {
-        setAlert({ variant: 'error', message: getTranslation(myLanguage, 'menuError'), icon: <TbFaceIdError /> })
-        console.log(error.message)
-      }
-      setLoading(false)
-    }
-    getFoodAndCoMenu()
-  }, [myLanguage])
-
-  console.log(filterDiets)
-
-  const formatMenu = (menu) => {
-    const flattenedMenuArray = menu.MenusForDays[0].SetMenus.map(
-      (setMenu) => setMenu.Components
-    ).flat()
-    const formattedMenuArray = flattenedMenuArray.map((item) => ({
-      dish: item.slice(0, item.indexOf(' (')),
-      diets: item.slice(item.indexOf('(') + 1, item.indexOf(')'))
-    }))
-    return formattedMenuArray
-  }
-  console.log('foodandcomenu', todayMenu)
-
-  /* I tried this: Object.values(menu)?.filter((menuItem) =>
-  filterDiets.every(diet => menuItem?.recipes?.hideAll?.dietcodes.includes(diet)) */
+  const { menu: nokiaMenu, alert: nokiaAlert, loading: nokiaLoading } = useSodexoData(currentDateApiFormat, '80')
+  const { menu: dreamsCafeMenu, alert: dreamsCafeAlert, loading: dreamsCafeLoading } = useFoodAndCoData('3202')
+  const { menu: metropoliaMenu, alert: metropoliaAlert, loading: metropoliaLoading } = useFoodAndCoData('3208')
 
   const menuToShow = !filterDiets.length
-    ? menu
+    ? nokiaMenu
     : {
-        ...Object.values(menu)?.filter((menuItem) =>
+        ...Object.values(nokiaMenu)?.filter((menuItem) =>
           menuItem?.recipes?.hideAll?.dietcodes.includes(filterDiets))
       }
   console.log(menuToShow)
@@ -97,7 +40,7 @@ const Home = () => {
     setTabValue(newValue)
   }
 
-  if (loading) {
+  if (nokiaLoading || dreamsCafeLoading || metropoliaLoading) {
     return (
     <Box width='100%' height='92vh' display='flex' justifyContent='center' alignItems='center'>
       <CircularProgress/>
@@ -117,7 +60,7 @@ const Home = () => {
           address="Karakaari 7"
           postalcode="02610 Espoo"
           >
-            {menu
+            {nokiaMenu
               ? (
                 <>
                   <FilterMenu
@@ -132,31 +75,49 @@ const Home = () => {
                 </>
                 )
               : (
-                  <Notification alert={alert} />
+                  <Notification alert={nokiaAlert} />
                 )
               }
           </RestaurantSection>
         </TabPanel>
         <TabPanel value={tabValue} index={1}>
         <RestaurantSection
-          name={todayMenu?.name}
+          name={dreamsCafeMenu?.name}
           address="Karakaari 7"
           postalcode="02610 Espoo"
           >
-            {todayMenu
+            {dreamsCafeMenu
               ? (
                   <RestaurantMenu
-                    menu={todayMenu.menu}
+                    menu={dreamsCafeMenu.menu}
                     restaurantType="foodandco"
                   />
                 )
               : (
-                  <Notification alert={alert} />
+                  <Notification alert={dreamsCafeAlert} />
                 )
               }
           </RestaurantSection>
         </TabPanel>
-        <TabPanel value={tabValue} index={2}>Metropolia</TabPanel>
+        <TabPanel value={tabValue} index={2}>
+        <RestaurantSection
+          name={metropoliaMenu?.name}
+          address="Karakaari 7"
+          postalcode="02610 Espoo"
+          >
+            {metropoliaMenu
+              ? (
+                  <RestaurantMenu
+                    menu={metropoliaMenu.menu}
+                    restaurantType="foodandco"
+                  />
+                )
+              : (
+                  <Notification alert={metropoliaAlert} />
+                )
+              }
+          </RestaurantSection>
+        </TabPanel>
       </Container>
   )
 }

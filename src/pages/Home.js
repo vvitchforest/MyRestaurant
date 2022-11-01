@@ -1,6 +1,5 @@
 import { React, useState } from 'react'
 import { Container, Box, CircularProgress, Tabs, Tab } from '@mui/material'
-import Moment from 'moment'
 import RestaurantMenu from '../components/RestaurantMenu'
 import Notification from '../components/Notification'
 import TabPanel from '../components/TabPanel'
@@ -15,11 +14,9 @@ const Home = () => {
   const [cookies] = useCookies(['language'])
   const [filterDiets, setFilterDiets] = useState('')
   const [tabValue, setTabValue] = useState(0)
-
   const myLanguage = cookies.language ? cookies.language : 'en'
-  const currentDateApiFormat = Moment().format('YYYY-MM-DD')
 
-  const { menu: nokiaMenu, alert: nokiaAlert, loading: nokiaLoading } = useSodexoData(currentDateApiFormat, '80')
+  const { menu: nokiaMenu, alert: nokiaAlert, loading: nokiaLoading } = useSodexoData('80')
   const { menu: dreamsCafeMenu, alert: dreamsCafeAlert, loading: dreamsCafeLoading } = useFoodAndCoData('3202')
   const { menu: metropoliaMenu, alert: metropoliaAlert, loading: metropoliaLoading } = useFoodAndCoData('3208')
 
@@ -29,8 +26,44 @@ const Home = () => {
         ...Object.values(nokiaMenu)?.filter((menuItem) =>
           menuItem?.recipes?.hideAll?.dietcodes.includes(filterDiets))
       }
-  console.log(menuToShow)
 
+  const dreamsCafeMenuToShow = !filterDiets.length
+    ? dreamsCafeMenu?.menu
+    : {
+        ...Object.values(dreamsCafeMenu?.menu)?.filter((menuItem) =>
+          menuItem?.diets.includes(filterDiets))
+      }
+
+  const campusRestaurants = [
+    {
+      index: 0,
+      name: `${getTranslation(myLanguage, 'restaurant')} Nokia One`,
+      type: 'sodexo',
+      address: 'Karakaari 7',
+      postalcode: '02610 Espoo',
+      menu: menuToShow,
+      alert: nokiaAlert
+    },
+    {
+      index: 1,
+      name: 'Dreams Cafe',
+      type: 'foodandco',
+      address: 'Karaportti 4',
+      postalcode: '02610 Espoo',
+      menu: dreamsCafeMenuToShow,
+      alert: dreamsCafeAlert
+    },
+    {
+      index: 2,
+      name: 'Metropolia',
+      type: 'foodandco',
+      address: 'Karakaarenkuja 6',
+      postalcode: '02610 Espoo',
+      menu: metropoliaMenu?.menu,
+      alert: metropoliaAlert
+    }
+
+  ]
   const handleFilterChange = (event) => {
     setFilterDiets(event.target.value)
   }
@@ -54,70 +87,35 @@ const Home = () => {
         <Tab label="Dreams Cafe"/>
         <Tab label="Metropolia"/>
       </Tabs>
-      <TabPanel value={tabValue} index={0}>
+      {campusRestaurants.map((restaurant) => (
+      <TabPanel value={tabValue} index={restaurant.index} key={restaurant.index}>
         <RestaurantSection
-          name={`${getTranslation(myLanguage, 'restaurant')} Nokia One`}
-          address="Karakaari 7"
-          postalcode="02610 Espoo"
-          >
-            {nokiaMenu
-              ? (
-                <>
-                  <FilterMenu
-                    filterValues={filterDiets}
-                    handleChange={handleFilterChange}
-                    clearFilter={() => setFilterDiets('')}
-                    clearButtonDisplay={!filterDiets.length ? 'none' : 'block'}/>
-                  <RestaurantMenu
-                    menu={menuToShow}
-                    restaurantType="sodexo"
-                    />
-                </>
-                )
-              : (
-                  <Notification alert={nokiaAlert} />
-                )
-              }
-          </RestaurantSection>
-        </TabPanel>
-        <TabPanel value={tabValue} index={1}>
-        <RestaurantSection
-          name={dreamsCafeMenu?.name}
-          address="Karakaari 7"
-          postalcode="02610 Espoo"
-          >
-            {dreamsCafeMenu
-              ? (
-                  <RestaurantMenu
-                    menu={dreamsCafeMenu.menu}
-                    restaurantType="foodandco"
+          name={restaurant.name}
+          address={restaurant.address}
+          postalcode={restaurant.postalcode}
+        >
+          {restaurant.menu
+            ? (
+              <>
+                <FilterMenu
+                  filterValues={filterDiets}
+                  handleChange={handleFilterChange}
+                  clearFilter={() => setFilterDiets('')}
+                  clearButtonDisplay={!filterDiets.length ? 'none' : 'block'}
+                  restaurantType={restaurant.type}
                   />
-                )
-              : (
-                  <Notification alert={dreamsCafeAlert} />
-                )
-              }
-          </RestaurantSection>
-        </TabPanel>
-        <TabPanel value={tabValue} index={2}>
-        <RestaurantSection
-          name={metropoliaMenu?.name}
-          address="Karakaari 7"
-          postalcode="02610 Espoo"
-          >
-            {metropoliaMenu
-              ? (
-                  <RestaurantMenu
-                    menu={metropoliaMenu.menu}
-                    restaurantType="foodandco"
+                <RestaurantMenu
+                  menu={restaurant.menu}
+                  restaurantType={restaurant.type}
                   />
-                )
-              : (
-                  <Notification alert={metropoliaAlert} />
-                )
-              }
+              </>
+              )
+            : (
+                <Notification alert={restaurant.alert} />
+              )}
           </RestaurantSection>
         </TabPanel>
+      ))}
       </Container>
   )
 }

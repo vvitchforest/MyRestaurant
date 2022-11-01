@@ -3,14 +3,16 @@ import sodexoMenuService from '../services/sodexomenu'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
 import { TbFaceIdError } from 'react-icons/tb'
+import Moment from 'moment'
 
-export const useSodexoData = (currentDate, restaurantId) => {
+export const useSodexoData = (restaurantId) => {
   const [menu, setMenu] = useState(null)
   const [alert, setAlert] = useState(null)
   const [loading, setLoading] = useState(true)
   const [cookies] = useCookies(['language'])
 
   const myLanguage = cookies.language ? cookies.language : 'en'
+  const currentDateApiFormat = Moment().format('YYYY-MM-DD')
 
   useEffect(() => {
     const getSodexoMenu = async () => {
@@ -18,8 +20,8 @@ export const useSodexoData = (currentDate, restaurantId) => {
       try {
         const menuFromAPI =
           myLanguage === 'en'
-            ? await sodexoMenuService.getMenuEn(currentDate, restaurantId)
-            : await sodexoMenuService.getMenuFi(currentDate, restaurantId)
+            ? await sodexoMenuService.getMenuEn(currentDateApiFormat, restaurantId)
+            : await sodexoMenuService.getMenuFi(currentDateApiFormat, restaurantId)
 
         setMenu(menuFromAPI.courses)
         if (menu === null) setAlert({ variant: 'info', message: getTranslation(myLanguage, 'menuNull') })

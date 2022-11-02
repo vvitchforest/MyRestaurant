@@ -35,7 +35,16 @@ const translations = {
     day: 'Day',
     hours: 'Hours',
     unavailable: 'Unavailable',
-    distance: 'Distance:'
+    distance: 'Distance:',
+    filter: 'Filter diets',
+    clearFilter: 'Clear',
+    glutenFree: 'Gluten free',
+    lactoseFree: 'Lactose free',
+    milkFree: 'Milk free',
+    lowLactose: 'Low lactose',
+    vegan: 'Vegan',
+    showAll: 'Show all',
+    noMeals: 'Cannot find any meals with this filter...'
   },
   fi: {
     map: 'Kartta',
@@ -68,7 +77,16 @@ const translations = {
     day: 'Päivä',
     hours: 'Tunnit',
     unavailable: 'Ei saatavilla',
-    distance: 'Etäisyys:'
+    distance: 'Etäisyys:',
+    filter: 'Suodata ruokavalio',
+    clearFilter: 'Poista',
+    glutenFree: 'Gluteeniton',
+    lactoseFree: 'Laktoositon',
+    milkFree: 'Maidoton',
+    lowLactose: 'Vähälaktoosinen',
+    vegan: 'Vegaani',
+    showAll: 'Näytä kaikki',
+    noMeals: 'Tällä suodattimella ei löytynyt yhtään ruakalajia... '
   }
 }
 

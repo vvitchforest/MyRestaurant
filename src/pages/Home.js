@@ -1,5 +1,5 @@
 import { React, useState } from 'react'
-import { Container, Box, CircularProgress, Tabs, Tab } from '@mui/material'
+import { Container, Box, CircularProgress, Tabs, Tab, Alert } from '@mui/material'
 import RestaurantMenu from '../components/RestaurantMenu'
 import Notification from '../components/Notification'
 import TabPanel from '../components/TabPanel'
@@ -9,32 +9,40 @@ import { useCookies } from 'react-cookie'
 import { useSodexoData } from '../hooks/useSodexoData'
 import { useFoodAndCoData } from '../hooks/useFoodAndCoData'
 import getTranslation from '../utils/Translations'
+import { BiSad } from 'react-icons/bi'
 
 const Home = () => {
   const [cookies] = useCookies(['language'])
-  const [filterDiets, setFilterDiets] = useState('')
+  const [filterDiet, setFilterDiet] = useState('')
   const [tabValue, setTabValue] = useState(0)
+
   const myLanguage = cookies.language ? cookies.language : 'en'
 
   const { menu: nokiaMenu, alert: nokiaAlert, loading: nokiaLoading } = useSodexoData('80')
   const { menu: dreamsCafeMenu, alert: dreamsCafeAlert, loading: dreamsCafeLoading } = useFoodAndCoData('3202')
   const { menu: metropoliaMenu, alert: metropoliaAlert, loading: metropoliaLoading } = useFoodAndCoData('3208')
 
-  const menuToShow = !filterDiets.length
+  const menuToShow = !filterDiet.length
     ? nokiaMenu
     : {
         ...Object.values(nokiaMenu)?.filter((menuItem) =>
-          menuItem?.recipes?.hideAll?.dietcodes.includes(filterDiets))
+          menuItem?.recipes?.hideAll?.dietcodes.includes(filterDiet))
       }
 
-  const dreamsCafeMenuToShow = !filterDiets.length
+  console.log(menuToShow)
+  const dreamsCafeMenuToShow = !filterDiet.length
     ? dreamsCafeMenu?.menu
     : {
         ...Object.values(dreamsCafeMenu?.menu)?.filter((menuItem) =>
-          menuItem?.diets.split(' ,').some(diet => diet === filterDiets))
+          menuItem?.diets.split(' ,').some(diet => diet === filterDiet))
       }
 
-  console.log('fileted', filterDiets)
+  const metropoliaMenuToShow = !filterDiet.length
+    ? dreamsCafeMenu?.menu
+    : {
+        ...Object.values(metropoliaMenu?.menu)?.filter((menuItem) =>
+          menuItem?.diets.split(' ,').some(diet => diet === filterDiet))
+      }
 
   const campusRestaurants = [
     {
@@ -61,18 +69,19 @@ const Home = () => {
       type: 'foodandco',
       address: 'Karakaarenkuja 6',
       postalcode: '02610 Espoo',
-      menu: metropoliaMenu?.menu,
+      menu: metropoliaMenuToShow,
       alert: metropoliaAlert
     }
 
   ]
   const handleFilterChange = (event) => {
-    setFilterDiets(event.target.value)
+    setFilterDiet(event.target.value)
   }
 
   const handleTabsChange = (event, newValue) => {
     console.log(newValue)
     setTabValue(newValue)
+    setFilterDiet('')
   }
 
   if (nokiaLoading || dreamsCafeLoading || metropoliaLoading) {
@@ -100,12 +109,14 @@ const Home = () => {
             ? (
               <>
                 <FilterMenu
-                  filterValues={filterDiets}
+                  filterValues={filterDiet}
                   handleChange={handleFilterChange}
-                  clearFilter={() => setFilterDiets('')}
-                  clearButtonDisplay={!filterDiets.length ? 'none' : 'block'}
+                  clearFilter={() => setFilterDiet('')}
+                  clearButtonDisplay={!filterDiet.length ? 'none' : 'block'}
                   restaurantType={restaurant.type}
                   />
+                  { filterDiet.length !== 0 && Object.keys(restaurant.menu).length === 0 &&
+                    <Alert severity="info" icon={<BiSad/>} sx={{ m: 2 }}>{getTranslation(myLanguage, 'noMeals')}.</Alert>}
                 <RestaurantMenu
                   menu={restaurant.menu}
                   restaurantType={restaurant.type}

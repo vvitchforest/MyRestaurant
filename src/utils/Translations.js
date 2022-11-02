@@ -40,7 +40,16 @@ const translations = {
     lessbusy: 'Less busy',
     busy: 'Busy',
     reviews: 'Reviews',
-    only5: 'Only five of the latest reviews are shown'
+    only5: 'Only five of the latest reviews are shown',
+    filter: 'Filter diets',
+    clearFilter: 'Clear',
+    glutenFree: 'Gluten free',
+    lactoseFree: 'Lactose free',
+    milkFree: 'Milk free',
+    lowLactose: 'Low lactose',
+    vegan: 'Vegan',
+    showAll: 'Show all',
+    noMeals: 'Cannot find any meals with this filter...'
   },
   fi: {
     map: 'Kartta',
@@ -77,7 +86,16 @@ const translations = {
     lessbusy: 'Ei ruuhkaa',
     busy: 'Ruuhkainen',
     reviews: 'Arvostelut',
-    only5: 'Vain viisi viimeisintä arvostelua on näkyvissä'
+    only5: 'Vain viisi viimeisintä arvostelua on näkyvissä',
+    filter: 'Suodata ruokavalio',
+    clearFilter: 'Poista',
+    glutenFree: 'Gluteeniton',
+    lactoseFree: 'Laktoositon',
+    milkFree: 'Maidoton',
+    lowLactose: 'Vähälaktoosinen',
+    vegan: 'Vegaani',
+    showAll: 'Näytä kaikki',
+    noMeals: 'Tällä suodattimella ei löytynyt yhtään ruokalajia... '
   }
 }
 

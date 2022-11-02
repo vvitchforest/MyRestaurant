@@ -1,66 +1,90 @@
-import { React, useState, useEffect } from 'react'
-import sodexoMenuService from '../services/sodexomenu'
-import { Card, Container, Typography, Box, CircularProgress } from '@mui/material'
-import Moment from 'moment'
-import 'moment/locale/fi'
+import { React, useState } from 'react'
+import { Container, Box, CircularProgress, Tabs, Tab, Alert } from '@mui/material'
 import RestaurantMenu from '../components/RestaurantMenu'
-import RestaurantHeader from '../components/RestaurantHeader'
-import { useCookies } from 'react-cookie'
-import getTranslation from '../utils/Translations'
 import Notification from '../components/Notification'
+import TabPanel from '../components/TabPanel'
 import FilterMenu from '../components/FilterMenu'
-import { TbFaceIdError } from 'react-icons/tb'
+import RestaurantSection from '../components/RestaurantSection'
+import { useCookies } from 'react-cookie'
+import { useSodexoData } from '../hooks/useSodexoData'
+import { useFoodAndCoData } from '../hooks/useFoodAndCoData'
+import getTranslation from '../utils/Translations'
+import { BiSad } from 'react-icons/bi'
 
 const Home = () => {
   const [cookies] = useCookies(['language'])
-  const [loading, setLoading] = useState(true)
-  const [menu, setMenu] = useState(null)
-  const [alert, setAlert] = useState(null)
-  const [filterDiets, setFilterDiets] = useState('')
+  const [filterDiet, setFilterDiet] = useState('')
+  const [tabValue, setTabValue] = useState(0)
 
   const myLanguage = cookies.language ? cookies.language : 'en'
-  Moment.locale(myLanguage)
-  const currentDateApiFormat = Moment().format('YYYY-MM-DD')
-  const currentDate = Moment().format('dddd DD-MM-YYYY')
 
-  useEffect(() => {
-    const getSodexoMenu = async () => {
-      setLoading(true)
-      try {
-        const menuFromAPI =
-          myLanguage === 'en'
-            ? await sodexoMenuService.getMenuEn(currentDateApiFormat, '80')
-            : await sodexoMenuService.getMenuFi(currentDateApiFormat, '80')
+  const { menu: nokiaMenu, alert: nokiaAlert, loading: nokiaLoading } = useSodexoData('80')
+  const { menu: dreamsCafeMenu, alert: dreamsCafeAlert, loading: dreamsCafeLoading } = useFoodAndCoData('3202')
+  const { menu: metropoliaMenu, alert: metropoliaAlert, loading: metropoliaLoading } = useFoodAndCoData('3208')
 
-        setMenu(menuFromAPI.courses)
-        if (menu === null) setAlert({ variant: 'info', message: getTranslation(myLanguage, 'menuNull') })
-      } catch (error) {
-        setAlert({ variant: 'error', message: getTranslation(myLanguage, 'menuError'), icon: <TbFaceIdError /> })
-        console.log(error)
-      }
-      setLoading(false)
-    }
-    getSodexoMenu()
-  }, [myLanguage])
-
-  console.log(filterDiets)
-
-  /* I tried this: Object.values(menu)?.filter((menuItem) =>
-  filterDiets.every(diet => menuItem?.recipes?.hideAll?.dietcodes.includes(diet)) */
-
-  const menuToShow = !filterDiets.length
-    ? menu
+  const menuToShow = !filterDiet.length
+    ? nokiaMenu
     : {
-        ...Object.values(menu)?.filter((menuItem) =>
-          menuItem?.recipes?.hideAll?.dietcodes.includes(filterDiets))
+        ...Object.values(nokiaMenu)?.filter((menuItem) =>
+          menuItem?.recipes?.hideAll?.dietcodes.includes(filterDiet))
       }
-  console.log(menuToShow)
 
+  console.log(menuToShow)
+  const dreamsCafeMenuToShow = !filterDiet.length
+    ? dreamsCafeMenu?.menu
+    : {
+        ...Object.values(dreamsCafeMenu?.menu)?.filter((menuItem) =>
+          menuItem?.diets.split(' ,').some(diet => diet === filterDiet))
+      }
+
+  const metropoliaMenuToShow = !filterDiet.length
+    ? dreamsCafeMenu?.menu
+    : {
+        ...Object.values(metropoliaMenu?.menu)?.filter((menuItem) =>
+          menuItem?.diets.split(' ,').some(diet => diet === filterDiet))
+      }
+
+  const campusRestaurants = [
+    {
+      index: 0,
+      name: `${getTranslation(myLanguage, 'restaurant')} Nokia One`,
+      type: 'sodexo',
+      address: 'Karakaari 7',
+      postalcode: '02610 Espoo',
+      menu: menuToShow,
+      alert: nokiaAlert
+    },
+    {
+      index: 1,
+      name: 'Dreams Cafe',
+      type: 'foodandco',
+      address: 'Karaportti 4',
+      postalcode: '02610 Espoo',
+      menu: dreamsCafeMenuToShow,
+      alert: dreamsCafeAlert
+    },
+    {
+      index: 2,
+      name: 'Metropolia',
+      type: 'foodandco',
+      address: 'Karakaarenkuja 6',
+      postalcode: '02610 Espoo',
+      menu: metropoliaMenuToShow,
+      alert: metropoliaAlert
+    }
+
+  ]
   const handleFilterChange = (event) => {
-    setFilterDiets(event.target.value)
+    setFilterDiet(event.target.value)
   }
 
-  if (loading) {
+  const handleTabsChange = (event, newValue) => {
+    console.log(newValue)
+    setTabValue(newValue)
+    setFilterDiet('')
+  }
+
+  if (nokiaLoading || dreamsCafeLoading || metropoliaLoading) {
     return (
     <Box width='100%' height='92vh' display='flex' justifyContent='center' alignItems='center'>
       <CircularProgress/>
@@ -68,41 +92,43 @@ const Home = () => {
   }
 
   return (
-    <Container sx={{ display: 'flex', justifyContent: 'center' }}>
-      <Card
-        elevation={3}
-        sx={{ width: { xs: '100%', md: '75%', lg: '60%' }, mb: 2, mt: 2 }}
+    <Container >
+      <Tabs value={tabValue} onChange={handleTabsChange} centered sx={{ my: 2, pt: 2 }}>
+        <Tab label="Nokia One"/>
+        <Tab label="Dreams Cafe"/>
+        <Tab label="Metropolia"/>
+      </Tabs>
+      {campusRestaurants.map((restaurant) => (
+      <TabPanel value={tabValue} index={restaurant.index} key={restaurant.index}>
+        <RestaurantSection
+          name={restaurant.name}
+          address={restaurant.address}
+          postalcode={restaurant.postalcode}
         >
-        <RestaurantHeader
-        name={`${getTranslation(myLanguage, 'restaurant')} Nokia One`}
-        address="Karakaari 7"
-        postalcode="02610 Espoo"
-        />
-        <Typography variant="h5" sx={{ pl: { xs: 2, sm: 5 } }}>
-          {getTranslation(myLanguage, 'menu')}
-          </Typography>
-          <Typography sx={{ pl: { xs: 2, sm: 5 }, textTransform: 'capitalize' }}>
-            {currentDate}
-          </Typography>
-            {menu
-              ? (
-                <>
-                <Box display='flex' justifyContent='flex-start'>
-                  <FilterMenu filterValues={filterDiets} handleChange={handleFilterChange} clearFilter={() => setFilterDiets('')} clearButtonDisplay={!filterDiets.length ? 'none' : 'block'}/>
-                </Box>
-                  <RestaurantMenu
-                    menu={menuToShow}
-                    restaurantType="sodexo"
+          {restaurant.menu
+            ? (
+              <>
+                <FilterMenu
+                  filterValues={filterDiet}
+                  handleChange={handleFilterChange}
+                  clearFilter={() => setFilterDiet('')}
+                  clearButtonDisplay={!filterDiet.length ? 'none' : 'block'}
+                  restaurantType={restaurant.type}
                   />
-                </>
-                )
-              : (
-                <Notification
-                  alert={alert}
-                />
-                )
-          }
-        </Card>
+                  { filterDiet.length !== 0 && Object.keys(restaurant.menu).length === 0 &&
+                    <Alert severity="info" icon={<BiSad/>} sx={{ m: 2 }}>{getTranslation(myLanguage, 'noMeals')}.</Alert>}
+                <RestaurantMenu
+                  menu={restaurant.menu}
+                  restaurantType={restaurant.type}
+                  />
+              </>
+              )
+            : (
+                <Notification alert={restaurant.alert} />
+              )}
+          </RestaurantSection>
+        </TabPanel>
+      ))}
       </Container>
   )
 }

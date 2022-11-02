@@ -6,10 +6,11 @@ import { useCookies } from 'react-cookie'
 
 const RestaurantMenu = ({ menu, restaurantType }) => {
   const [cookies] = useCookies(['language'])
-  return (
-    <List>
-      {restaurantType === 'sodexo' &&
-        Object.values(menu).map((item, index) => (
+
+  if (restaurantType === 'sodexo') {
+    return (
+      <List>
+        {Object.values(menu).map((item, index) => (
           <RestaurantMenuItem
             key={index}
             menuItem={cookies.language === 'en' ? item?.title_en : item?.title_fi}
@@ -20,20 +21,27 @@ const RestaurantMenu = ({ menu, restaurantType }) => {
             restaurantType={restaurantType}
           />
         ))}
-      {restaurantType === 'foodandco' &&
-        Object.values(menu).map((item, index) => (
+      </List>
+    )
+  }
+
+  if (restaurantType === 'foodandco') {
+    return (
+      <List>
+        {Object.values(menu).map((item, index) => (
           <RestaurantMenuItem
             key={index}
             menuItem={item.dish}
             dietCodes={item.diets}
-          />
+        />
         ))}
-    </List>
-  )
+      </List>
+    )
+  }
 }
 
 RestaurantMenu.propTypes = {
-  menu: PropTypes.object,
-  restaurantType: PropTypes.string
+  menu: PropTypes.object.isRequired,
+  restaurantType: PropTypes.string.isRequired
 }
 export default RestaurantMenu

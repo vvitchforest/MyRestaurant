@@ -1,6 +1,7 @@
 /**
  * @Author Oskar Wiiala
- * All translations for the app are here
+ * All translations for the app should be put here
+ * Currently supports English and Finnish
  */
 
 const translations = {
@@ -35,7 +36,11 @@ const translations = {
     day: 'Day',
     hours: 'Hours',
     unavailable: 'Unavailable',
-    distance: 'Distance:'
+    distance: 'Distance:',
+    lessbusy: 'Less busy',
+    busy: 'Busy',
+    reviews: 'Reviews',
+    only5: 'Only five of the latest reviews are shown'
   },
   fi: {
     map: 'Kartta',
@@ -68,7 +73,11 @@ const translations = {
     day: 'Päivä',
     hours: 'Tunnit',
     unavailable: 'Ei saatavilla',
-    distance: 'Etäisyys:'
+    distance: 'Etäisyys:',
+    lessbusy: 'Ei ruuhkaa',
+    busy: 'Ruuhkainen',
+    reviews: 'Arvostelut',
+    only5: 'Vain viisi viimeisintä arvostelua on näkyvissä'
   }
 }
 

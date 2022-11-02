@@ -83,7 +83,6 @@ const DirectionsModal = ({
       directionService.route(request, function (result, status) {
         if (status === 'OK') {
           directionRenderer.setDirections(result)
-          console.log('dir', result)
         }
       })
       setOpenDrawer(false)

@@ -83,6 +83,7 @@ const RestaurantCard = ({
     dispatch(actions.setOpeningHours(!expanded))
     dispatch(actions.setPlaceId(placeId))
   }
+
   const getPlaceDetails = () => {
     const request = {
       placeId,
@@ -275,9 +276,11 @@ const RestaurantCard = ({
           <CustomModal
             open={modalOpen}
             handleClose={() => setModalOpen(false)}
-            title={cookies.language === 'en' ? 'Reviews' : 'Arvostelut'}
+            title={getTranslation(language, 'reviews')}
           >
-            Only 5 latest reviews are shown
+            <Typography sx={{ pt: '8px', pb: '8px' }}>
+              {getTranslation(language, 'only5')}
+            </Typography>
             {reviews.map(function (results) {
               return (
                 <Card

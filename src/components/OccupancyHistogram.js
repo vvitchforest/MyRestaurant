@@ -117,7 +117,7 @@ const OccupancyHistogram = (args) => {
           color='#8c8cff'
           dashStyle='dash'
         >
-          <Label text={getTranslation(language, 'lowaverage')} />
+          <Label text={getTranslation(language, 'lessbusy')} />
         </ConstantLine>
         <ConstantLine
           width={2}
@@ -125,7 +125,7 @@ const OccupancyHistogram = (args) => {
           color='#ff7c7c'
           dashStyle='dash'
         >
-          <Label text={getTranslation(language, 'highaverage')} />
+          <Label text={getTranslation(language, 'busy')} />
         </ConstantLine>
       </ValueAxis>
       <Legend visible={false} />

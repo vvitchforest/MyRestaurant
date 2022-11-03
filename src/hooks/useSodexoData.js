@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import sodexoMenuService from '../services/sodexomenu'
 import { useCookies } from 'react-cookie'
-import getTranslation from '../utils/Translations'
-import { TbFaceIdError } from 'react-icons/tb'
 import Moment from 'moment'
 
 export const useSodexoData = (restaurantId) => {
   const [menu, setMenu] = useState(null)
-  const [alert, setAlert] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
+  const [loading, setLoading] = useState(false)
+
   const [cookies] = useCookies(['language'])
 
   const myLanguage = cookies.language ? cookies.language : 'en'
@@ -23,10 +22,12 @@ export const useSodexoData = (restaurantId) => {
             ? await sodexoMenuService.getMenuEn(currentDateApiFormat, restaurantId)
             : await sodexoMenuService.getMenuFi(currentDateApiFormat, restaurantId)
 
-        setMenu(menuFromAPI.courses)
-        if (menu === null) setAlert({ variant: 'info', message: getTranslation(myLanguage, 'menuNull') })
+        const formattedMenuArray = formatMenu(menuFromAPI.courses)
+        const menuObject = { ...formattedMenuArray }
+        setMenu(menuObject)
+        console.log('sodexo', menuObject)
       } catch (error) {
-        setAlert({ variant: 'error', message: getTranslation(myLanguage, 'menuError'), icon: <TbFaceIdError /> })
+        setError(true)
         console.log(error)
       }
       setLoading(false)
@@ -34,5 +35,21 @@ export const useSodexoData = (restaurantId) => {
     getSodexoMenu()
   }, [myLanguage])
 
-  return { menu, alert, loading }
+  const formatMenu = (menu) => {
+    // for days when there is no menu
+    if (menu === null) return {}
+    const formattedMenuArray = Object.values(menu).map(menuItem =>
+      ({
+        dish: cookies.language === 'en' ? menuItem?.title_en : menuItem?.title_fi,
+        diets: menuItem?.recipes?.hideAll?.dietcodes.split(', '),
+        title: menuItem?.category,
+        price: menuItem?.price,
+        allergens: menuItem?.additionalDietInfo?.allergens
+      })
+    )
+
+    return formattedMenuArray
+  }
+
+  return { menu, loading, error }
 }

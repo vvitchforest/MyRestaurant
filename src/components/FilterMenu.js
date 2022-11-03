@@ -36,7 +36,7 @@ const FilterMenu = ({ filterValues, handleChange, clearFilter, clearButtonDispla
 
   return (
     <Box width='100%' display='flex' justifyContent='flex-start' sx={{ pl: { xs: 2, sm: 5 }, '& .MuiSelect-select': { p: 1.25 }, '& .MuiInputLabel-formControl': { lineHeight: '0.8em' } }}>
-      <FormControl sx={{ mt: 2, width: { xs: '60%', sm: '30%' }, '& svg': { color: '#1976d2' } }}>
+      <FormControl sx={{ mt: 2, width: { xs: '60%', sm: '30%' }, '& svg': { color: 'primary' } }}>
         <InputLabel id="filter-label">{getTranslation(myLanguage, 'filter')}</InputLabel>
         <Select
           labelId="filter-label"

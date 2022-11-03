@@ -20,17 +20,20 @@ const theme = createTheme({
     h4: {
       fontFamily: 'Roboto Mono'
     },
+    h5: {
+      fontFamily: 'Roboto Mono'
+    },
     button: {
       fontFamily: 'Roboto Mono',
-      letterSpacing: '2px'
+      letterSpacing: '1px'
     },
     subtitle2: {
       fontFamily: 'Roboto Mono',
-      letterSpacing: '2px'
+      letterSpacing: '1px'
     },
     MuiToolbar: {
       fontFamily: 'Roboto Mono',
-      letterSpacing: '2px'
+      letterSpacing: '1px'
     }
   }
 })

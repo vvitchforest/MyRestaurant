@@ -2,13 +2,9 @@ import React from 'react'
 import { Box, Grid, CardContent, Typography } from '@mui/material'
 import PropTypes from 'prop-types'
 import OccupancyHistogram from '../components/OccupancyHistogram'
-import { useCookies } from 'react-cookie'
-import getTranslation from '../utils/Translations'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
-const RestaurantHeader = ({ name, address, postalcode }) => {
-  const [cookies] = useCookies(['language'])
-  const myLanguage = cookies.language ? cookies.language : 'en'
+const RestaurantHeader = ({ name, address, postalcode, lunchTime }) => {
   const mediumScreen = useMediaQuery('(min-width:750px)')
 
   const fontStyle = {
@@ -37,7 +33,7 @@ const RestaurantHeader = ({ name, address, postalcode }) => {
               variant="body2"
               sx={{ color: 'green', fontWeight: 'bold', fontStyle }}
             >
-              {getTranslation(myLanguage, 'open')}
+              {lunchTime}
             </Typography>
           </Grid>
           {name?.includes('Nokia One') &&
@@ -61,6 +57,7 @@ const RestaurantHeader = ({ name, address, postalcode }) => {
 RestaurantHeader.propTypes = {
   name: PropTypes.string,
   address: PropTypes.string,
-  postalcode: PropTypes.string
+  postalcode: PropTypes.string,
+  lunchTime: PropTypes.string
 }
 export default RestaurantHeader

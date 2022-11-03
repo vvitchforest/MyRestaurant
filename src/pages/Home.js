@@ -1,5 +1,6 @@
 import { React, useState } from 'react'
-import { Container, Box, CircularProgress, Tabs, Tab, Alert } from '@mui/material'
+import { Container, Box, CircularProgress, Tabs, Tab, Alert, Fab } from '@mui/material'
+import { Link } from 'react-router-dom'
 import RestaurantMenu from '../components/RestaurantMenu'
 import Notification from '../components/Notification'
 import TabPanel from '../components/TabPanel'
@@ -38,7 +39,7 @@ const Home = () => {
       }
 
   const metropoliaMenuToShow = !filterDiet.length
-    ? dreamsCafeMenu?.menu
+    ? metropoliaMenu?.menu
     : {
         ...Object.values(metropoliaMenu?.menu)?.filter((menuItem) =>
           menuItem?.diets.split(' ,').some(diet => diet === filterDiet))
@@ -46,29 +47,30 @@ const Home = () => {
 
   const campusRestaurants = [
     {
-      index: 0,
       name: `${getTranslation(myLanguage, 'restaurant')} Nokia One`,
       type: 'sodexo',
       address: 'Karakaari 7',
       postalcode: '02610 Espoo',
+      lunchTime: 'placeholder',
       menu: menuToShow,
       alert: nokiaAlert
     },
     {
-      index: 1,
       name: 'Dreams Cafe',
       type: 'foodandco',
       address: 'Karaportti 4',
       postalcode: '02610 Espoo',
+      lunchTime: 'placeholder',
       menu: dreamsCafeMenuToShow,
       alert: dreamsCafeAlert
     },
     {
-      index: 2,
+
       name: 'Metropolia',
       type: 'foodandco',
       address: 'Karakaarenkuja 6',
       postalcode: '02610 Espoo',
+      lunchTime: 'placeholder',
       menu: metropoliaMenuToShow,
       alert: metropoliaAlert
     }
@@ -93,17 +95,18 @@ const Home = () => {
 
   return (
     <Container >
-      <Tabs value={tabValue} onChange={handleTabsChange} centered sx={{ my: 2, pt: 2 }}>
+      <Tabs value={tabValue} onChange={handleTabsChange} centered sx={{ my: 2 }}>
         <Tab label="Nokia One"/>
         <Tab label="Dreams Cafe"/>
         <Tab label="Metropolia"/>
       </Tabs>
-      {campusRestaurants.map((restaurant) => (
-      <TabPanel value={tabValue} index={restaurant.index} key={restaurant.index}>
+      {campusRestaurants.map((restaurant, index) => (
+      <TabPanel value={tabValue} index={index} key={index}>
         <RestaurantSection
           name={restaurant.name}
           address={restaurant.address}
           postalcode={restaurant.postalcode}
+          lunchTime={restaurant.lunchTime}
         >
           {restaurant.menu
             ? (
@@ -116,7 +119,7 @@ const Home = () => {
                   restaurantType={restaurant.type}
                   />
                   { filterDiet.length !== 0 && Object.keys(restaurant.menu).length === 0 &&
-                    <Alert severity="info" icon={<BiSad/>} sx={{ m: 2 }}>{getTranslation(myLanguage, 'noMeals')}.</Alert>}
+                    <Alert severity="info" icon={<BiSad/>} sx={{ mx: { xs: 2, sm: 5 }, my: 2 }}>{getTranslation(myLanguage, 'noMeals')}.</Alert>}
                 <RestaurantMenu
                   menu={restaurant.menu}
                   restaurantType={restaurant.type}
@@ -126,6 +129,16 @@ const Home = () => {
             : (
                 <Notification alert={restaurant.alert} />
               )}
+              <Box width="100%" display="flex" justifyContent="center">
+                <Fab
+                  variant="extended"
+                  component={Link} to="/restaurants"
+                  size="medium" color="primary"
+                  aria-label="other-restaurants-nearby"
+                  sx={{ position: 'fixed', bottom: 0, mb: 2 }}>
+                  Other restaurants nearby
+                </Fab>
+              </Box>
           </RestaurantSection>
         </TabPanel>
       ))}

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import RestaurantCard from '../components/RestaurantCard'
 import getTranslation from '../utils/Translations'
-import { CircularProgress, Box, FormControl, InputLabel, Select, OutlinedInput, MenuItem, useTheme, Chip } from '@mui/material'
+import { CircularProgress, Box, FormControl, InputLabel, Select, OutlinedInput, MenuItem, useTheme, Chip, Container } from '@mui/material'
 // import { useDispatch, useSelector } from 'react-redux'
 // import * as actions from '../store/actions/index'
 
@@ -68,7 +68,7 @@ const RestaurantsList = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '1000',
+        radius: '50',
         type: ['restaurant']
       }
 
@@ -167,15 +167,12 @@ const RestaurantsList = () => {
   } */
 
   return (
-    <div>
-      <h1>
-        {getTranslation(
-          cookies.language ? cookies.language : 'en',
-          'restaurants'
-        )}
-          <FormControl sx={{ display: 'flex', justifyContent: 'center', m: 1, width: 300 }}>
+    <Container sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', width: '100%' }}>
+      <Box sx={{ display: 'flex', alignItems: 'end', justifyContent: 'center', width: '100%' }}>
+          <FormControl sx={{ width: '100%', alignSelf: 'center', display: 'flex' }}>
         <InputLabel id="demo-multiple-chip-label">Select type</InputLabel>
         <Select
+          sx={{ width: { xs: '90%', sm: '65%', md: '50%', lg: '40%' }, alignSelf: 'center' }}
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
           multiple
@@ -202,7 +199,7 @@ const RestaurantsList = () => {
           ))}
         </Select>
       </FormControl>
-      </h1>
+      </Box>
       {(isLoaded && checkPagination && restaurantTypes.length === 0) || (isLoaded && checkPagination === false && restaurantTypes.length === 0)
         ? placesFinal.map(function (results) {
           console.log('results: ', results)
@@ -262,7 +259,7 @@ const RestaurantsList = () => {
             />
               )
             })}
-    </div>
+    </Container>
   )
 }
 export default RestaurantsList

@@ -136,7 +136,7 @@ const Map = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '1000',
+        radius: '0',
         type: ['restaurant']
       }
 

@@ -20,6 +20,7 @@ import {
 import { getOccupancyData } from '../utils/OccupancyData.js'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
+import { purple } from '@mui/material/colors'
 
 // args should only contain width and height
 const OccupancyHistogram = (args) => {
@@ -102,11 +103,11 @@ const OccupancyHistogram = (args) => {
         type='bar'
         barOverlapGroup='time'
       />
-      <Series id='seriesActual' valueField='valueActual' color='#1976D2' />
+      <Series id='seriesActual' valueField='valueActual' color={purple[500]} />
       <Series
         id='seriesPrediction'
         valueField='valuePrediction'
-        color='#1976D24D'
+        color={purple[500]}
       />
       <ArgumentAxis title={getTranslation(language, 'hourofday')} />
       <ValueAxis title={getTranslation(language, 'people')}>

@@ -112,8 +112,8 @@ const Navbar = () => {
             onChange={handleChange}
             aria-label='language'
           >
-            <ToggleButton value='en'>EN</ToggleButton>
-            <ToggleButton value='fi'>FI</ToggleButton>
+            <ToggleButton sx={{ color: 'white' }} value='en'>EN</ToggleButton>
+            <ToggleButton sx={{ color: 'white' }} value='fi'>FI</ToggleButton>
           </ToggleButtonGroup>
           <List sx={{ display: { xs: 'none', md: 'flex' } }}>
             <NavItem

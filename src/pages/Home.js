@@ -63,19 +63,19 @@ const Home = () => {
           restaurantType={restaurant.type}
           id={restaurant.id}
         >
-              <Box width="100%" display="flex" justifyContent="center">
-                <Fab
-                  variant="extended"
-                  component={Link} to="/restaurants"
-                  size="medium" color="primary"
-                  aria-label="other-restaurants-nearby"
-                  sx={{ position: 'fixed', bottom: 0, mb: 2 }}>
-                  Other restaurants nearby
-                </Fab>
-              </Box>
           </RestaurantSection>
         </TabPanel>
       ))}
+       <Box width="100%" display="flex" justifyContent="center">
+        <Fab
+          variant="extended"
+          component={Link} to="/restaurants"
+          size="medium" color="primary"
+          aria-label="other-restaurants-nearby"
+          sx={{ position: 'fixed', bottom: 0, mb: 2 }}>
+          Other restaurants nearby
+        </Fab>
+      </Box>
       </Container>
   )
 }

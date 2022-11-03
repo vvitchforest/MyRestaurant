@@ -39,7 +39,7 @@ const Home = () => {
       }
 
   const metropoliaMenuToShow = !filterDiet.length
-    ? dreamsCafeMenu?.menu
+    ? metropoliaMenu?.menu
     : {
         ...Object.values(metropoliaMenu?.menu)?.filter((menuItem) =>
           menuItem?.diets.split(' ,').some(diet => diet === filterDiet))
@@ -47,7 +47,6 @@ const Home = () => {
 
   const campusRestaurants = [
     {
-      index: 0,
       name: `${getTranslation(myLanguage, 'restaurant')} Nokia One`,
       type: 'sodexo',
       address: 'Karakaari 7',
@@ -57,7 +56,6 @@ const Home = () => {
       alert: nokiaAlert
     },
     {
-      index: 1,
       name: 'Dreams Cafe',
       type: 'foodandco',
       address: 'Karaportti 4',
@@ -67,7 +65,7 @@ const Home = () => {
       alert: dreamsCafeAlert
     },
     {
-      index: 2,
+
       name: 'Metropolia',
       type: 'foodandco',
       address: 'Karakaarenkuja 6',
@@ -102,8 +100,8 @@ const Home = () => {
         <Tab label="Dreams Cafe"/>
         <Tab label="Metropolia"/>
       </Tabs>
-      {campusRestaurants.map((restaurant) => (
-      <TabPanel value={tabValue} index={restaurant.index} key={restaurant.index}>
+      {campusRestaurants.map((restaurant, index) => (
+      <TabPanel value={tabValue} index={index} key={index}>
         <RestaurantSection
           name={restaurant.name}
           address={restaurant.address}

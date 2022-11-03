@@ -32,16 +32,17 @@ export const useFoodAndCoData = (restaurantId) => {
     getFoodAndCoMenu()
   }, [myLanguage])
 
-  const formatMenu = (menu) => {
-    const flattenedMenuArray = menu.MenusForDays[0].SetMenus.map(
-      (setMenu) => setMenu.Components
-    ).flat()
-    const formattedMenuArray = flattenedMenuArray.map((item) => ({
-      dish: item.slice(0, item.indexOf(' (')),
-      diets: item.slice(item.indexOf('(') + 1, item.indexOf(')'))
-    }))
-    return formattedMenuArray
-  }
   console.log('foodandcomenu', menu)
   return { menu, alert, loading }
+}
+
+const formatMenu = (menu) => {
+  const flattenedMenuArray = menu.MenusForDays[0].SetMenus.map(
+    (setMenu) => setMenu.Components
+  ).flat()
+  const formattedMenuArray = flattenedMenuArray.map((item) => ({
+    dish: item.slice(0, item.indexOf(' (')),
+    diets: item.slice(item.indexOf('(') + 1, item.indexOf(')'))
+  }))
+  return formattedMenuArray
 }

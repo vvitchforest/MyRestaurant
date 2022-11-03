@@ -179,6 +179,7 @@ const DirectionsModal = ({
           </Button>
           <Button
             variant='contained'
+            testID='button'
             disabled={disabled}
             onClick={() => {
               getDirections(selectedType, restaurantLat, restaurantLng)

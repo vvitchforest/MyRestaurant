@@ -25,7 +25,6 @@ import {
   Paper
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import PropTypes from 'prop-types'
 import { useCookies } from 'react-cookie'
@@ -33,6 +32,7 @@ import getTranslation from '../utils/Translations'
 import { useDispatch } from 'react-redux'
 import * as actions from '../store/actions/index'
 import CustomModal from './CustomModal'
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 
 // Handles MUI Collapse component expansion when clicking "Opening hours" dropdown icon
 const ExpandMore = styled((props) => {
@@ -150,6 +150,28 @@ const RestaurantCard = ({
     setTableRows(tableRowsTemp)
   }
 
+  const openWebsite = () => {
+    const request = {
+      placeId,
+      fields: ['website']
+    }
+
+    const service = new window.google.maps.places.PlacesService(
+      document.createElement('div')
+    )
+    service.getDetails(request, callback)
+
+    function callback (results, status) {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        if (results.website !== undefined) {
+          window.open(results.website)
+        } else {
+          window.alert('Not available')
+        }
+      }
+    }
+  }
+
   return (
     <Box
       key={placeId}
@@ -180,8 +202,9 @@ const RestaurantCard = ({
                   language,
                   'ariasettings'
                 )}
+                onClick={openWebsite}
               >
-                <MoreVertIcon />
+                <RestaurantMenuIcon />
               </IconButton>
             }
             title={name}

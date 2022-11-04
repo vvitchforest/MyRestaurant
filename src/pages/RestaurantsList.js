@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import RestaurantCard from '../components/RestaurantCard'
 import getTranslation from '../utils/Translations'
-import { CircularProgress, Box, FormControl, InputLabel, Select, OutlinedInput, MenuItem, useTheme, Chip } from '@mui/material'
+import { CircularProgress, Box, FormControl, InputLabel, Select, OutlinedInput, MenuItem, useTheme, Chip, Container } from '@mui/material'
 // import { useDispatch, useSelector } from 'react-redux'
 // import * as actions from '../store/actions/index'
 
 const RestaurantsList = () => {
+  console.log('listaa')
+
   const ITEM_HEIGHT = 48
   const ITEM_PADDING_TOP = 8
   const MenuProps = {
@@ -53,7 +55,9 @@ const RestaurantsList = () => {
 
   useEffect(() => {
     const getPos = (position) => {
+      console.log('yksikaksikolme')
       if (navigator.geolocation) {
+        console.log('yykaakoo')
         const currentPosition = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
@@ -63,13 +67,20 @@ const RestaurantsList = () => {
       }
     }
     navigator.geolocation.getCurrentPosition(getPos)
-  }, [])
+    console.log('checkpos: ', checkIfPos)
+    if (checkIfPos === true) {
+      console.log('checkpos true')
+      getPlacesData()
+      setCheckIfPos(false)
+    }
+  }, [checkIfPos])
+
   const getPlacesData = () => {
     console.log('Current', currentPos)
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '1000',
+        radius: '0',
         type: ['restaurant']
       }
 
@@ -77,11 +88,14 @@ const RestaurantsList = () => {
       service.nearbySearch(request, callback)
 
       function callback (results, status, pagination) {
+        console.log('wtf123')
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          console.log('tekeekö')
           for (let i = 0; i < results.length; i++) {
             createRestaurantList(results[i])
           }
           if (pagination && pagination.hasNextPage) {
+            console.log('paginaatio')
             pagination.nextPage()
             setTimeout(function () {
               setCheckPagination(true)
@@ -93,12 +107,7 @@ const RestaurantsList = () => {
       }
     }
   }
-  setTimeout(function () {
-    if (checkIfPos === true) {
-      getPlacesData()
-      setCheckIfPos(false)
-    }
-  }, 2000)
+
   const createRestaurantList = (place) => {
     placesList.push(place)
     setPlacesFinal(placesList)
@@ -131,51 +140,12 @@ const RestaurantsList = () => {
       }
     }
   }, [restaurantTypes])
-  // Will leave these here for now (ignore)
-  /*  const getPlaceDetails = () => {
-    console.log('PlaceId', placeId)
-    const request = {
-      placeId: placeId,
-      fields: ['opening_hours']
-    }
-
-    const service = new window.google.maps.places.PlacesService(
-      document.createElement('div')
-    )
-    service.getDetails(request, callback)
-
-    function callback (results, status) {
-      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        console.log('Res', results.opening_hours.weekday_text)
-        setOpeningHours(results.opening_hours.weekday_text)
-      }
-    }
-  }
-  if (expanded === true) {
-    getPlaceDetails()
-    dispatch(actions.setOpeningHours(false))
-  }
-  const handleOnClick = (id) => {
-    setSelectedCard(selectedCard => {
-      selectedCard = new Set(selectedCard)
-      if (selectedCard.has(id)) {
-        selectedCard.delete(id)
-      } else {
-        selectedCard.add(id)
-      }
-      return selectedCard
-    })
-  } */
 
   return (
-    <div>
-      <h1>
-        {getTranslation(
-          language,
-          'restaurants'
-        )}
-          <FormControl sx={{ display: 'flex', justifyContent: 'center', m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-chip-label">Select type</InputLabel>
+    <Container sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+        <FormControl sx={{ width: { xs: '90%', sm: '65%', md: '50%', lg: '40%' }, pt: '24px', pb: '24px' }}>
+        <InputLabel sx={{ pt: '24px' }} id="demo-multiple-chip-label">Select type</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
@@ -203,7 +173,7 @@ const RestaurantsList = () => {
           ))}
         </Select>
       </FormControl>
-      </h1>
+      </Box>
       {(isLoaded && checkPagination && restaurantTypes.length === 0) || (isLoaded && checkPagination === false && restaurantTypes.length === 0)
         ? placesFinal.map(function (results) {
           console.log('results: ', results)
@@ -263,7 +233,7 @@ const RestaurantsList = () => {
             />
               )
             })}
-    </div>
+    </Container>
   )
 }
 export default RestaurantsList

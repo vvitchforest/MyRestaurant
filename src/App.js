@@ -7,6 +7,7 @@ import Map from './pages/Map'
 import Menu from './pages/Menu'
 
 function App () {
+  console.log('appi')
   return (
     <Router>
       <Navbar />

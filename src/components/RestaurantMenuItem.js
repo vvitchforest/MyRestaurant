@@ -43,7 +43,7 @@ const RestaurantMenuItem = ({
             <Grid item>
               <Typography
                 gutterBottom
-                variant="subtitle2"
+                variant="subtitle"
                 component="div"
                 fontSize="1rem"
               >
@@ -69,7 +69,7 @@ const RestaurantMenuItem = ({
                 variant="body2"
                 sx={{ pt: 0.5 }}
               >
-                {dietCodes}
+                {dietCodes.join(', ')}
               </Typography>
             </Grid>
             <Grid item sx={{ flex: 1 }}>
@@ -99,7 +99,7 @@ RestaurantMenuItem.propTypes = {
   mealType: PropTypes.string,
   price: PropTypes.string,
   dietInfo: PropTypes.string,
-  dietCodes: PropTypes.string,
+  dietCodes: PropTypes.array,
   restaurantType: PropTypes.string
 }
 export default RestaurantMenuItem

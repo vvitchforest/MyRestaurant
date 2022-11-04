@@ -1,3 +1,8 @@
+/**
+ * @Author Teemu Tirkkonen
+ * ActionTypes for redux so redux knows what to set based on the type
+ */
+
 import * as actionTypes from '../actions/actionTypes'
 
 const initialState = {

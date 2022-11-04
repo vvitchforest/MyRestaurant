@@ -1,3 +1,8 @@
+/**
+ * @Author Teemu Tirkkonen
+ * Page for displaying restaurant card components
+ */
+
 import React, { useEffect, useState } from 'react'
 import { Box, IconButton, Drawer, Rating, Typography, CardMedia } from '@mui/material'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
@@ -32,7 +37,6 @@ const Map = () => {
   const [restaurantWebsite, setRestaurantWebsite] = useState()
 
   const placesList = []
-  // let getNextPage
   const [placesFinal, setPlacesFinal] = useState([])
   const mapStyles = {
     height: '95vh',
@@ -80,10 +84,11 @@ const Map = () => {
       }
     ]
   }
-  /* const icon = {
-    url: require('../restaurant icon.png'),
-    scaledSize: new window.google.maps.Size(90, 42)
-  } */
+
+  /**
+   * Loads the API with API key and libraries we want to use
+   * @param {*} isLoaded checks that the API works
+   */
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -91,32 +96,17 @@ const Map = () => {
   })
   const [map, setMap] = React.useState(null)
   const mapRef = React.useRef()
-  /* const request = {
-    location: currentPos,
-    radius: '2000',
-    type: ['restaurant']
-  } */
-
+  // When page is loaded map loads
   const onLoad = React.useCallback(function callback (map) {
-    /* const bounds = new window.google.maps.LatLngBounds(defaultCenter)
-    map.fitBounds(bounds) */
     setMap(map)
     mapRef.current = map
   }, [])
-
+  // When page is refreshed unmounts map
   const onUnmount = React.useCallback(function callback (map) {
     setMap(null)
   }, [])
-  /* const nearbySearch = React.useCallback(function callback (results, status) {
-    if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-      for (let i = 0; i < results.length; i++) {
-        createMarker(results[i])
-      }
-    }
-  }, [])
-  const createMarker = (place) => {
-    console.log('Place', place)
-  } */
+
+  // Gets the users currentlocation and sets it to a variable
   useEffect(() => {
     const getPos = (position) => {
       if (navigator.geolocation) {
@@ -129,21 +119,29 @@ const Map = () => {
     }
     navigator.geolocation.getCurrentPosition(getPos)
   }, [])
+  // Sets the map to location and gets nearbyRestaurants
   const panToLocation = () => {
     setClick(true)
     console.log('Current', currentPos)
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '1000',
+        radius: '0',
         type: ['restaurant']
       }
-
+      // Gets the Google PlacesService and sets it to map
       const service = new window.google.maps.places.PlacesService(
         mapRef.current
       )
+      // Calls nearbySearch which is used when you want to get places near you
       service.nearbySearch(request, callback)
-
+      /**
+     * Makes the call to the service and goes through all of the results and calls createMarker function
+     * There can be multiple pages. If there is waits until all results are gotten before rendering
+     * @param {*} results data of restaurant, such as name, address, rating etc.
+     * @param {*} status whether or not everything was successful
+     * @param {*} pagination gives next page if there is one
+     */
       function callback (results, status, pagination) {
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
           for (let i = 0; i < results.length; i++) {
@@ -171,6 +169,7 @@ const Map = () => {
   }
 
   /**
+   * Gets the restaurant information based on place id and specific fields
    * @param {*} placeId Id of restaurant
    */
   const setRestaurantInfo = (
@@ -182,13 +181,19 @@ const Map = () => {
       fields: ['name', 'rating', 'formatted_phone_number', 'formatted_address', 'opening_hours', 'utc_offset_minutes', 'geometry', 'website']
     }
 
+    // Gets the Google PlacesService and sets it to map
     const service = new window.google.maps.places.PlacesService(
       mapRef.current
     )
+    // Gets the directionService so we can get the distance to selected restaurant
     const directionService = new window.google.maps.DirectionsService()
     service.getDetails(request, callback)
 
     /**
+     * Makes the call to the service and gets details of the restaurant
+     * sets everything e.g. name, address and rating
+     * checks whether opening hours exist or not
+     * on top of those gets the distance to the restaurant from users location
      * @param {*} results data of restaurant, such as name, address, rating etc.
      * @param {*} status whether or not everything was successful
      */
@@ -224,6 +229,7 @@ const Map = () => {
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
   }
+  // Opens a new tab if restaurant website exist and if not alerts the user
   const openWebsite = () => {
     if (restaurantWebsite !== undefined) {
       return (

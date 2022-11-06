@@ -4,6 +4,17 @@ import PropTypes from 'prop-types'
 import OccupancyHistogram from '../components/OccupancyHistogram'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
+/**
+ * @Author Irina Konovalova
+ * Header displaying restaurant info (name, address, lunch time) of campus restaurant.
+ * Used in RestaurantSection component.
+ * @param {string} name name of the restaurant
+ * @param {string} address address of the restaurant
+ * @param {string} postalcode postal code of the restaurant
+ * @param {string} lunchTime lunch time in the restaurant
+ * @returns Component for displaying campus restaurant info and occupancy historam for restaurant Nokia One.
+ */
+
 const RestaurantHeader = ({ name, address, postalcode, lunchTime }) => {
   const mediumScreen = useMediaQuery('(min-width:750px)')
 

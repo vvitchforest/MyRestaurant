@@ -1,6 +1,11 @@
 import axios from 'axios'
-// const baseUrl = 'https://www.sodexo.fi/en/ruokalistat/output/daily_json/80'
 
+/**
+ * Fetch menu data from Sodexo API
+ * @param {string} date date
+ * @param {string} id restaurant id
+ * @returns response data
+ */
 const getMenuEn = async (date, id) => {
   const response = await axios.get(`https://www.sodexo.fi/en/ruokalistat/output/daily_json/${id}/${date}`)
   return response.data

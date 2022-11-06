@@ -12,7 +12,18 @@ import {
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
 
-const FilterMenu = ({ filterValues, handleChange, clearFilter, clearButtonDisplay, restaurantType }) => {
+/**
+ * Filtering lunch menu of campus restaurants by diet code. Used in RestaurantSection component.
+ * @Author Irina Konovalova
+ * @param {string} filterValue value of selected filter option
+ * @param {function} handleChange handles change of selected filter value
+ * @param {function} clearFilter handles resetting filter
+ * @param {string} clearButtonDisplay display of clear filter Button (none if filter is empty)
+ * @param {string} restaurantType whether restaurant is of type sodexo or foodandco
+ * @returns Component that filters lunch menu by diet type
+ */
+
+const FilterMenu = ({ filterValue, handleChange, clearFilter, clearButtonDisplay, restaurantType }) => {
   const [cookies] = useCookies(['language'])
   const myLanguage = cookies.language ? cookies.language : 'en'
 
@@ -41,11 +52,11 @@ const FilterMenu = ({ filterValues, handleChange, clearFilter, clearButtonDispla
         <Select
           labelId="filter-label"
           id="filter"
-          value={filterValues}
+          value={filterValue}
           onChange={handleChange}
           input={<OutlinedInput id="select-filter" label={getTranslation(myLanguage, 'filter')} />}
           MenuProps={MenuProps}
-        >
+          >
           <MenuItem value="">{getTranslation(myLanguage, 'showAll')}</MenuItem>
           <MenuItem value="G">{getTranslation(myLanguage, 'glutenFree')}</MenuItem>
           <MenuItem value="M">{getTranslation(myLanguage, 'milkFree')}</MenuItem>
@@ -65,7 +76,7 @@ const FilterMenu = ({ filterValues, handleChange, clearFilter, clearButtonDispla
 }
 
 FilterMenu.propTypes = {
-  filterValues: PropTypes.string,
+  filterValue: PropTypes.string,
   handleChange: PropTypes.func,
   clearFilter: PropTypes.func,
   clearButtonDisplay: PropTypes.string,

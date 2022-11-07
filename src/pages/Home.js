@@ -1,11 +1,15 @@
 import { React, useState } from 'react'
 import { Container, Box, Tabs, Tab, Fab } from '@mui/material'
 import { Link } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
 import TabPanel from '../components/TabPanel'
 import RestaurantSection from '../components/RestaurantSection'
-import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
 
+/**
+ * @Author Irina Konovalova
+ * Page displaying campus restaurants' info and lunch menus
+ */
 const Home = () => {
   const [cookies] = useCookies(['language'])
   const [tabValue, setTabValue] = useState(0)
@@ -63,8 +67,8 @@ const Home = () => {
           restaurantType={restaurant.type}
           id={restaurant.id}
         >
-          </RestaurantSection>
-        </TabPanel>
+        </RestaurantSection>
+      </TabPanel>
       ))}
        <Box width="100%" display="flex" justifyContent="center">
         <Fab

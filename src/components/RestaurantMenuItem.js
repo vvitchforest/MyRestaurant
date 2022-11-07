@@ -12,6 +12,18 @@ import InfoIcon from '@mui/icons-material/Info'
 import CustomModal from '../components/CustomModal'
 import { useCookies } from 'react-cookie'
 
+/**
+ * @Author Irina Konovalova
+ * Component showing menu item. Used in RestaurantMenu.
+ * @param {string} menuItem dish name
+ * @param {string} mealType menu item title
+ * @param {string} price price of menu item
+ * @param {string} dietInfo menu item's allergy info
+ * @param {array} dietCodes diet codes of a menu item
+ * @param {string} restaurantType whether a campus restaurant is of type sodexo or foodandco
+ * @returns MenuItem component
+ */
+
 const RestaurantMenuItem = ({
   menuItem,
   mealType,

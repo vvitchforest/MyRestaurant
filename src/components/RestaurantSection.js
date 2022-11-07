@@ -14,22 +14,29 @@ import { useFoodAndCoData } from '../hooks/useFoodAndCoData'
 import { BiSad } from 'react-icons/bi'
 import { TbFaceIdError } from 'react-icons/tb'
 
+/**
+ * @Author Irina Konovalova
+ * Section displaying all info and menu data of a campus restaurant. Used in Home page.
+ * @param {string} name name of the campus restaurant
+ * @param {string} address address of the campus restaurant
+ * @param {string} postalcode postal code of the restaurant
+ * @param {string} lunchTime lunch time at the restaurant
+ * @param {string} restaurantType whether a restaurant is of type sodexo or foodandco
+ * @param {string} id id of the restaurant
+ * @returns section displaying restaurant info, menu and menu filter (& possible notifications)
+ */
+
 const RestaurantSection = ({ name, address, postalcode, lunchTime, restaurantType, id }) => {
   const [cookies] = useCookies(['language'])
+  const { menu, loading, error } = restaurantType === 'sodexo' ? useSodexoData(id) : useFoodAndCoData(id)
+  const [filterDiet, setFilterDiet] = useState('')
+
   const myLanguage = cookies.language ? cookies.language : 'en'
   Moment.locale(myLanguage)
   const currentDate = Moment().format('dddd DD-MM-YYYY')
 
-  const callDataHook = (type, id) => {
-    if (type === 'sodexo') {
-      return useSodexoData(id)
-    }
-    return useFoodAndCoData(id)
-  }
-
-  const { menu, loading, error } = callDataHook(restaurantType, id)
-  const [filterDiet, setFilterDiet] = useState('')
-
+  /* Show unfiltered menu if filter is empty.
+    Else show items in which diets array contains at least one diet that equals filterDiet state */
   const menuToShow = !filterDiet.length
     ? menu
     : {
@@ -50,27 +57,30 @@ const RestaurantSection = ({ name, address, postalcode, lunchTime, restaurantTyp
 
   let content
 
+  /* If there is error in data fetch, show notification with appropriate message */
   if (error) content = <Notification alert={{ variant: 'error', message: getTranslation(myLanguage, 'menuError'), icon: <TbFaceIdError/> }} />
 
+  /* If menu is null or undefined or empty, show notification with appropriate message */
   else if (!menu || !Object.keys(menu).length) content = <Notification alert={{ variant: 'info', message: getTranslation(myLanguage, 'menuNull') }} />
 
+  /* If there is no error and menu is not null, undefined or empty object, show filter and menu list */
   else {
     content = (
       <>
         <FilterMenu
-          filterValues={filterDiet}
+          filterValue={filterDiet}
           handleChange={handleFilterChange}
           clearFilter={() => setFilterDiet('')}
           clearButtonDisplay={!filterDiet.length ? 'none' : 'block'}
           restaurantType={restaurantType}
-          />
-            { filterDiet.length !== 0 && Object.keys(menuToShow).length === 0 &&
-            <Notification alert={{ variant: 'info', message: getTranslation(myLanguage, 'noMeals'), icon: <BiSad/> }} />}
+        />
+          { filterDiet.length !== 0 && Object.keys(menuToShow).length === 0 &&
+          <Notification alert={{ variant: 'info', message: getTranslation(myLanguage, 'noMeals'), icon: <BiSad/> }} />}
         <RestaurantMenu
           menu={menuToShow}
           restaurantType={restaurantType}
-          />
-        </>
+        />
+      </>
     )
   }
 

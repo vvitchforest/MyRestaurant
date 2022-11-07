@@ -19,12 +19,15 @@ import MapIcon from '@mui/icons-material/Map'
 import { styled } from '@mui/material/styles'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
-
 import { Link } from 'react-router-dom'
-
 import NavItem from './NavItem'
 import { useDispatch } from 'react-redux'
 import * as actions from '../store/actions/index'
+
+/**
+ * @Author Irina Konovalova, Oskar Wiiala
+ * @returns Component for navigating between pages of the app
+ */
 
 const Navbar = () => {
   const [cookies, setCookie] = useCookies(['language'])
@@ -122,7 +125,7 @@ const Navbar = () => {
                 'home'
               )}
               icon={<HomeIcon />}
-              link={Link}
+              component={Link}
               to='/'
             />
             <NavItem
@@ -131,7 +134,7 @@ const Navbar = () => {
                 'restaurants'
               )}
               icon={<RestaurantIcon />}
-              link={Link}
+              component={Link}
               to='/restaurants'
             />
             <NavItem
@@ -140,12 +143,13 @@ const Navbar = () => {
                 'map'
               )}
               icon={<MapIcon />}
-              link={Link}
+              component={Link}
               to='/map'
             />
           </List>
         </Toolbar>
       </AppBar>
+      { /* On small screen sizes, navigation links are displayed in a drawer */}
       <Drawer
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
@@ -178,7 +182,7 @@ const Navbar = () => {
                 'home'
               )}
               icon={<HomeIcon />}
-              link={Link}
+              component={Link}
               to='/'
               onClick={() => setOpenDrawer(false)}
             />
@@ -188,7 +192,7 @@ const Navbar = () => {
                 'restaurants'
               )}
               icon={<RestaurantIcon />}
-              link={Link}
+              component={Link}
               to='/restaurants'
               onClick={() => setOpenDrawer(false)}
             />
@@ -198,7 +202,7 @@ const Navbar = () => {
                 'map'
               )}
               icon={<MapIcon />}
-              link={Link}
+              component={Link}
               to='/map'
               onClick={() => setOpenDrawer(false)}
             />

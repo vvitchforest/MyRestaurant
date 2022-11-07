@@ -11,7 +11,7 @@ import {
   ToggleButton as MUIToggleButton
 } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
-import MenuIcon from '@mui/icons-material/Menu'
+import { HiMenuAlt1 } from 'react-icons/hi'
 import CloseIcon from '@mui/icons-material/Close'
 import HomeIcon from '@mui/icons-material/Home'
 import RestaurantIcon from '@mui/icons-material/Restaurant'
@@ -23,6 +23,7 @@ import { Link } from 'react-router-dom'
 import NavItem from './NavItem'
 import { useDispatch } from 'react-redux'
 import * as actions from '../store/actions/index'
+import { purple } from '@mui/material/colors'
 
 /**
  * @Author Irina Konovalova, Oskar Wiiala
@@ -36,7 +37,14 @@ const Navbar = () => {
     language
   )
   const [openDrawer, setOpenDrawer] = useState(false)
+  const [position, setPosition] = useState({ position: 'relative' })
   const dispatch = useDispatch()
+
+  const navbarScrollStyle = {
+    position: 'fixed',
+    top: '0',
+    animation: 'slide-in 500ms'
+  }
 
   const changeLanguage = (newName) => {
     if (newName !== 'fi' && newName !== 'en') {
@@ -59,7 +67,7 @@ const Navbar = () => {
   const ToggleButton = styled(MUIToggleButton)({
     '&.Mui-selected, &.Mui-selected:hover': {
       color: 'white',
-      backgroundColor: '#42A5F5'
+      backgroundColor: purple[300]
     }
   })
 
@@ -75,13 +83,27 @@ const Navbar = () => {
     }
   }
 
+  useEffect(() => {
+    window.addEventListener('scroll', stickNavbar)
+    return () => {
+      window.removeEventListener('scroll', stickNavbar)
+    }
+  }, [scroll])
+
+  const stickNavbar = () => {
+    if (window !== undefined) {
+      const windowHeight = window.scrollY
+      windowHeight > 50 ? setPosition(navbarScrollStyle) : setPosition({ position: 'relative', animation: 'fade-in 1500ms' })
+    }
+  }
   return (
     <>
-      <AppBar position='static'>
+      <AppBar style={position}>
         <Toolbar
           sx={{
             display: 'flex',
-            justifyContent: { xs: 'flex-start', md: 'space-between' }
+            justifyContent: { xs: 'flex-start', md: 'space-between' },
+            mx: { xs: 0, md: 5 }
           }}
         >
           <IconButton
@@ -91,7 +113,7 @@ const Navbar = () => {
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { md: 'none' } }}
           >
-            <MenuIcon />
+            <HiMenuAlt1 />
           </IconButton>
           <Typography
             color='#ffffff'
@@ -102,23 +124,7 @@ const Navbar = () => {
           >
             MyRestaurant
           </Typography>
-          <ToggleButtonGroup
-            sx={{
-              marginLeft: '20px',
-              marginRight: '20px',
-              display: 'flex',
-              flex: 1,
-              justifyContent: 'flex-end'
-            }}
-            value={alignment}
-            exclusive
-            onChange={handleChange}
-            aria-label='language'
-          >
-            <ToggleButton sx={{ color: 'white' }} value='en'>EN</ToggleButton>
-            <ToggleButton sx={{ color: 'white' }} value='fi'>FI</ToggleButton>
-          </ToggleButtonGroup>
-          <List sx={{ display: { xs: 'none', md: 'flex' } }}>
+          <List sx={{ display: { xs: 'none', md: 'flex' }, ml: 'auto' }}>
             <NavItem
               text={getTranslation(
                 language,
@@ -147,6 +153,16 @@ const Navbar = () => {
               to='/map'
             />
           </List>
+          <ToggleButtonGroup
+            sx={{ ml: { xs: 'auto', md: 5 }, borderRadius: '0.25rem' }}
+            value={alignment}
+            exclusive
+            onChange={handleChange}
+            aria-label='language'
+          >
+            <ToggleButton sx={{ color: 'white', fontFamily: 'Montserrat' }} value='en' >EN</ToggleButton>
+            <ToggleButton sx={{ color: 'white', fontFamily: 'Montserrat' }} value='fi' border='none'>FI</ToggleButton>
+          </ToggleButtonGroup>
         </Toolbar>
       </AppBar>
       { /* On small screen sizes, navigation links are displayed in a drawer */}
@@ -156,7 +172,7 @@ const Navbar = () => {
         variant='temporary'
         sx={{
           display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: '75%' }
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: { xs: '75%', sm: '50%' } }
         }}
       >
         <Box>
@@ -175,7 +191,7 @@ const Navbar = () => {
             MyRestaurant
           </Typography>
           <Divider />
-          <List>
+          <List sx={{ '& a': { borderRadius: 0 } }}>
             <NavItem
               text={getTranslation(
                 language,

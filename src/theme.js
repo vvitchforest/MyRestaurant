@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles'
-import { green, purple } from '@mui/material/colors'
+import { purple } from '@mui/material/colors'
 
 const theme = createTheme({
   palette: {
@@ -7,7 +7,7 @@ const theme = createTheme({
       main: purple[500]
     },
     secondary: {
-      main: green[500]
+      main: '#000000'
     },
     info: {
       main: purple[500]
@@ -29,11 +29,32 @@ const theme = createTheme({
     },
     subtitle2: {
       fontFamily: 'Roboto Mono',
-      letterSpacing: '1px'
+      letterSpacing: '2px'
+    }
+  },
+  components: {
+    MuiButtonBase: {
+      variants: [
+        {
+          props: { variant: 'navlink' },
+          style: {
+            borderRadius: '0.25rem'
+          }
+        }
+      ]
     },
-    MuiToolbar: {
-      fontFamily: 'Roboto Mono',
-      letterSpacing: '1px'
+    MuiDrawer: {
+      styleOverrides: {
+        root: {
+          '& .MuiDrawer-paper': {
+            backgroundColor: 'RGBA(255, 255, 255, 0.80)',
+            backdropFilter: 'blur(15px)'
+          },
+          '& .MuiBackdrop-root': {
+            backgroundColor: 'RGBA(0, 0, 0, 0.1)'
+          }
+        }
+      }
     }
   }
 })

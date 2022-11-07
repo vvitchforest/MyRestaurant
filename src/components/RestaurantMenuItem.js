@@ -43,8 +43,7 @@ const RestaurantMenuItem = ({
           <Grid container sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Grid item xs>
               <Typography
-                color="#1976d2"
-                variant="subtitle2"
+                variant="subtitle"
                 component="div"
                 textTransform="uppercase"
                 fontSize="1.125rem"

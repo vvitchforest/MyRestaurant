@@ -72,7 +72,7 @@ const Home = () => {
       ))}
        <Box width="100%" display="flex" justifyContent="center">
         <Fab
-          color='secondary'
+          color='primary'
           variant="extended"
           component={Link} to="/restaurants"
           size="medium"

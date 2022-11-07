@@ -80,7 +80,7 @@ const RestaurantMenuItem = ({
                 variant="body2"
                 sx={{ pt: 0.5 }}
               >
-                {dietCodes.join(', ')}
+                {dietCodes?.join(', ')}
               </Typography>
             </Grid>
             <Grid item sx={{ flex: 1 }}>

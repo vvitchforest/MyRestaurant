@@ -23,7 +23,7 @@ import { Link } from 'react-router-dom'
 import NavItem from './NavItem'
 import { useDispatch } from 'react-redux'
 import * as actions from '../store/actions/index'
-import { purple } from '@mui/material/colors'
+import { green } from '@mui/material/colors'
 
 /**
  * @Author Irina Konovalova, Oskar Wiiala
@@ -67,7 +67,7 @@ const Navbar = () => {
   const ToggleButton = styled(MUIToggleButton)({
     '&.Mui-selected, &.Mui-selected:hover': {
       color: 'white',
-      backgroundColor: purple[300]
+      backgroundColor: green[400]
     }
   })
 
@@ -98,7 +98,7 @@ const Navbar = () => {
   }
   return (
     <>
-      <AppBar style={position}>
+      <AppBar style={position} elevation={2}>
         <Toolbar
           sx={{
             display: 'flex',
@@ -117,6 +117,7 @@ const Navbar = () => {
           </IconButton>
           <Typography
             color='#ffffff'
+            fontWeight='bold'
             variant='h6'
             sx={{ textDecoration: 'none' }}
             component={Link}

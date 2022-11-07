@@ -1,16 +1,16 @@
 import { createTheme } from '@mui/material/styles'
-import { purple } from '@mui/material/colors'
+import { green } from '@mui/material/colors'
 
 const theme = createTheme({
   palette: {
     primary: {
-      main: purple[500]
+      main: green[600]
     },
     secondary: {
       main: '#000000'
     },
     info: {
-      main: purple[500]
+      main: green[500]
     }
   },
   typography: {

@@ -1,3 +1,8 @@
+/**
+ * @Author Teemu Tirkkonen
+ * Mock of redux store for unit tests
+ */
+
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 
 import userReducer from '../store/reducers/userinterface'

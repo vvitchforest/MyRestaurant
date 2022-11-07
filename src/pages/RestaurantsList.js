@@ -1,11 +1,14 @@
+/**
+ * @Author Teemu Tirkkonen
+ * Page for displaying restaurant card components
+ */
+
 import { useJsApiLoader } from '@react-google-maps/api'
 import React, { useEffect, useState } from 'react'
 import { useCookies } from 'react-cookie'
 import RestaurantCard from '../components/RestaurantCard'
 import getTranslation from '../utils/Translations'
 import { CircularProgress, Box, FormControl, InputLabel, Select, OutlinedInput, MenuItem, useTheme, Chip, Container } from '@mui/material'
-// import { useDispatch, useSelector } from 'react-redux'
-// import * as actions from '../store/actions/index'
 
 const RestaurantsList = () => {
   console.log('listaa')
@@ -20,7 +23,7 @@ const RestaurantsList = () => {
       }
     }
   }
-
+  // Types for filter
   const types = [
     'All',
     'Bar',
@@ -41,18 +44,18 @@ const RestaurantsList = () => {
   const theme = useTheme()
   const [restaurantTypes, setRestaurantTypes] = useState([])
   const [placesFiltered, setPlacesFiltered] = useState([])
-  // const expanded = useSelector(state => state.userinterface.expanded)
-  // const placeId = useSelector(state => state.userinterface.placeId)
-  // const dispatch = useDispatch()
-  // const [openingHours, setOpeningHours] = useState([])
-  // const [selectedCard, setSelectedCard] = useState(new Set())
 
+  /**
+   * Loads the API with API key and libraries we want to use
+   * @param {*} isLoaded checks that the API works
+   */
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     libraries
   })
 
+  // Gets the users currentlocation and sets it to a variable
   useEffect(() => {
     const getPos = (position) => {
       console.log('yksikaksikolme')
@@ -67,14 +70,8 @@ const RestaurantsList = () => {
       }
     }
     navigator.geolocation.getCurrentPosition(getPos)
-    console.log('checkpos: ', checkIfPos)
-    if (checkIfPos === true) {
-      console.log('checkpos true')
-      getPlacesData()
-      setCheckIfPos(false)
-    }
-  }, [checkIfPos])
-
+  }, [])
+  // Gets retaurants near you based on current location and radius
   const getPlacesData = () => {
     console.log('Current', currentPos)
     if (currentPos !== {}) {
@@ -83,10 +80,12 @@ const RestaurantsList = () => {
         radius: '0',
         type: ['restaurant']
       }
-
+      // Gets the Google PlacesService and sets it to invisible div element
       const service = new window.google.maps.places.PlacesService(document.createElement('div'))
+      // Calls nearbySearch which is used when you want to get places near you
       service.nearbySearch(request, callback)
-
+      // Makes the call to the service and goes through all of the results and calls createRestaurantList function
+      // There can be multiple pages. If there is waits until all results are gotten before rendering
       function callback (results, status, pagination) {
         console.log('wtf123')
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
@@ -107,11 +106,19 @@ const RestaurantsList = () => {
       }
     }
   }
-
+  // Waits for location and then gets the nearby restaurants
+  setTimeout(function () {
+    if (checkIfPos === true) {
+      getPlacesData()
+      setCheckIfPos(false)
+    }
+  }, 2000)
+  // Adds the restaurants to array
   const createRestaurantList = (place) => {
     placesList.push(place)
     setPlacesFinal(placesList)
   }
+  // Styling for the filter element
   const getStyles = (type, restaurantTypes, theme) => {
     return {
       fontWeight:
@@ -120,6 +127,7 @@ const RestaurantsList = () => {
         : theme.typography.fontWeightMedium
     }
   }
+  // Handles the changing of restaurant types
   const handleChange = (event) => {
     const {
       target: { value }
@@ -129,10 +137,17 @@ const RestaurantsList = () => {
       typeof value === 'string' ? value.split(',') : value
     )
   }
+  /**
+   * Filters restaurants based on type e.g. bar or bakery
+   * @param {*} arr array of restaurants near the user
+   * @param {*} type selected restaurant types from filter
+   */
   const filterRestaurants = (arr, type) => {
     console.log('restaurants', arr.filter((el) => el.types.includes(type.toLowerCase())))
     return setPlacesFiltered(arr.filter((el) => el.types.includes(type.toLowerCase())))
   }
+  // Calls filterRestaurants if restaurantTypes changes
+  // so if user adds a new filter
   useEffect(() => {
     if (restaurantTypes.length > 0) {
       for (let i = 0; i < restaurantTypes.length; i++) {
@@ -142,10 +157,10 @@ const RestaurantsList = () => {
   }, [restaurantTypes])
 
   return (
-    <Container sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+    <Container sx={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
       <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-        <FormControl sx={{ width: { xs: '90%', sm: '65%', md: '50%', lg: '40%' }, pt: '24px', pb: '24px' }}>
-        <InputLabel sx={{ pt: '24px' }} id="demo-multiple-chip-label">Select type</InputLabel>
+          <FormControl sx={{ width: { xs: '90%', sm: '65%', md: '50%', lg: '40%' } }}>
+        <InputLabel id="demo-multiple-chip-label">Select type</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
@@ -187,8 +202,6 @@ const RestaurantsList = () => {
             rating={results.rating !== undefined ? results.rating : 0}
             userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
             isOpen={results.opening_hours !== undefined && results.opening_hours.isOpen() !== false ? 'open' : 'closed'}
-            // openingHours={openingHours.length > 0 && selectedCard.has(results.place_id) ? openingHours : ['Not available']}
-            // onClick={(e) => handleOnClick(results.place_id)}
           />
           )
         })
@@ -211,8 +224,6 @@ const RestaurantsList = () => {
               rating={results.rating !== undefined ? results.rating : 0}
               userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
               isOpen={results.opening_hours !== undefined && results.opening_hours.isOpen() !== false ? 'open' : 'closed'}
-              // openingHours={openingHours.length > 0 && selectedCard.has(results.place_id) ? openingHours : ['Not available']}
-              // onClick={(e) => handleOnClick(results.place_id)}
             />
               )
             })
@@ -228,8 +239,6 @@ const RestaurantsList = () => {
               rating={results.rating !== undefined ? results.rating : 0}
               userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
               isOpen={results.opening_hours !== undefined && results.opening_hours.isOpen() !== false ? 'open' : 'closed'}
-              // openingHours={openingHours.length > 0 && selectedCard.has(results.place_id) ? openingHours : ['Not available']}
-              // onClick={(e) => handleOnClick(results.place_id)}
             />
               )
             })}

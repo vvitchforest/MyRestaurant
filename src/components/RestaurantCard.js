@@ -65,7 +65,6 @@ const RestaurantCard = ({
   rating,
   userRatingsTotal,
   isOpen,
-  // openingHours,
   onClick
 }) => {
   const [cookies] = useCookies(['language'])
@@ -83,18 +82,22 @@ const RestaurantCard = ({
     dispatch(actions.setOpeningHours(!expanded))
     dispatch(actions.setPlaceId(placeId))
   }
-
+  // Gets the opening hours by using specific restaurants id
   const getPlaceDetails = () => {
     const request = {
       placeId,
       fields: ['opening_hours']
     }
 
+    // Gets the Google PlacesService and sets it to invisible div element
     const service = new window.google.maps.places.PlacesService(
       document.createElement('div')
     )
+    // Calls getDetails which is used when you want extra information from specific place
     service.getDetails(request, callback)
-
+    // Makes the call to the service and if opening hours exist for the place,
+    // sets opening hours and creates a table from them
+    // if they don't exist sets Not Available
     function callback (results, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         if (results.opening_hours !== undefined) {
@@ -106,21 +109,27 @@ const RestaurantCard = ({
       }
     }
   }
+  // Gets opening hours when collapse is expanded
   if (expanded === true) {
     getPlaceDetails()
     dispatch(actions.setOpeningHours(false))
   }
+  // Gets the reviews by using specific restaurants id
   const handleReviews = () => {
     const request = {
       placeId,
       fields: ['reviews']
     }
 
+    // Same as above
     const service = new window.google.maps.places.PlacesService(
       document.createElement('div')
     )
+    // Calls getDetails which is used when you want extra information from specific place
     service.getDetails(request, callback)
 
+    // Makes the call to the service and if reviews exist for the place,
+    // sets reviews and if not sets Not Available
     function callback (results, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         if (results.reviews !== undefined) {
@@ -150,17 +159,22 @@ const RestaurantCard = ({
     setTableRows(tableRowsTemp)
   }
 
+  // Gets the website by using specific restaurants id
   const openWebsite = () => {
     const request = {
       placeId,
       fields: ['website']
     }
 
+    // Same as above
     const service = new window.google.maps.places.PlacesService(
       document.createElement('div')
     )
+    // Calls getDetails which is used when you want extra information from specific place
     service.getDetails(request, callback)
 
+    // Makes the call to the service and if website exist for the place,
+    // opens it in new window and if not alerts the user
     function callback (results, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         if (results.website !== undefined) {
@@ -358,7 +372,6 @@ RestaurantCard.propTypes = {
   rating: PropTypes.number.isRequired,
   userRatingsTotal: PropTypes.number.isRequired,
   isOpen: PropTypes.string.isRequired,
-  // openingHours: PropTypes.array.isRequired,
   onClick: PropTypes.any
 }
 

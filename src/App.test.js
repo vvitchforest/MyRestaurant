@@ -1,3 +1,8 @@
+/**
+ * @Author Teemu Tirkkonen
+ * Unit tests for the app are here
+ */
+
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import App from './App'

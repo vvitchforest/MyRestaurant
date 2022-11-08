@@ -33,14 +33,7 @@ const FilterMenu = ({ filterValue, handleChange, clearFilter, clearButtonDisplay
     PaperProps: {
       style: {
         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: { xs: '50%', sm: '25%' },
-        background: 'rgba(255, 255, 255, 0.08)',
-        backdropFilter: 'blur(15px)'
-      }
-    },
-    MenuListProps: {
-      style: {
-        background: 'rgba(255, 255, 255, 0.08)'
+        width: { xs: '50%', sm: '25%' }
       }
     }
   }

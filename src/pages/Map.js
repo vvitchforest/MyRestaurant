@@ -1,5 +1,6 @@
 /**
  * @Author Teemu Tirkkonen
+ * @Author Oskar Wiiala
  * Page for displaying restaurant card components
  */
 

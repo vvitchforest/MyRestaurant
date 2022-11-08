@@ -41,7 +41,7 @@ const RestaurantSection = ({ name, address, postalcode, lunchTime, restaurantTyp
     ? menu
     : {
         ...Object.values(menu)?.filter((menuItem) =>
-          menuItem?.diets.some(diet => diet === filterDiet))
+          menuItem?.diets?.some(diet => diet === filterDiet))
       }
 
   const handleFilterChange = (event) => {

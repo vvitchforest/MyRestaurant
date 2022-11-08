@@ -72,9 +72,10 @@ const Home = () => {
       ))}
        <Box width="100%" display="flex" justifyContent="center">
         <Fab
+          color='primary'
           variant="extended"
           component={Link} to="/restaurants"
-          size="medium" color="primary"
+          size="medium"
           aria-label="other-restaurants-nearby"
           sx={{ position: 'fixed', bottom: 0, mb: 2 }}>
           Other restaurants nearby

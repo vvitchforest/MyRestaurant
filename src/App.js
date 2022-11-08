@@ -7,6 +7,7 @@ import RestaurantsList from './pages/RestaurantsList'
 import Map from './pages/Map'
 
 function App () {
+  console.log('appi')
   return (
     <Router>
       <Navbar />

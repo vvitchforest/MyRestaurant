@@ -1,3 +1,8 @@
+/**
+ * @Author Teemu Tirkkonen
+ * Functions for setting values to redux store
+ */
+
 import * as actionTypes from './actionTypes'
 
 export const setLanguage = (cookie) => {

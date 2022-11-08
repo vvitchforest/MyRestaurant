@@ -58,7 +58,7 @@ const Navbar = () => {
       changeLanguage('en')
       handleChange('en')
     } else console.log('language already set')
-  })
+  }, [])
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)

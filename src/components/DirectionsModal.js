@@ -1,5 +1,6 @@
 /**
- * @Author Oskar Wiiala, Teemu Tirkkonen
+ * @Author Oskar Wiiala
+ * @Author Teemu Tirkkonen
  * Modal for choosing travel option to specific restaurant in map
  */
 
@@ -40,22 +41,24 @@ const DirectionsModal = ({
   /**
    * Gets directions for selected restaurant from current location
    * @param {string} type type of travel, eg. 'walk', 'bus'
-   * @param {number} lat
-   * @param {number} lng
+   * @param {number} lat latitude of restaurant
+   * @param {number} lng longitude of restaurant
    */
   const getDirections = (type, lat, lng) => {
     if (type === 'walk') {
+      // Gets the directionService and directionRenderer
+      // Renderer is used to draw the route in the map
       const directionService = new window.google.maps.DirectionsService()
       const directionRenderer = new window.google.maps.DirectionsRenderer()
-
+      // Sets the directionRenderer to the map
       directionRenderer.setMap(mapRef.current)
-
+      // Request directions based on current location, restaurant lat/lng + walking
       const request = {
         origin: currentPos,
         destination: { lat, lng },
         travelMode: 'WALKING'
       }
-
+      // Draws the route to the map
       directionService.route(request, function (result, status) {
         if (status === 'OK') {
           directionRenderer.setDirections(result)
@@ -64,11 +67,15 @@ const DirectionsModal = ({
       setOpenDrawer(false)
       handleClose()
     } else if (type === 'bus') {
+      // Gets the directionService and directionRenderer
+      // Renderer is used to draw the route in the map
       const directionService = new window.google.maps.DirectionsService()
       const directionRenderer = new window.google.maps.DirectionsRenderer()
-
+      // Sets the directionRenderer to the map
       directionRenderer.setMap(mapRef.current)
-
+      // Request directions based on current location, restaurant lat/lng
+      // and by using bus as a primary traveling mode
+      // if there's no buses will use same route as with walking
       const request = {
         origin: currentPos,
         destination: { lat, lng },
@@ -79,7 +86,7 @@ const DirectionsModal = ({
           routingPreference: 'FEWER_TRANSFERS'
         }
       }
-
+      // Draws the route to the map
       directionService.route(request, function (result, status) {
         if (status === 'OK') {
           directionRenderer.setDirections(result)

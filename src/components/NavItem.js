@@ -26,7 +26,8 @@ const NavItem = ({ text, icon, component, to, onClick }) => {
       selected={to === location.pathname}
       sx={{
         '&.Mui-selected':
-      { backgroundColor: { xs: green[100], md: green[400] }, color: { xs: 'black', md: 'white' } }
+      { backgroundColor: { xs: green[100], md: green[500] }, color: { xs: 'black', md: 'white' } },
+        '&.Mui-selected:hover': { md: { backgroundColor: green[600] } }
       }}
     >
       {icon}

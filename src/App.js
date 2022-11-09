@@ -9,7 +9,7 @@ import Map from './pages/Map'
 function App () {
   console.log('appi')
   return (
-    <Router>
+    <Router >
       <Navbar />
       <Routes>
         <Route path="/restaurants" element={<RestaurantsList />} />

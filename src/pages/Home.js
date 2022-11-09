@@ -1,10 +1,11 @@
-import { React, useState } from 'react'
+import { React, useState, useEffect } from 'react'
 import { Container, Box, Tabs, Tab, Fab } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import TabPanel from '../components/TabPanel'
 import RestaurantSection from '../components/RestaurantSection'
 import getTranslation from '../utils/Translations'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 /**
  * @Author Irina Konovalova
@@ -13,8 +14,10 @@ import getTranslation from '../utils/Translations'
 const Home = () => {
   const [cookies] = useCookies(['language'])
   const [tabValue, setTabValue] = useState(0)
+  const [buttonVisibility, setButtonVisibility] = useState({ display: 'none' })
 
   const myLanguage = cookies.language ? cookies.language : 'en'
+  const mediumScreen = useMediaQuery('(min-width:750px)')
 
   const campusRestaurants = [
     {
@@ -23,7 +26,7 @@ const Home = () => {
       type: 'sodexo',
       address: 'Karakaari 7',
       postalcode: '02610 Espoo',
-      lunchTime: 'placeholder'
+      lunchTime: '11:00-13.30'
     },
     {
       id: '3202',
@@ -31,7 +34,7 @@ const Home = () => {
       type: 'foodandco',
       address: 'Karaportti 4',
       postalcode: '02610 Espoo',
-      lunchTime: 'placeholder'
+      lunchTime: '10.45-13.30'
     },
     {
 
@@ -40,7 +43,7 @@ const Home = () => {
       type: 'foodandco',
       address: 'Karakaarenkuja 6',
       postalcode: '02610 Espoo',
-      lunchTime: 'placeholder'
+      lunchTime: '10.45-13.30'
     }
 
   ]
@@ -48,6 +51,23 @@ const Home = () => {
   const handleTabsChange = (event, newValue) => {
     console.log(newValue)
     setTabValue(newValue)
+  }
+
+  useEffect(() => {
+    window.addEventListener('scroll', revealButton)
+    return () => {
+      window.removeEventListener('scroll', revealButton)
+    }
+  }, [scroll])
+
+  const revealButton = () => {
+    if (window !== undefined) {
+      const windowHeight = window.scrollY
+      windowHeight > 100
+        ? setButtonVisibility(
+          { display: 'flex', animation: 'fade-in 1000ms' })
+        : setButtonVisibility({ display: 'none', animation: 'fade-in 1000ms reverse' })
+    }
   }
 
   return (
@@ -77,8 +97,9 @@ const Home = () => {
           component={Link} to="/restaurants"
           size="medium"
           aria-label="other-restaurants-nearby"
+          style={mediumScreen ? { display: 'flex' } : buttonVisibility }
           sx={{ position: 'fixed', bottom: 0, mb: 2 }}>
-          Other restaurants nearby
+          {getTranslation(myLanguage, 'restaurantsNearby')}
         </Fab>
       </Box>
       </Container>

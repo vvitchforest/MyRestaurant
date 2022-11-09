@@ -71,18 +71,17 @@ const OccupancyHistogram = (args) => {
   // Customizes actual value and prediction value color for bar when it is at current hour
   const customizePoint = (arg) => {
     if (arg.data.time === currentTimeQuartered) {
-      // Series 1 pertains to actual value
+      console.log('arg:', arg)
+      // Series 1 pertains to prediction value, // Series 2 pertains to actual value
       if (arg.seriesName === 'Series 1') {
         return {
-          color: '#DA4949',
-          hoverStyle: { color: '#DA4949' }
+          color: '#66BB6A',
+          hoverStyle: { color: '#66BB6A' }
         }
-      }
-      // Series 2 pertains to prediction value
-      if (arg.seriesName === 'Series 2') {
+      } else if (arg.seriesName === 'Series 2') {
         return {
-          color: '#DA49494D',
-          hoverStyle: { color: '#DA4949' }
+          color: '#43A047',
+          hoverStyle: { color: '#43A047' }
         }
       }
     }

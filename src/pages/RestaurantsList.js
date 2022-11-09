@@ -128,7 +128,7 @@ const RestaurantsList = () => {
         : theme.typography.fontWeightMedium
     }
   }
-  // Handles the changing of restaurant types
+  // Handles the changing of restaurant types.
   const handleChange = (event) => {
     const {
       target: { value }

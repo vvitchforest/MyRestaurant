@@ -72,7 +72,7 @@ const RestaurantsList = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '0',
+        radius: '50',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to invisible div element

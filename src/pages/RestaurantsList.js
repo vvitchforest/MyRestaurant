@@ -159,7 +159,7 @@ const RestaurantsList = () => {
 
   return (
     <Container sx={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', pt: '12px', pb: '12px' }}>
           <FormControl sx={{ width: { xs: '90%', sm: '65%', md: '50%', lg: '40%' } }}>
         <InputLabel id="demo-multiple-chip-label">Select type</InputLabel>
         <Select

@@ -51,7 +51,7 @@ const OccupancyHistogram = (args) => {
   useEffect(() => {
     setWidth(args.width ? args.width : 300)
     setHeight(args.height ? args.height : 150)
-  })
+  }, [args.width])
 
   const getCurrentDay = () => {
     const days = [

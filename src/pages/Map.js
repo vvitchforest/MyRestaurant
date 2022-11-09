@@ -128,7 +128,7 @@ const Map = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '0',
+        radius: '500',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to map

@@ -14,42 +14,74 @@ import {
   Label,
   ConstantLine,
   CommonSeriesSettings,
-  Size
+  Size,
+  AdaptiveLayout
 } from 'devextreme-react/chart'
-import { occupancyData } from '../utils/OccupancyData.js'
+import { getOccupancyData } from '../utils/OccupancyData.js'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
+import { purple } from '@mui/material/colors'
 
 // args should only contain width and height
 const OccupancyHistogram = (args) => {
+  // Converts current time into 15 minute intervals rounded down (e.g. 12:42 -> 12:30, or 12:09 -> 12)
+  const getCurrentTimeQuartered = () => {
+    const date = new Date()
+    const hour = date.getHours().toString()
+    const minute = date.getMinutes()
+    let convertedMinute = ''
+    if (minute < 30 && minute >= 15) {
+      convertedMinute = ':15'
+    } else if (minute < 45 && minute >= 30) {
+      convertedMinute = ':30'
+    } else if (minute >= 45) {
+      convertedMinute = ':45'
+    }
+    return hour + convertedMinute
+  }
+
   const [cookies] = useCookies(['language'])
+  const language = cookies.language ? cookies.language : 'en'
   const [highAverage] = useState(40)
   const [lowAverage] = useState(15)
   const [width, setWidth] = useState()
   const [height, setHeight] = useState()
-  const currentHour = new Date().getHours()
+  const currentTimeQuartered = getCurrentTimeQuartered()
 
   useEffect(() => {
-    console.log('occupancy histogram: ', args)
     setWidth(args.width ? args.width : 300)
     setHeight(args.height ? args.height : 150)
   })
 
+  const getCurrentDay = () => {
+    const days = [
+      'sunday',
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday'
+    ]
+    const d = new Date()
+    // getDay() returns a number, which represents the day
+    return days[d.getDay()]
+  }
+
   // Customizes actual value and prediction value color for bar when it is at current hour
   const customizePoint = (arg) => {
-    if (arg.data.hour === currentHour.toString()) {
-      // Series 1 pertains to actual value
+    if (arg.data.time === currentTimeQuartered) {
+      console.log('arg:', arg)
+      // Series 1 pertains to prediction value, // Series 2 pertains to actual value
       if (arg.seriesName === 'Series 1') {
         return {
-          color: '#DA4949',
-          hoverStyle: { color: '#DA4949' }
+          color: '#66BB6A',
+          hoverStyle: { color: '#66BB6A' }
         }
-      }
-      // Series 2 pertains to prediction value
-      if (arg.seriesName === 'Series 2') {
+      } else if (arg.seriesName === 'Series 2') {
         return {
-          color: '#DA49494D',
-          hoverStyle: { color: '#DA4949' }
+          color: '#43A047',
+          hoverStyle: { color: '#43A047' }
         }
       }
     }
@@ -57,66 +89,47 @@ const OccupancyHistogram = (args) => {
   }
 
   return (
-      <Chart
-        id='chart'
-        title='Occupancy histogram'
-        dataSource={occupancyData}
-        customizePoint={customizePoint}
-      >
-        <Size width={width} height={height} />
-        <CommonSeriesSettings
-          argumentField='hour'
-          type='bar'
-          barOverlapGroup='hour'
-        />
-        <Series id='seriesActual' valueField='valueActual' color='#1976D2' />
-        <Series
-          id='seriesPrediction'
-          valueField='valuePrediction'
-          color='#1976D24D'
-        />
-        <ArgumentAxis
-          title={getTranslation(
-            cookies.language ? cookies.language : 'en',
-            'hourofday'
-          )}
-        />
-        <ValueAxis
-          title={getTranslation(
-            cookies.language ? cookies.language : 'en',
-            'people'
-          )}
+    <Chart
+      id='chart'
+      title={getTranslation(language, 'occupancy')}
+      dataSource={getOccupancyData(getCurrentDay())}
+      customizePoint={customizePoint}
+    >
+      <AdaptiveLayout width={0} height={0} keepLabels={true} />
+      <Size width={width} height={height} />
+      <CommonSeriesSettings
+        argumentField='time'
+        type='bar'
+        barOverlapGroup='time'
+      />
+      <Series id='seriesActual' valueField='valueActual' color={purple[500]} />
+      <Series
+        id='seriesPrediction'
+        valueField='valuePrediction'
+        color={purple[500]}
+      />
+      <ArgumentAxis title={getTranslation(language, 'hourofday')} />
+      <ValueAxis title={getTranslation(language, 'people')}>
+        <VisualRange startValue={0} />
+        <ConstantLine
+          width={2}
+          value={lowAverage}
+          color='#8c8cff'
+          dashStyle='dash'
         >
-          <VisualRange startValue={0} />
-          <ConstantLine
-            width={2}
-            value={lowAverage}
-            color='#8c8cff'
-            dashStyle='dash'
-          >
-            <Label
-              text={getTranslation(
-                cookies.language ? cookies.language : 'en',
-                'lowaverage'
-              )}
-            />
-          </ConstantLine>
-          <ConstantLine
-            width={2}
-            value={highAverage}
-            color='#ff7c7c'
-            dashStyle='dash'
-          >
-            <Label
-              text={getTranslation(
-                cookies.language ? cookies.language : 'en',
-                'highaverage'
-              )}
-            />
-          </ConstantLine>
-        </ValueAxis>
-        <Legend visible={false} />
-      </Chart>
+          <Label text={getTranslation(language, 'lessbusy')} />
+        </ConstantLine>
+        <ConstantLine
+          width={2}
+          value={highAverage}
+          color='#ff7c7c'
+          dashStyle='dash'
+        >
+          <Label text={getTranslation(language, 'busy')} />
+        </ConstantLine>
+      </ValueAxis>
+      <Legend visible={false} />
+    </Chart>
   )
 }
 

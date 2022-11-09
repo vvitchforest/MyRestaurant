@@ -12,6 +12,18 @@ import InfoIcon from '@mui/icons-material/Info'
 import CustomModal from '../components/CustomModal'
 import { useCookies } from 'react-cookie'
 
+/**
+ * @Author Irina Konovalova
+ * Component showing menu item. Used in RestaurantMenu.
+ * @param {string} menuItem dish name
+ * @param {string} mealType menu item title
+ * @param {string} price price of menu item
+ * @param {string} dietInfo menu item's allergy info
+ * @param {array} dietCodes diet codes of a menu item
+ * @param {string} restaurantType whether a campus restaurant is of type sodexo or foodandco
+ * @returns MenuItem component
+ */
+
 const RestaurantMenuItem = ({
   menuItem,
   mealType,
@@ -31,8 +43,7 @@ const RestaurantMenuItem = ({
           <Grid container sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Grid item xs>
               <Typography
-                color="#1976d2"
-                variant="subtitle2"
+                variant="subtitle"
                 component="div"
                 textTransform="uppercase"
                 fontSize="1.125rem"
@@ -43,7 +54,7 @@ const RestaurantMenuItem = ({
             <Grid item>
               <Typography
                 gutterBottom
-                variant="subtitle2"
+                variant="subtitle"
                 component="div"
                 fontSize="1rem"
               >
@@ -69,7 +80,7 @@ const RestaurantMenuItem = ({
                 variant="body2"
                 sx={{ pt: 0.5 }}
               >
-                {dietCodes}
+                {dietCodes?.join(', ')}
               </Typography>
             </Grid>
             <Grid item sx={{ flex: 1 }}>
@@ -99,7 +110,7 @@ RestaurantMenuItem.propTypes = {
   mealType: PropTypes.string,
   price: PropTypes.string,
   dietInfo: PropTypes.string,
-  dietCodes: PropTypes.string,
+  dietCodes: PropTypes.array,
   restaurantType: PropTypes.string
 }
 export default RestaurantMenuItem

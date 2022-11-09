@@ -1,5 +1,6 @@
 /**
  * @Author Teemu Tirkkonen
+ * @Author Oskar Wiiala
  * Page for displaying restaurant card components
  */
 
@@ -21,6 +22,7 @@ const Map = () => {
   const [checkNextPage, setNextPage] = useState(false)
   const [libraries] = useState(['places', 'geometry'])
   const [cookies] = useCookies(['language'])
+  const language = cookies.language ? cookies.language : 'en'
   const [openDrawer, setOpenDrawer] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
   const toggleModal = () => setModalOpen(!modalOpen)
@@ -269,9 +271,8 @@ const Map = () => {
         >
           <IconButton
             onClick={() => panToLocation()}
-            style={{ marginLeft: 210 }}
             color={'primary'}
-            sx={{ margin: '10px', backgroundColor: 'white' }}
+            sx={{ margin: '10px', backgroundColor: 'white', position: 'absolute', bottom: 105, right: 0 }}
           >
             <MyLocationIcon />
           </IconButton>
@@ -352,7 +353,7 @@ const Map = () => {
             <Box sx={restaurantOpenStyle}>
               <Typography variant='body1' sx={{ fontSize: { xs: '5vw', sm: '3vw', md: '2.5vw', lg: '2.5vw' }, pl: '6px', alignSelf: 'center' }}>
                 {getTranslation(
-                  cookies.language ? cookies.language : 'en',
+                  language,
                   restaurantBusinessStatus
                 )}
               </Typography>
@@ -376,7 +377,7 @@ const Map = () => {
                   component='img'
                   height='225'
                   image={restaurantIcon}
-                  alt={getTranslation(cookies.language ? cookies.language : 'en', 'ariapicturerestaurant')}
+                  alt={getTranslation(language, 'ariapicturerestaurant')}
                   />
               </Box>
               <Box sx={{ display: 'flex', flex: 2, flexDirection: 'row' }}>
@@ -385,7 +386,7 @@ const Map = () => {
                   <Typography variant='body2' color='text.secondary' sx={restaurantAddressStyle}>{restaurantAddress}</Typography>
                   <Box sx={{ display: 'flex', justifyContent: { sm: 'space-between', md: 'space-between', lg: 'space-between' }, flexDirection: { xs: 'column', sm: 'row', md: 'row', lg: 'row' } }}>
                     <Rating name='half-rating-read' value={restaurantRating === undefined ? 0 : restaurantRating} defaultValue={0} precision={0.5} readOnly sx={{ alignSelf: { sm: 'center', md: 'center', lg: 'center' } }} />
-                    <Typography variant='body2' color='text.secondary' sx={restaurantAddressStyle}>{getTranslation(cookies.language ? cookies.language : 'en', 'distance')} {distance === undefined ? 0 : distance}</Typography>
+                    <Typography variant='body2' color='text.secondary' sx={restaurantAddressStyle}>{getTranslation(language, 'distance')} {distance === undefined ? 0 : distance}</Typography>
                   </Box>
                 </Box>
                 <Box sx={iconContainerStyle}>

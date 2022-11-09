@@ -1,108 +1,107 @@
 import { React, useState, useEffect } from 'react'
-import sodexoMenuService from '../services/sodexomenu'
-import { Card, Container, Typography, Box, CircularProgress } from '@mui/material'
-import Moment from 'moment'
-import 'moment/locale/fi'
-import RestaurantMenu from '../components/RestaurantMenu'
-import RestaurantHeader from '../components/RestaurantHeader'
+import { Container, Box, Tabs, Tab, Fab } from '@mui/material'
+import { Link } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
+import TabPanel from '../components/TabPanel'
+import RestaurantSection from '../components/RestaurantSection'
 import getTranslation from '../utils/Translations'
-import Notification from '../components/Notification'
-import FilterMenu from '../components/FilterMenu'
-import { TbFaceIdError } from 'react-icons/tb'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
+/**
+ * @Author Irina Konovalova
+ * Page displaying campus restaurants' info and lunch menus
+ */
 const Home = () => {
   const [cookies] = useCookies(['language'])
-  const [loading, setLoading] = useState(true)
-  const [menu, setMenu] = useState(null)
-  const [alert, setAlert] = useState(null)
-  const [filterDiets, setFilterDiets] = useState('')
+  const [tabValue, setTabValue] = useState(0)
+  const [buttonVisibility, setButtonVisibility] = useState({ display: 'none' })
 
   const myLanguage = cookies.language ? cookies.language : 'en'
-  Moment.locale(myLanguage)
-  const currentDateApiFormat = Moment().format('YYYY-MM-DD')
-  const currentDate = Moment().format('dddd DD-MM-YYYY')
+  const mediumScreen = useMediaQuery('(min-width:750px)')
 
-  useEffect(() => {
-    const getSodexoMenu = async () => {
-      setLoading(true)
-      try {
-        const menuFromAPI =
-          myLanguage === 'en'
-            ? await sodexoMenuService.getMenuEn(currentDateApiFormat, '80')
-            : await sodexoMenuService.getMenuFi(currentDateApiFormat, '80')
+  const campusRestaurants = [
+    {
+      id: '80',
+      name: `${getTranslation(myLanguage, 'restaurant')} Nokia One`,
+      type: 'sodexo',
+      address: 'Karakaari 7',
+      postalcode: '02610 Espoo',
+      lunchTime: '11:00-13.30'
+    },
+    {
+      id: '3202',
+      name: 'Dreams Cafe',
+      type: 'foodandco',
+      address: 'Karaportti 4',
+      postalcode: '02610 Espoo',
+      lunchTime: '10.45-13.30'
+    },
+    {
 
-        setMenu(menuFromAPI.courses)
-        if (menu === null) setAlert({ variant: 'info', message: getTranslation(myLanguage, 'menuNull') })
-      } catch (error) {
-        setAlert({ variant: 'error', message: getTranslation(myLanguage, 'menuError'), icon: <TbFaceIdError /> })
-        console.log(error)
-      }
-      setLoading(false)
+      id: '3208',
+      name: 'Metropolia',
+      type: 'foodandco',
+      address: 'Karakaarenkuja 6',
+      postalcode: '02610 Espoo',
+      lunchTime: '10.45-13.30'
     }
-    getSodexoMenu()
-  }, [myLanguage])
 
-  console.log(filterDiets)
+  ]
 
-  /* I tried this: Object.values(menu)?.filter((menuItem) =>
-  filterDiets.every(diet => menuItem?.recipes?.hideAll?.dietcodes.includes(diet)) */
-
-  const menuToShow = !filterDiets.length
-    ? menu
-    : {
-        ...Object.values(menu)?.filter((menuItem) =>
-          menuItem?.recipes?.hideAll?.dietcodes.includes(filterDiets))
-      }
-  console.log(menuToShow)
-
-  const handleFilterChange = (event) => {
-    setFilterDiets(event.target.value)
+  const handleTabsChange = (event, newValue) => {
+    console.log(newValue)
+    setTabValue(newValue)
   }
 
-  if (loading) {
-    return (
-    <Box width='100%' height='92vh' display='flex' justifyContent='center' alignItems='center'>
-      <CircularProgress/>
-    </Box>)
+  useEffect(() => {
+    window.addEventListener('scroll', revealButton)
+    return () => {
+      window.removeEventListener('scroll', revealButton)
+    }
+  }, [scroll])
+
+  const revealButton = () => {
+    if (window !== undefined) {
+      const windowHeight = window.scrollY
+      windowHeight > 100
+        ? setButtonVisibility(
+          { display: 'flex', animation: 'fade-in 1000ms' })
+        : setButtonVisibility({ display: 'none', animation: 'fade-in 1000ms reverse' })
+    }
   }
 
   return (
-    <Container sx={{ display: 'flex', justifyContent: 'center' }}>
-      <Card
-        elevation={3}
-        sx={{ width: { xs: '100%', md: '75%', lg: '60%' }, mb: 2, mt: 2 }}
+    <Container >
+      <Tabs value={tabValue} onChange={handleTabsChange} centered sx={{ my: 2 }}>
+        <Tab label="Nokia One"/>
+        <Tab label="Dreams Cafe"/>
+        <Tab label="Metropolia"/>
+      </Tabs>
+      {campusRestaurants.map((restaurant, index) => (
+      <TabPanel value={tabValue} index={index} key={index}>
+        <RestaurantSection
+          name={restaurant.name}
+          address={restaurant.address}
+          postalcode={restaurant.postalcode}
+          lunchTime={restaurant.lunchTime}
+          restaurantType={restaurant.type}
+          id={restaurant.id}
         >
-        <RestaurantHeader
-        name={`${getTranslation(myLanguage, 'restaurant')} Nokia One`}
-        address="Karakaari 7"
-        postalcode="02610 Espoo"
-        />
-        <Typography variant="h5" sx={{ pl: { xs: 2, sm: 5 } }}>
-          {getTranslation(myLanguage, 'menu')}
-          </Typography>
-          <Typography sx={{ pl: { xs: 2, sm: 5 }, textTransform: 'capitalize' }}>
-            {currentDate}
-          </Typography>
-            {menu
-              ? (
-                <>
-                <Box display='flex' justifyContent='flex-start'>
-                  <FilterMenu filterValues={filterDiets} handleChange={handleFilterChange} clearFilter={() => setFilterDiets('')} clearButtonDisplay={!filterDiets.length ? 'none' : 'block'}/>
-                </Box>
-                  <RestaurantMenu
-                    menu={menuToShow}
-                    restaurantType="sodexo"
-                  />
-                </>
-                )
-              : (
-                <Notification
-                  alert={alert}
-                />
-                )
-          }
-        </Card>
+        </RestaurantSection>
+      </TabPanel>
+      ))}
+       <Box width="100%" display="flex" justifyContent="center">
+        <Fab
+          color='primary'
+          variant="extended"
+          component={Link} to="/restaurants"
+          size="medium"
+          aria-label="other-restaurants-nearby"
+          style={mediumScreen ? { display: 'flex' } : buttonVisibility }
+          sx={{ position: 'fixed', bottom: 0, mb: 2 }}>
+          {getTranslation(myLanguage, 'restaurantsNearby')}
+        </Fab>
+      </Box>
       </Container>
   )
 }

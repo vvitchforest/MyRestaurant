@@ -11,7 +11,7 @@ import {
   ToggleButton as MUIToggleButton
 } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
-import MenuIcon from '@mui/icons-material/Menu'
+import { RiMenu2Line } from 'react-icons/ri'
 import CloseIcon from '@mui/icons-material/Close'
 import HomeIcon from '@mui/icons-material/Home'
 import RestaurantIcon from '@mui/icons-material/Restaurant'
@@ -19,20 +19,32 @@ import MapIcon from '@mui/icons-material/Map'
 import { styled } from '@mui/material/styles'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
-
 import { Link } from 'react-router-dom'
-
 import NavItem from './NavItem'
 import { useDispatch } from 'react-redux'
 import * as actions from '../store/actions/index'
+import { green } from '@mui/material/colors'
+
+/**
+ * @Author Irina Konovalova, Oskar Wiiala
+ * @returns Component for navigating between pages of the app
+ */
 
 const Navbar = () => {
   const [cookies, setCookie] = useCookies(['language'])
+  const language = cookies.language ? cookies.language : 'en'
   const [alignment, setAlignment] = useState(
-    cookies.language ? cookies.language : 'en'
+    language
   )
   const [openDrawer, setOpenDrawer] = useState(false)
+  const [position, setPosition] = useState({ position: 'relative' })
   const dispatch = useDispatch()
+
+  const navbarScrollStyle = {
+    position: 'fixed',
+    top: '0',
+    animation: 'slide-in 500ms'
+  }
 
   const changeLanguage = (newName) => {
     if (newName !== 'fi' && newName !== 'en') {
@@ -46,7 +58,7 @@ const Navbar = () => {
       changeLanguage('en')
       handleChange('en')
     } else console.log('language already set')
-  })
+  }, [])
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
@@ -55,7 +67,7 @@ const Navbar = () => {
   const ToggleButton = styled(MUIToggleButton)({
     '&.Mui-selected, &.Mui-selected:hover': {
       color: 'white',
-      backgroundColor: '#42A5F5'
+      backgroundColor: green[500]
     }
   })
 
@@ -71,13 +83,28 @@ const Navbar = () => {
     }
   }
 
+  useEffect(() => {
+    window.addEventListener('scroll', stickNavbar)
+    return () => {
+      window.removeEventListener('scroll', stickNavbar)
+    }
+  }, [scroll])
+
+  const stickNavbar = () => {
+    if (window !== undefined) {
+      const windowHeight = window.scrollY
+      windowHeight > 50 ? setPosition(navbarScrollStyle) : setPosition({ position: 'relative' })
+    }
+  }
   return (
     <>
-      <AppBar position='static'>
+      <AppBar style={position} elevation={2}
+        sx={{ backgroundColor: 'RGBA(255, 255, 255, 0.7)', backdropFilter: 'blur(15px)' } }>
         <Toolbar
           sx={{
             display: 'flex',
-            justifyContent: { xs: 'flex-start', md: 'space-between' }
+            justifyContent: { xs: 'flex-start', md: 'space-between' },
+            mx: { xs: 0, md: 5 }
           }}
         >
           <IconButton
@@ -87,10 +114,12 @@ const Navbar = () => {
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { md: 'none' } }}
           >
-            <MenuIcon />
+            <RiMenu2Line color='black' />
           </IconButton>
           <Typography
-            color='#ffffff'
+            color={green[500]}
+            fontWeight='bold'
+            fontFamily= 'Roboto Mono'
             variant='h6'
             sx={{ textDecoration: 'none' }}
             component={Link}
@@ -98,60 +127,55 @@ const Navbar = () => {
           >
             MyRestaurant
           </Typography>
+          <List sx={{ display: { xs: 'none', md: 'flex' }, ml: 'auto' }}>
+            <NavItem
+              text={getTranslation(
+                language,
+                'home'
+              )}
+              icon={<HomeIcon />}
+              component={Link}
+              to='/'
+            />
+            <NavItem
+              text={getTranslation(
+                language,
+                'restaurants'
+              )}
+              icon={<RestaurantIcon />}
+              component={Link}
+              to='/restaurants'
+            />
+            <NavItem
+              text={getTranslation(
+                language,
+                'map'
+              )}
+              icon={<MapIcon />}
+              component={Link}
+              to='/map'
+            />
+          </List>
           <ToggleButtonGroup
-            sx={{
-              marginLeft: '20px',
-              marginRight: '20px',
-              display: 'flex',
-              flex: 1,
-              justifyContent: 'flex-end'
-            }}
+            sx={{ ml: { xs: 'auto', md: 5 }, borderRadius: '0.25rem' }}
             value={alignment}
             exclusive
             onChange={handleChange}
             aria-label='language'
           >
-            <ToggleButton value='en'>EN</ToggleButton>
-            <ToggleButton value='fi'>FI</ToggleButton>
+            <ToggleButton sx={{ color: 'black', fontFamily: 'Montserrat' }} value='en' >EN</ToggleButton>
+            <ToggleButton sx={{ color: 'black', fontFamily: 'Montserrat' }} value='fi' border='none'>FI</ToggleButton>
           </ToggleButtonGroup>
-          <List sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <NavItem
-              text={getTranslation(
-                cookies.language ? cookies.language : 'en',
-                'home'
-              )}
-              icon={<HomeIcon />}
-              link={Link}
-              to='/'
-            />
-            <NavItem
-              text={getTranslation(
-                cookies.language ? cookies.language : 'en',
-                'restaurants'
-              )}
-              icon={<RestaurantIcon />}
-              link={Link}
-              to='/restaurants'
-            />
-            <NavItem
-              text={getTranslation(
-                cookies.language ? cookies.language : 'en',
-                'map'
-              )}
-              icon={<MapIcon />}
-              link={Link}
-              to='/map'
-            />
-          </List>
         </Toolbar>
       </AppBar>
+      { /* On small screen sizes, navigation links are displayed in a drawer */}
       <Drawer
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
         variant='temporary'
         sx={{
           display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: '75%' }
+          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: { xs: '75%', sm: '50%' } }
         }}
       >
         <Box>
@@ -170,34 +194,34 @@ const Navbar = () => {
             MyRestaurant
           </Typography>
           <Divider />
-          <List>
+          <List sx={{ '& a': { borderRadius: 0 } }}>
             <NavItem
               text={getTranslation(
-                cookies.language ? cookies.language : 'en',
+                language,
                 'home'
               )}
               icon={<HomeIcon />}
-              link={Link}
+              component={Link}
               to='/'
               onClick={() => setOpenDrawer(false)}
             />
             <NavItem
               text={getTranslation(
-                cookies.language ? cookies.language : 'en',
+                language,
                 'restaurants'
               )}
               icon={<RestaurantIcon />}
-              link={Link}
+              component={Link}
               to='/restaurants'
               onClick={() => setOpenDrawer(false)}
             />
             <NavItem
               text={getTranslation(
-                cookies.language ? cookies.language : 'en',
+                language,
                 'map'
               )}
               icon={<MapIcon />}
-              link={Link}
+              component={Link}
               to='/map'
               onClick={() => setOpenDrawer(false)}
             />

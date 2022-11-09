@@ -1,5 +1,6 @@
 /**
  * @Author Teemu Tirkkonen
+ * @Author Oskar Wiiala
  * Page for displaying restaurant card components
  */
 
@@ -11,6 +12,8 @@ import getTranslation from '../utils/Translations'
 import { CircularProgress, Box, FormControl, InputLabel, Select, OutlinedInput, MenuItem, useTheme, Chip, Container } from '@mui/material'
 
 const RestaurantsList = () => {
+  console.log('listaa')
+
   const ITEM_HEIGHT = 48
   const ITEM_PADDING_TOP = 8
   const MenuProps = {
@@ -32,6 +35,7 @@ const RestaurantsList = () => {
     'Cafe'
   ]
   const [cookies] = useCookies(['language'])
+  const language = cookies.language ? cookies.language : 'en'
   const [currentPos, setCurrentPos] = useState({})
   const placesList = []
   const [checkIfPos, setCheckIfPos] = useState(false)
@@ -55,7 +59,9 @@ const RestaurantsList = () => {
   // Gets the users currentlocation and sets it to a variable
   useEffect(() => {
     const getPos = (position) => {
+      console.log('yksikaksikolme')
       if (navigator.geolocation) {
+        console.log('yykaakoo')
         const currentPosition = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
@@ -82,11 +88,14 @@ const RestaurantsList = () => {
       // Makes the call to the service and goes through all of the results and calls createRestaurantList function
       // There can be multiple pages. If there is waits until all results are gotten before rendering
       function callback (results, status, pagination) {
+        console.log('wtf123')
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+          console.log('tekeekö')
           for (let i = 0; i < results.length; i++) {
             createRestaurantList(results[i])
           }
           if (pagination && pagination.hasNextPage) {
+            console.log('paginaatio')
             pagination.nextPage()
             setTimeout(function () {
               setCheckPagination(true)
@@ -150,7 +159,7 @@ const RestaurantsList = () => {
 
   return (
     <Container sx={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', pt: '12px', pb: '12px' }}>
           <FormControl sx={{ width: { xs: '90%', sm: '65%', md: '50%', lg: '40%' } }}>
         <InputLabel id="demo-multiple-chip-label">Select type</InputLabel>
         <Select
@@ -199,7 +208,7 @@ const RestaurantsList = () => {
         })
         : restaurantTypes.length === 0 && <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '50px', alignItems: 'center' }}>
           {getTranslation(
-            cookies.language ? cookies.language : 'en',
+            language,
             'loadingrestaurants'
           )}<CircularProgress sx={{ marginTop: '50px' }}/>
           </Box>}

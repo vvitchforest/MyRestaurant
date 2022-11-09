@@ -1,15 +1,26 @@
 import React from 'react'
-import { Box, Grid, CardContent, Typography } from '@mui/material'
+import { Box, Grid, CardContent, Typography, Chip } from '@mui/material'
 import PropTypes from 'prop-types'
 import OccupancyHistogram from '../components/OccupancyHistogram'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
-import useMediaQuery from '@mui/material/useMediaQuery'
 
-const RestaurantHeader = ({ name, address, postalcode }) => {
+/**
+ * @Author Irina Konovalova
+ * Header displaying restaurant info (name, address, lunch time) of campus restaurant.
+ * Used in RestaurantSection component.
+ * @param {string} name name of the restaurant
+ * @param {string} address address of the restaurant
+ * @param {string} postalcode postal code of the restaurant
+ * @param {string} lunchTime lunch time in the restaurant
+ * @returns Component for displaying campus restaurant info and occupancy historam for restaurant Nokia One.
+ */
+
+const RestaurantHeader = ({ name, address, postalcode, lunchTime }) => {
+  const mediumScreen = useMediaQuery('(min-width:750px)')
   const [cookies] = useCookies(['language'])
   const myLanguage = cookies.language ? cookies.language : 'en'
-  const mediumScreen = useMediaQuery('(min-width:750px)')
 
   const fontStyle = {
     fontSize: '1rem'
@@ -33,23 +44,20 @@ const RestaurantHeader = ({ name, address, postalcode }) => {
             <Typography variant="body2" sx={fontStyle}>
               {postalcode}
             </Typography>
-            <Typography
-              variant="body2"
-              sx={{ color: 'green', fontWeight: 'bold', fontStyle }}
-            >
-              {getTranslation(myLanguage, 'open')}
-            </Typography>
+            <Chip label={`${getTranslation(myLanguage, 'lunch')} ${lunchTime}`} sx={{ mt: 0.5 }}/>
           </Grid>
-          <Grid item xs={12} sx={{ pb: 0 }}>
+          {name?.includes('Nokia One') &&
+          (<Grid item xs={12} sx={{ pb: 0 }}>
             <Box
               sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}
             >
               <OccupancyHistogram
-                width={mediumScreen ? 475 : 300}
-                height={mediumScreen ? 237 : 100}
+                width={mediumScreen ? 475 : 250}
+                height={mediumScreen ? 237 : 175}
               />
             </Box>
-          </Grid>
+          </Grid>)
+          }
         </Grid>
       </CardContent>
     </Box>
@@ -59,6 +67,7 @@ const RestaurantHeader = ({ name, address, postalcode }) => {
 RestaurantHeader.propTypes = {
   name: PropTypes.string,
   address: PropTypes.string,
-  postalcode: PropTypes.string
+  postalcode: PropTypes.string,
+  lunchTime: PropTypes.string
 }
 export default RestaurantHeader

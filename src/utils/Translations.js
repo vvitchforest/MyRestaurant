@@ -1,6 +1,7 @@
 /**
  * @Author Oskar Wiiala
- * All translations for the app are here
+ * All translations for the app should be put here
+ * Currently supports English and Finnish
  */
 
 const translations = {
@@ -35,7 +36,22 @@ const translations = {
     day: 'Day',
     hours: 'Hours',
     unavailable: 'Unavailable',
-    distance: 'Distance:'
+    distance: 'Distance:',
+    lessbusy: 'Less busy',
+    busy: 'Busy',
+    reviews: 'Reviews',
+    only5: 'Only five of the latest reviews are shown',
+    filter: 'Filter diets',
+    clearFilter: 'Clear',
+    glutenFree: 'Gluten free',
+    lactoseFree: 'Lactose free',
+    milkFree: 'Milk free',
+    lowLactose: 'Low lactose',
+    vegan: 'Vegan',
+    showAll: 'Show all',
+    noMeals: 'Cannot find any meals with this filter...',
+    lunch: 'Lunch',
+    restaurantsNearby: 'Other restaurants nearby'
   },
   fi: {
     map: 'Kartta',
@@ -68,7 +84,22 @@ const translations = {
     day: 'Päivä',
     hours: 'Tunnit',
     unavailable: 'Ei saatavilla',
-    distance: 'Etäisyys:'
+    distance: 'Etäisyys:',
+    lessbusy: 'Ei ruuhkaa',
+    busy: 'Ruuhkainen',
+    reviews: 'Arvostelut',
+    only5: 'Vain viisi viimeisintä arvostelua on näkyvissä',
+    filter: 'Suodata ruokavalio',
+    clearFilter: 'Poista',
+    glutenFree: 'Gluteeniton',
+    lactoseFree: 'Laktoositon',
+    milkFree: 'Maidoton',
+    lowLactose: 'Vähälaktoosinen',
+    vegan: 'Vegaani',
+    showAll: 'Näytä kaikki',
+    noMeals: 'Tällä suodattimella ei löytynyt yhtään ruokalajia... ',
+    lunch: 'Lounas',
+    restaurantsNearby: 'Muut ravintolat lähellä'
   }
 }
 

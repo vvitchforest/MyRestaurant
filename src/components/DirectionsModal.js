@@ -1,5 +1,6 @@
 /**
- * @Author Oskar Wiiala, Teemu Tirkkonen
+ * @Author Oskar Wiiala
+ * @Author Teemu Tirkkonen
  * Modal for choosing travel option to specific restaurant in map
  */
 
@@ -31,6 +32,7 @@ const DirectionsModal = ({
   mapRef
 }) => {
   const [cookies] = useCookies(['language'])
+  const language = cookies.language ? cookies.language : 'en'
   const [selectedType, setSelectedType] = useState()
   const [disabled, setDisabled] = useState(true)
   const [colorWalk, setColorWalk] = useState('default')
@@ -88,7 +90,6 @@ const DirectionsModal = ({
       directionService.route(request, function (result, status) {
         if (status === 'OK') {
           directionRenderer.setDirections(result)
-          console.log('dir', result)
         }
       })
       setOpenDrawer(false)
@@ -110,7 +111,7 @@ const DirectionsModal = ({
       }}
     >
       <Box
-        style={{
+        sx={{
           backgroundColor: 'white',
           padding: '1rem 1.5rem',
           maxWidth: '100vw'
@@ -124,7 +125,7 @@ const DirectionsModal = ({
         >
           <Typography variant='h6'>
             {getTranslation(
-              cookies.language ? cookies.language : 'en',
+              language,
               'choosetraveloption'
             )}
           </Typography>
@@ -179,7 +180,7 @@ const DirectionsModal = ({
             }}
           >
             {getTranslation(
-              cookies.language ? cookies.language : 'en',
+              language,
               'cancel'
             )}
           </Button>

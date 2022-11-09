@@ -68,6 +68,7 @@ const RestaurantCard = ({
   onClick
 }) => {
   const [cookies] = useCookies(['language'])
+  const language = cookies.language ? cookies.language : 'en'
   const [expanded, setExpanded] = useState(false)
   const [openingHours, setOpeningHours] = useState([])
   const [tableRows, setTableRows] = useState([])
@@ -147,11 +148,11 @@ const RestaurantCard = ({
     for (let i = 0; data.length > i; i++) {
       const data1 = data[i]
       // gets characters of a string before character ':' and then translates it
-      const day = getTranslation(cookies.language ? cookies.language : 'en', data1.substring(0, data1.indexOf(':')).toLowerCase())
+      const day = getTranslation(language, data1.substring(0, data1.indexOf(':')).toLowerCase())
       // gets characters of a string after character ' '
       let hours = data1.substring(data1.indexOf(' ') + 1)
       if (hours === 'Closed') {
-        hours = getTranslation(cookies.language ? cookies.language : 'en', 'closed')
+        hours = getTranslation(language, 'closed')
       }
       tableRowsTemp.push({ day, hours })
     }
@@ -206,13 +207,13 @@ const RestaurantCard = ({
               backgroundColor: isOpen === 'open' ? '#DAF7A6' : '#FF8266'
             }}
           >
-            {getTranslation(cookies.language ? cookies.language : 'en', isOpen)}
+            {getTranslation(language, isOpen)}
           </Typography>
           <CardHeader
             action={
               <IconButton
                 aria-label={getTranslation(
-                  cookies.language ? cookies.language : 'en',
+                  language,
                   'ariasettings'
                 )}
                 onClick={openWebsite}
@@ -257,14 +258,14 @@ const RestaurantCard = ({
             height='225'
             image={icon}
             alt={getTranslation(
-              cookies.language ? cookies.language : 'en',
+              language,
               'ariapicturerestaurant'
             )}
           />
           <CardContent sx={{ display: 'flex', flexDirection: 'row' }}>
             <Typography sx={{ alignSelf: 'center' }}>
               {getTranslation(
-                cookies.language ? cookies.language : 'en',
+                language,
                 'openinghours'
               )}
             </Typography>
@@ -279,14 +280,14 @@ const RestaurantCard = ({
           </CardContent>
           <Collapse in={expanded} timeout='auto' unmountOnExit>
             <CardContent>
-              {(tableRows.length === 0) && getTranslation(cookies.language ? cookies.language : 'en', 'unavailable')}
+              {(tableRows.length === 0) && getTranslation(language, 'unavailable')}
               {tableRows.length > 0 &&
               <TableContainer component={Paper}>
                 <Table size='small' aria-label='dense table with opening hours'>
                   <TableHead>
                     <TableRow>
-                      <TableCell>{getTranslation(cookies.language ? cookies.language : 'en', 'day')}</TableCell>
-                      <TableCell align='right'>{getTranslation(cookies.language ? cookies.language : 'en', 'hours')}</TableCell>
+                      <TableCell>{getTranslation(language, 'day')}</TableCell>
+                      <TableCell align='right'>{getTranslation(language, 'hours')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -312,9 +313,11 @@ const RestaurantCard = ({
           <CustomModal
             open={modalOpen}
             handleClose={() => setModalOpen(false)}
-            title={cookies.language === 'en' ? 'Reviews' : 'Arvostelut'}
+            title={getTranslation(language, 'reviews')}
           >
-            Only 5 latest reviews are shown
+            <Typography sx={{ pt: '8px', pb: '8px' }}>
+              {getTranslation(language, 'only5')}
+            </Typography>
             {reviews.map(function (results) {
               return (
                 <Card
@@ -332,7 +335,7 @@ const RestaurantCard = ({
                     action={
                       <IconButton
                         aria-label={getTranslation(
-                          cookies.language ? cookies.language : 'en',
+                          language,
                           'ariasettings'
                         )}
                       ></IconButton>

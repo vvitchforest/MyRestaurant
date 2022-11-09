@@ -1,8 +1,10 @@
 import React from 'react'
-import { Box, Grid, CardContent, Typography } from '@mui/material'
+import { Box, Grid, CardContent, Typography, Chip } from '@mui/material'
 import PropTypes from 'prop-types'
 import OccupancyHistogram from '../components/OccupancyHistogram'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useCookies } from 'react-cookie'
+import getTranslation from '../utils/Translations'
 
 /**
  * @Author Irina Konovalova
@@ -17,6 +19,8 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 
 const RestaurantHeader = ({ name, address, postalcode, lunchTime }) => {
   const mediumScreen = useMediaQuery('(min-width:750px)')
+  const [cookies] = useCookies(['language'])
+  const myLanguage = cookies.language ? cookies.language : 'en'
 
   const fontStyle = {
     fontSize: '1rem'
@@ -40,12 +44,7 @@ const RestaurantHeader = ({ name, address, postalcode, lunchTime }) => {
             <Typography variant="body2" sx={fontStyle}>
               {postalcode}
             </Typography>
-            <Typography
-              variant="body2"
-              sx={{ color: 'green', fontWeight: 'bold', fontStyle }}
-            >
-              {lunchTime}
-            </Typography>
+            <Chip label={`${getTranslation(myLanguage, 'lunch')} ${lunchTime}`} sx={{ mt: 0.5 }}/>
           </Grid>
           {name?.includes('Nokia One') &&
           (<Grid item xs={12} sx={{ pb: 0 }}>

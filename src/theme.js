@@ -10,7 +10,7 @@ const theme = createTheme({
       main: '#000000'
     },
     info: {
-      main: green[500]
+      main: green[600]
     }
   },
   typography: {
@@ -28,8 +28,7 @@ const theme = createTheme({
       letterSpacing: '1px'
     },
     subtitle2: {
-      fontFamily: 'Roboto Mono',
-      letterSpacing: '2px'
+      fontFamily: 'Roboto Mono'
     }
   },
   components: {
@@ -38,7 +37,8 @@ const theme = createTheme({
         {
           props: { variant: 'navlink' },
           style: {
-            borderRadius: '0.25rem'
+            borderRadius: '0.25rem',
+            color: '#000000'
           }
         }
       ]
@@ -47,7 +47,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '& .MuiDrawer-paper': {
-            backgroundColor: 'RGBA(255, 255, 255, 0.80)',
+            backgroundColor: 'RGBA(255, 255, 255, 0.60)',
             backdropFilter: 'blur(15px)'
           },
           '& .MuiBackdrop-root': {

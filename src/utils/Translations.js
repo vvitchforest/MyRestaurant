@@ -49,7 +49,9 @@ const translations = {
     lowLactose: 'Low lactose',
     vegan: 'Vegan',
     showAll: 'Show all',
-    noMeals: 'Cannot find any meals with this filter...'
+    noMeals: 'Cannot find any meals with this filter...',
+    lunch: 'Lunch',
+    restaurantsNearby: 'Other restaurants nearby'
   },
   fi: {
     map: 'Kartta',
@@ -95,7 +97,9 @@ const translations = {
     lowLactose: 'Vähälaktoosinen',
     vegan: 'Vegaani',
     showAll: 'Näytä kaikki',
-    noMeals: 'Tällä suodattimella ei löytynyt yhtään ruokalajia... '
+    noMeals: 'Tällä suodattimella ei löytynyt yhtään ruokalajia... ',
+    lunch: 'Lounas',
+    restaurantsNearby: 'Muut ravintolat lähellä'
   }
 }
 

@@ -11,7 +11,7 @@ import {
   ToggleButton as MUIToggleButton
 } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
-import { HiMenuAlt1 } from 'react-icons/hi'
+import { RiMenu2Line } from 'react-icons/ri'
 import CloseIcon from '@mui/icons-material/Close'
 import HomeIcon from '@mui/icons-material/Home'
 import RestaurantIcon from '@mui/icons-material/Restaurant'
@@ -67,7 +67,7 @@ const Navbar = () => {
   const ToggleButton = styled(MUIToggleButton)({
     '&.Mui-selected, &.Mui-selected:hover': {
       color: 'white',
-      backgroundColor: green[400]
+      backgroundColor: green[500]
     }
   })
 
@@ -93,12 +93,13 @@ const Navbar = () => {
   const stickNavbar = () => {
     if (window !== undefined) {
       const windowHeight = window.scrollY
-      windowHeight > 50 ? setPosition(navbarScrollStyle) : setPosition({ position: 'relative', animation: 'fade-in 1500ms' })
+      windowHeight > 50 ? setPosition(navbarScrollStyle) : setPosition({ position: 'relative' })
     }
   }
   return (
     <>
-      <AppBar style={position} elevation={2}>
+      <AppBar style={position} elevation={2}
+        sx={{ backgroundColor: 'RGBA(255, 255, 255, 0.7)', backdropFilter: 'blur(15px)' } }>
         <Toolbar
           sx={{
             display: 'flex',
@@ -113,11 +114,12 @@ const Navbar = () => {
             onClick={handleDrawerToggle}
             sx={{ mr: 2, display: { md: 'none' } }}
           >
-            <HiMenuAlt1 />
+            <RiMenu2Line color='black' />
           </IconButton>
           <Typography
-            color='#ffffff'
+            color={green[500]}
             fontWeight='bold'
+            fontFamily= 'Roboto Mono'
             variant='h6'
             sx={{ textDecoration: 'none' }}
             component={Link}
@@ -161,8 +163,8 @@ const Navbar = () => {
             onChange={handleChange}
             aria-label='language'
           >
-            <ToggleButton sx={{ color: 'white', fontFamily: 'Montserrat' }} value='en' >EN</ToggleButton>
-            <ToggleButton sx={{ color: 'white', fontFamily: 'Montserrat' }} value='fi' border='none'>FI</ToggleButton>
+            <ToggleButton sx={{ color: 'black', fontFamily: 'Montserrat' }} value='en' >EN</ToggleButton>
+            <ToggleButton sx={{ color: 'black', fontFamily: 'Montserrat' }} value='fi' border='none'>FI</ToggleButton>
           </ToggleButtonGroup>
         </Toolbar>
       </AppBar>

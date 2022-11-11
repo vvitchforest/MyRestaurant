@@ -6,6 +6,8 @@
 
 const translations = {
   en: {
+    null: 'null',
+    undefined: 'undefined',
     map: 'Map',
     home: 'Home',
     restaurants: 'Restaurants',
@@ -54,6 +56,8 @@ const translations = {
     restaurantsNearby: 'Other restaurants nearby'
   },
   fi: {
+    null: 'null',
+    undefined: 'undefined',
     map: 'Kartta',
     home: 'Koti',
     restaurants: 'Ravintolat',
@@ -104,7 +108,7 @@ const translations = {
 }
 
 const getTranslation = (lang, text) => {
-  return translations[lang][text]
+  return translations[lang || 'en'][text || 'null']
 }
 
 export default getTranslation

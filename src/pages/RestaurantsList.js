@@ -78,7 +78,7 @@ const RestaurantsList = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '0',
+        radius: '50',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to invisible div element
@@ -128,7 +128,7 @@ const RestaurantsList = () => {
         : theme.typography.fontWeightMedium
     }
   }
-  // Handles the changing of restaurant types
+  // Handles the changing of restaurant types.
   const handleChange = (event) => {
     const {
       target: { value }

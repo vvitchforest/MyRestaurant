@@ -1,11 +1,10 @@
-import { React, useState, useEffect } from 'react'
+import { React, useState } from 'react'
 import { Container, Box, Tabs, Tab, Fab } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import TabPanel from '../components/TabPanel'
 import RestaurantSection from '../components/RestaurantSection'
 import getTranslation from '../utils/Translations'
-import useMediaQuery from '@mui/material/useMediaQuery'
 
 /**
  * @Author Irina Konovalova
@@ -14,10 +13,8 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 const Home = () => {
   const [cookies] = useCookies(['language'])
   const [tabValue, setTabValue] = useState(0)
-  const [buttonVisibility, setButtonVisibility] = useState({ display: 'none' })
 
   const myLanguage = cookies.language ? cookies.language : 'en'
-  const mediumScreen = useMediaQuery('(min-width:750px)')
 
   const campusRestaurants = [
     {
@@ -53,23 +50,6 @@ const Home = () => {
     setTabValue(newValue)
   }
 
-  useEffect(() => {
-    window.addEventListener('scroll', revealButton)
-    return () => {
-      window.removeEventListener('scroll', revealButton)
-    }
-  }, [scroll])
-
-  const revealButton = () => {
-    if (window !== undefined) {
-      const windowHeight = window.scrollY
-      windowHeight > 100
-        ? setButtonVisibility(
-          { display: 'flex', animation: 'fade-in 1000ms' })
-        : setButtonVisibility({ display: 'none', animation: 'fade-in 1000ms reverse' })
-    }
-  }
-
   return (
     <Container >
       <Tabs value={tabValue} onChange={handleTabsChange} centered sx={{ my: 2 }}>
@@ -97,7 +77,6 @@ const Home = () => {
           component={Link} to="/restaurants"
           size="medium"
           aria-label="other-restaurants-nearby"
-          style={mediumScreen ? { display: 'flex' } : buttonVisibility }
           sx={{ position: 'fixed', bottom: 0, mb: 2 }}>
           {getTranslation(myLanguage, 'restaurantsNearby')}
         </Fab>

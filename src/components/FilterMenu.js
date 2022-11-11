@@ -7,7 +7,9 @@ import {
   FormControl,
   Select,
   Box,
-  Button
+  Button,
+  Checkbox,
+  ListItemText
 } from '@mui/material'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
@@ -23,7 +25,13 @@ import getTranslation from '../utils/Translations'
  * @returns Component that filters lunch menu by diet type
  */
 
-const FilterMenu = ({ filterValue, handleChange, clearFilter, clearButtonDisplay, restaurantType }) => {
+const FilterMenu = ({
+  filterValue,
+  handleChange,
+  clearFilter,
+  clearButtonDisplay,
+  restaurantType
+}) => {
   const [cookies] = useCookies(['language'])
   const myLanguage = cookies.language ? cookies.language : 'en'
 
@@ -38,38 +46,93 @@ const FilterMenu = ({ filterValue, handleChange, clearFilter, clearButtonDisplay
     }
   }
 
+  const dietCodes = [
+    {
+      code: 'G',
+      name: getTranslation(myLanguage, 'glutenFree')
+    },
+    {
+      code: 'M',
+      name: getTranslation(myLanguage, 'milkFree')
+    },
+    {
+      code: 'L',
+      name: getTranslation(myLanguage, 'lactoseFree')
+    },
+    {
+      code: 'VL',
+      name: getTranslation(myLanguage, 'lowLactose')
+    }
+  ]
+
+  const dietCodesToShow = restaurantType === 'sodexo'
+    ? dietCodes
+    : dietCodes.concat({ code: 'Veg', name: getTranslation(myLanguage, 'vegan') })
+
   return (
-    <Box width='100%' display='flex' justifyContent='flex-start' sx={{ pl: { xs: 2, sm: 5 }, '& .MuiSelect-select': { p: 1.25 }, '& .MuiInputLabel-formControl': { lineHeight: '0.8em' } }}>
-      <FormControl sx={{ mt: 2, width: { xs: '60%', sm: '30%' }, '& svg': { color: 'primary' } }}>
-        <InputLabel id="filter-label">{getTranslation(myLanguage, 'filter')}</InputLabel>
+    <Box
+      width="100%"
+      display="flex"
+      justifyContent="flex-start"
+      sx={{
+        pl: { xs: 2, sm: 5 },
+        '& .MuiSelect-select': { p: 1.25 },
+        '& .MuiInputLabel-formControl': { lineHeight: '0.8em' }
+      }}
+    >
+      <FormControl
+        sx={{
+          mt: 2,
+          width: { xs: '60%', sm: '30%' },
+          '& svg': { color: 'primary' }
+        }}
+      >
+        <InputLabel id="filter-label">
+          {getTranslation(myLanguage, 'filter')}
+        </InputLabel>
         <Select
           labelId="filter-label"
           id="filter"
+          multiple
           value={filterValue}
           onChange={handleChange}
-          input={<OutlinedInput id="select-filter" label={getTranslation(myLanguage, 'filter')} />}
-          MenuProps={MenuProps}
-          >
-          <MenuItem value="">{getTranslation(myLanguage, 'showAll')}</MenuItem>
-          <MenuItem value="G">{getTranslation(myLanguage, 'glutenFree')}</MenuItem>
-          <MenuItem value="M">{getTranslation(myLanguage, 'milkFree')}</MenuItem>
-          <MenuItem value="L">{getTranslation(myLanguage, 'lactoseFree')}</MenuItem>
-          <MenuItem value="VL">{getTranslation(myLanguage, 'lowLactose')}</MenuItem>
-          { restaurantType === 'foodandco' &&
-          <MenuItem value="Veg">{getTranslation(myLanguage, 'vegan')}</MenuItem>
+          input={
+            <OutlinedInput
+              id="select-filter"
+              label={getTranslation(myLanguage, 'filter')}
+            />
           }
+          renderValue={(selected) => selected.join(', ')}
+          MenuProps={MenuProps}
+        >
+          {dietCodesToShow.map((dietCode) => (
+            <MenuItem key={dietCode.code} value={dietCode.code}>
+              <Checkbox checked={filterValue.indexOf(dietCode.code) > -1} />
+              <ListItemText>{dietCode.name}</ListItemText>
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
-      <Box height='inherit' display='flex' alignItems='flex-end' sx={{ ml: 0.5 } }>
-        <Button variant="outlined" onClick={clearFilter} sx={{ display: `${clearButtonDisplay}`, py: 1 }}>{getTranslation(myLanguage, 'clearFilter')}</Button>
+      <Box
+        height="inherit"
+        display="flex"
+        alignItems="flex-end"
+        sx={{ ml: 0.5 }}
+      >
+        <Button
+          variant="outlined"
+          onClick={clearFilter}
+          sx={{ display: `${clearButtonDisplay}`, py: 1 }}
+        >
+          {getTranslation(myLanguage, 'clearFilter')}
+        </Button>
       </Box>
     </Box>
-
   )
 }
 
 FilterMenu.propTypes = {
-  filterValue: PropTypes.string,
+  filterValue: PropTypes.array,
   handleChange: PropTypes.func,
   clearFilter: PropTypes.func,
   clearButtonDisplay: PropTypes.string,

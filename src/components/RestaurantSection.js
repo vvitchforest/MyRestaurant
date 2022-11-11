@@ -29,7 +29,7 @@ import { TbFaceIdError } from 'react-icons/tb'
 const RestaurantSection = ({ name, address, postalcode, lunchTime, restaurantType, id }) => {
   const [cookies] = useCookies(['language'])
   const { menu, loading, error } = restaurantType === 'sodexo' ? useSodexoData(id) : useFoodAndCoData(id)
-  const [filterDiet, setFilterDiet] = useState('')
+  const [filterDiet, setFilterDiet] = useState([])
 
   const myLanguage = cookies.language ? cookies.language : 'en'
   Moment.locale(myLanguage)
@@ -41,7 +41,7 @@ const RestaurantSection = ({ name, address, postalcode, lunchTime, restaurantTyp
     ? menu
     : {
         ...Object.values(menu)?.filter((menuItem) =>
-          menuItem?.diets?.some(diet => diet === filterDiet))
+          filterDiet.some(diet => menuItem?.diets?.includes(diet)))
       }
 
   const handleFilterChange = (event) => {
@@ -70,7 +70,7 @@ const RestaurantSection = ({ name, address, postalcode, lunchTime, restaurantTyp
         <FilterMenu
           filterValue={filterDiet}
           handleChange={handleFilterChange}
-          clearFilter={() => setFilterDiet('')}
+          clearFilter={() => setFilterDiet([])}
           clearButtonDisplay={!filterDiet.length ? 'none' : 'block'}
           restaurantType={restaurantType}
         />

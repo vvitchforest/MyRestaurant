@@ -5,16 +5,12 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { Box, IconButton, Drawer, Rating, Typography, CardMedia } from '@mui/material'
+import { IconButton } from '@mui/material'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
-import DirectionsIcon from '@mui/icons-material/Directions'
-import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
+import RestaurantDrawer from '../components/RestaurantDrawer'
 import DirectionsModal from '../components/DirectionsModal'
-// import { CenterFocusStrong } from '@mui/icons-material'
-import CloseIcon from '@mui/icons-material/Close'
 import MyLocationIcon from '@mui/icons-material/MyLocation'
 import { useCookies } from 'react-cookie'
-import getTranslation from '../utils/Translations'
 
 const Map = () => {
   const [currentPos, setCurrentPos] = useState({})
@@ -128,7 +124,7 @@ const Map = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '50',
+        radius: '800',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to map
@@ -242,17 +238,6 @@ const Map = () => {
     }
   }
 
-  const restaurantOpenStyle = {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    ml: '12px',
-    mr: '12px',
-    backgroundColor: restaurantBusinessStatus === 'open'
-      ? '#DAF7A6'
-      : '#FF8266'
-  }
-
   return isLoaded
     ? (
         <GoogleMap
@@ -344,62 +329,20 @@ const Map = () => {
               position={currentPos}
             />}
           <></>
-          <Drawer
-            anchor='bottom'
+          <RestaurantDrawer
             open={openDrawer}
             onClose={() => setOpenDrawer(false)}
-            variant='temporary'
-          >
-            <Box sx={restaurantOpenStyle}>
-              <Typography variant='body1' sx={{ fontSize: { xs: '5vw', sm: '3vw', md: '2.5vw', lg: '2.5vw' }, pl: '6px', alignSelf: 'center' }}>
-                {getTranslation(
-                  language,
-                  restaurantBusinessStatus
-                )}
-              </Typography>
-              <IconButton type='button' onClick={handleDrawerToggle}>
-                <CloseIcon sx={closeIconStyle} />
-              </IconButton>
-            </Box>
-            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row', md: 'row', lg: 'row' } }}>
-              <Box
-                sx={{
-                  flex: 1,
-                  pl: '12px',
-                  pr: '12px'
-                }}
-              >
-                <CardMedia
-                  sx={{
-                    height: { xs: '20%', sm: '95%', md: '95%', lg: '95%' },
-                    maxHeight: { xs: '100px', sm: '250px', md: '250px', lg: '250px' }
-                  }}
-                  component='img'
-                  height='225'
-                  image={restaurantIcon}
-                  alt={getTranslation(language, 'ariapicturerestaurant')}
-                  />
-              </Box>
-              <Box sx={{ display: 'flex', flex: 2, flexDirection: 'row' }}>
-                <Box sx={{ padding: '12px', flex: 3 }}>
-                  <Typography variant='body1' sx={restaurantNameStyle}>{restaurantName}</Typography>
-                  <Typography variant='body2' color='text.secondary' sx={restaurantAddressStyle}>{restaurantAddress}</Typography>
-                  <Box sx={{ display: 'flex', justifyContent: { sm: 'space-between', md: 'space-between', lg: 'space-between' }, flexDirection: { xs: 'column', sm: 'row', md: 'row', lg: 'row' } }}>
-                    <Rating name='half-rating-read' value={restaurantRating === undefined ? 0 : restaurantRating} defaultValue={0} precision={0.5} readOnly sx={{ alignSelf: { sm: 'center', md: 'center', lg: 'center' } }} />
-                    <Typography variant='body2' color='text.secondary' sx={restaurantAddressStyle}>{getTranslation(language, 'distance')} {distance === undefined ? 0 : distance}</Typography>
-                  </Box>
-                </Box>
-                <Box sx={iconContainerStyle}>
-                  <IconButton sx={iconButtonStyle} onClick={openWebsite}>
-                    <RestaurantMenuIcon sx={iconStyle} />
-                  </IconButton>
-                  <IconButton sx={iconButtonStyle} onClick={toggleModal}>
-                    <DirectionsIcon sx={iconStyle} />
-                  </IconButton>
-                </Box>
-              </Box>
-            </Box>
-          </Drawer>
+            handleDrawerToggle={handleDrawerToggle}
+            openWebsite={openWebsite}
+            toggleModal={toggleModal}
+            language={language}
+            restaurantBusinessStatus={restaurantBusinessStatus}
+            restaurantIcon={restaurantIcon}
+            restaurantName={restaurantName}
+            restaurantAddress={restaurantAddress}
+            restaurantRating={restaurantRating}
+            distance={distance}
+          />
           <DirectionsModal
             open={modalOpen}
             handleClose={() => setModalOpen(false)}
@@ -413,49 +356,6 @@ const Map = () => {
     : (
     <></>
       )
-}
-
-const restaurantNameStyle = {
-  fontSize: { xs: '5vw', sm: '3vw', md: '2.5vw', lg: '2.5vw' },
-  padding: '5px'
-}
-
-const restaurantAddressStyle = {
-  fontSize: { xs: '4vw', sm: '2vw', md: '1.8vw', lg: '1.8vw' },
-  padding: '5px'
-}
-
-const iconContainerStyle = {
-  display: 'flex',
-  alignItems: 'end',
-  flex: 1,
-  flexDirection: 'column',
-  justifyContent: 'space-around',
-  pl: '12px',
-  pr: '12px'
-}
-
-const closeIconStyle = {
-  width: '25px',
-  height: '25px'
-}
-
-const iconStyle = {
-  width: { xs: '80%', sm: '80%', md: '80%', lg: '80%' },
-  height: { xs: '80%', sm: '80%', md: '80%', lg: '80%' }
-}
-
-const iconButtonStyle = {
-  display: 'flex',
-  justifyContent: 'space-around',
-  flexDirection: 'column',
-  boxShadow: 3,
-  width: { xs: '80%', sm: '65%', md: '58%', lg: '45%' },
-  height: { xs: '45%', sm: '45%', md: '45%', lg: '45%' },
-  border: 'solid #000',
-  borderWidth: '1px',
-  borderRadius: '6px',
-  borderColor: '#0250a3'
 }
 
 export default Map

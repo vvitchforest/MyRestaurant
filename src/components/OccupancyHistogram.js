@@ -51,7 +51,7 @@ const OccupancyHistogram = (args) => {
   useEffect(() => {
     setWidth(args.width ? args.width : 300)
     setHeight(args.height ? args.height : 150)
-  })
+  }, [args.width])
 
   const getCurrentDay = () => {
     const days = [
@@ -67,6 +67,11 @@ const OccupancyHistogram = (args) => {
     // getDay() returns a number, which represents the day
     return days[d.getDay()]
   }
+
+  const [occupancyData, setOccupancyData] = useState([])
+  useEffect(() => {
+    setOccupancyData(getOccupancyData(getCurrentDay()))
+  }, [])
 
   // Customizes actual value and prediction value color for bar when it is at current hour
   const customizePoint = (arg) => {
@@ -92,7 +97,7 @@ const OccupancyHistogram = (args) => {
     <Chart
       id='chart'
       title={getTranslation(language, 'occupancy')}
-      dataSource={getOccupancyData(getCurrentDay())}
+      dataSource={occupancyData}
       customizePoint={customizePoint}
     >
       <AdaptiveLayout width={0} height={0} keepLabels={true} />

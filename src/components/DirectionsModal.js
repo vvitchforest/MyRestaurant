@@ -9,6 +9,7 @@ import PropTypes from 'prop-types'
 import { Dialog, Box, Typography, IconButton, Button } from '@mui/material'
 import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk'
 import DirectionsBusIcon from '@mui/icons-material/DirectionsBus'
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
 
@@ -37,6 +38,7 @@ const DirectionsModal = ({
   const [disabled, setDisabled] = useState(true)
   const [colorWalk, setColorWalk] = useState('default')
   const [colorBus, setColorBus] = useState('default')
+  const [colorCar, setColorCar] = useState('default')
 
   /**
    * Gets directions for selected restaurant from current location
@@ -94,6 +96,9 @@ const DirectionsModal = ({
       })
       setOpenDrawer(false)
       handleClose()
+    } else if (type === 'car') {
+      // TODO: add directions API call for car
+      console.log('car selected')
     } else {
       console.log(type, ' not yet implemented')
     }
@@ -142,6 +147,7 @@ const DirectionsModal = ({
             color={colorWalk}
             onClick={() => {
               setColorWalk('primary')
+              setColorCar('default')
               setColorBus('default')
               setSelectedType('walk')
               setDisabled(false)
@@ -153,12 +159,25 @@ const DirectionsModal = ({
             color={colorBus}
             onClick={() => {
               setColorBus('primary')
+              setColorCar('default')
               setColorWalk('default')
               setSelectedType('bus')
               setDisabled(false)
             }}
           >
             <DirectionsBusIcon sx={{ width: '36px', height: '36px' }} />
+          </IconButton>
+          <IconButton
+            color={colorCar}
+            onClick={() => {
+              setColorCar('primary')
+              setColorBus('default')
+              setColorWalk('default')
+              setSelectedType('car')
+              setDisabled(false)
+            }}
+          >
+            <DirectionsCarIcon sx={{ width: '36px', height: '36px' }} />
           </IconButton>
         </Box>
         <Box
@@ -177,6 +196,7 @@ const DirectionsModal = ({
               setDisabled(true)
               setColorWalk('default')
               setColorBus('default')
+              setColorCar('default')
             }}
           >
             {getTranslation(
@@ -186,13 +206,13 @@ const DirectionsModal = ({
           </Button>
           <Button
             variant='contained'
-            testID='button'
             disabled={disabled}
             onClick={() => {
               getDirections(selectedType, restaurantLat, restaurantLng)
               setDisabled(true)
               setColorWalk('default')
               setColorBus('default')
+              setColorCar('default')
             }}
           >
             OK

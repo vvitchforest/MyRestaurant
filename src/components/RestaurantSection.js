@@ -36,12 +36,12 @@ const RestaurantSection = ({ name, address, postalcode, lunchTime, restaurantTyp
   const currentDate = Moment().format('dddd DD-MM-YYYY')
 
   /* Show unfiltered menu if filter is empty.
-    Else show items in which diets array contains at least one diet that equals filterDiet state */
+    Else show items in which diets array contains every diet that is in filterDiet state */
   const menuToShow = !filterDiet.length
     ? menu
     : {
         ...Object.values(menu)?.filter((menuItem) =>
-          filterDiet.some(diet => menuItem?.diets?.includes(diet)))
+          filterDiet.every(diet => menuItem?.diets?.includes(diet)))
       }
 
   const handleFilterChange = (event) => {

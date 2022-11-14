@@ -6,8 +6,10 @@ import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux'
 import userinterfaceReducer from './store/reducers/userinterface'
 import { configureStore } from '@reduxjs/toolkit'
-import { ThemeProvider } from '@mui/material/styles'
-import theme from './theme'
+// import { ThemeProvider } from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline'
+// import theme from './theme'
+import { ColorModeContextProvider } from './context/ColorModeContext'
 
 const store = configureStore({
   reducer: {
@@ -18,11 +20,12 @@ const store = configureStore({
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </ThemeProvider>
+    <ColorModeContextProvider>
+        <CssBaseline />
+        <Provider store={store}>
+          <App />
+        </Provider>
+    </ColorModeContextProvider>
   </React.StrictMode>
 )
 

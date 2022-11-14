@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react'
 import { IconButton } from '@mui/material'
 import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
 import RestaurantDrawer from '../components/RestaurantDrawer'
+import DirectionsDrawer from '../components/DirectionsDrawer'
 import DirectionsModal from '../components/DirectionsModal'
 import MyLocationIcon from '@mui/icons-material/MyLocation'
 import { useCookies } from 'react-cookie'
@@ -331,7 +332,6 @@ const Map = () => {
           <></>
           <RestaurantDrawer
             open={openDrawer}
-            onClose={() => setOpenDrawer(false)}
             handleDrawerToggle={handleDrawerToggle}
             openWebsite={openWebsite}
             toggleModal={toggleModal}
@@ -342,6 +342,16 @@ const Map = () => {
             restaurantAddress={restaurantAddress}
             restaurantRating={restaurantRating}
             distance={distance}
+          />
+          <DirectionsDrawer
+            open={false}
+            handleDrawerToggle={handleDrawerToggle}
+            language={language}
+            directions={[
+              'first step',
+              'second step',
+              'third step'
+            ]}
           />
           <DirectionsModal
             open={modalOpen}

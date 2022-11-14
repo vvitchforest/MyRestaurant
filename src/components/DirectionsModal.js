@@ -63,6 +63,12 @@ const DirectionsModal = ({
       // Draws the route to the map
       directionService.route(request, function (result, status) {
         if (status === 'OK') {
+          console.log('wtf is result:', result)
+          // console logs for steps in directions instructions for walk
+          const steps = result.routes[0].legs[0].steps
+          for (let i = 0; i < steps.length; i++) {
+            console.log(`step ${i + 1}: ${steps[i].instructions}`)
+          }
           directionRenderer.setDirections(result)
         }
       })
@@ -91,6 +97,29 @@ const DirectionsModal = ({
       // Draws the route to the map
       directionService.route(request, function (result, status) {
         if (status === 'OK') {
+          console.log('wtf is result2:', result)
+          // console logs for steps in directions instructions for bus
+          const steps = result.routes[0].legs[0].steps
+          let step = 1
+          console.log(`From ${result.routes[0].legs[0].start_address} to ${result.routes[0].legs[0].end_address}`)
+          console.log(`Distance: ${result.routes[0].legs[0].distance.text}. Estimated time: from ${result.routes[0].legs[0].departure_time.text} to ${result.routes[0].legs[0].arrival_time.text} (${result.routes[0].legs[0].duration.text})`)
+          for (let i = 0; i < steps.length; i++) {
+            if (steps[i].travel_mode === 'TRANSIT') {
+              console.log(
+                `step ${step}: board bus ${steps[i].transit.line.short_name}, departing at ${steps[i].transit.departure_time.text} towards ${steps[i].transit.headsign}, arriving at ${steps[i].transit.arrival_time.text}. (${steps[i].transit.num_stops} stops)`
+              )
+              step++
+            } else if (steps[i].travel_mode === 'WALKING') {
+              for (let j = 0; j < steps[i].steps.length; j++) {
+                const cleanText = steps[i].steps[j].instructions.replace(
+                  /<\/?[^>]+(>|$)/g,
+                  ''
+                )
+                console.log(`step ${step}: ${cleanText}`)
+                step++
+              }
+            }
+          }
           directionRenderer.setDirections(result)
         }
       })
@@ -129,10 +158,7 @@ const DirectionsModal = ({
           }}
         >
           <Typography variant='h6'>
-            {getTranslation(
-              language,
-              'choosetraveloption'
-            )}
+            {getTranslation(language, 'choosetraveloption')}
           </Typography>
         </Box>
         <Box
@@ -199,10 +225,7 @@ const DirectionsModal = ({
               setColorCar('default')
             }}
           >
-            {getTranslation(
-              language,
-              'cancel'
-            )}
+            {getTranslation(language, 'cancel')}
           </Button>
           <Button
             variant='contained'

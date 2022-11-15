@@ -5,7 +5,7 @@
 
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Box, Drawer, IconButton, Typography } from '@mui/material'
+import { Box, IconButton, Typography, SwipeableDrawer } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import getTranslation from '../utils/Translations'
 
@@ -13,23 +13,24 @@ import getTranslation from '../utils/Translations'
  * @param {boolean} open is drawer open or not
  * @param {func} handleDrawerToggle handles opening and closing of restaurant info drawer in Map.js
  * @param {string} language language of app ('en', 'fi')
- * @param {array} directions directions information
+ * @param {array} instructions directions information
  * @returns drawer component for displaying a specific route's instructions
  */
 const DirectionsDrawer = ({
   open,
   handleDrawerToggle,
   language,
-  directions
+  instructions
 }) => {
-  console.log('directions', directions)
+  console.log('instructions', instructions)
 
   return (
-    <Drawer
+    <SwipeableDrawer
       anchor='bottom'
       open={open}
       onClose={handleDrawerToggle}
-      variant='temporary'
+      onOpen={handleDrawerToggle}
+      variant='persistent'
     >
       <Box
         sx={{
@@ -60,14 +61,25 @@ const DirectionsDrawer = ({
           flexDirection: 'column',
           justifyContent: 'space-between',
           ml: '12px',
-          mr: '12px'
+          mr: '12px',
+          mb: '12px'
         }}
       >
-        {directions.map((step) => (
-          <Typography key={step}>{step}</Typography>
+        {instructions.map((position) => (
+          <Typography
+            key={position.step}
+            variant='body2'
+            sx={{
+              fontSize: { xs: '3vw', sm: '2vw', md: '1.5vw', lg: '1.5vw' },
+              pl: '6px',
+              pt: '2px'
+            }}
+          >
+            {position.step}
+          </Typography>
         ))}
       </Box>
-    </Drawer>
+    </SwipeableDrawer>
   )
 }
 
@@ -75,7 +87,7 @@ DirectionsDrawer.propTypes = {
   open: PropTypes.bool,
   handleDrawerToggle: PropTypes.func,
   language: PropTypes.string,
-  directions: PropTypes.array
+  instructions: PropTypes.array
 }
 
 export default DirectionsDrawer

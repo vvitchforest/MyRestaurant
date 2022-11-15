@@ -26,11 +26,13 @@ import getTranslation from '../utils/Translations'
 const DirectionsModal = ({
   open,
   handleClose,
-  setOpenDrawer,
+  setOpenRestaurantDrawer,
+  setOpenDirectionsDrawer,
   currentPos,
   restaurantLat,
   restaurantLng,
-  mapRef
+  mapRef,
+  setInstructions
 }) => {
   const [cookies] = useCookies(['language'])
   const language = cookies.language ? cookies.language : 'en'
@@ -65,15 +67,32 @@ const DirectionsModal = ({
         if (status === 'OK') {
           console.log('wtf is result:', result)
           // console logs for steps in directions instructions for walk
+          const instructionsArray = []
           const steps = result.routes[0].legs[0].steps
+          // instructionsArray.push(
+          //   `From ${result.routes[0].legs[0].start_address} to ${result.routes[0].legs[0].end_address}`
+          // )
+          // instructionsArray.push(
+          //   `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
+          // )
           for (let i = 0; i < steps.length; i++) {
             console.log(`step ${i + 1}: ${steps[i].instructions}`)
+            if (steps[i].instructions) {
+              // removes HTML tags from instructions text
+              const cleanText = steps[i].instructions.replace(
+                /<\/?[^>]+(>|$)/g,
+                ''
+              )
+              instructionsArray.push({ lat: steps[i].start_location.lat(), lng: steps[i].start_location.lng(), step: `step ${i + 1}: ${cleanText}` })
+            }
           }
+          setInstructions(instructionsArray)
           directionRenderer.setDirections(result)
         }
       })
-      setOpenDrawer(false)
+      setOpenRestaurantDrawer(false)
       handleClose()
+      setOpenDirectionsDrawer(true)
     } else if (type === 'bus') {
       // Gets the directionService and directionRenderer
       // Renderer is used to draw the route in the map
@@ -99,32 +118,42 @@ const DirectionsModal = ({
         if (status === 'OK') {
           console.log('wtf is result2:', result)
           // console logs for steps in directions instructions for bus
+          const instructionsArray = []
           const steps = result.routes[0].legs[0].steps
           let step = 1
-          console.log(`From ${result.routes[0].legs[0].start_address} to ${result.routes[0].legs[0].end_address}`)
-          console.log(`Distance: ${result.routes[0].legs[0].distance.text}. Estimated time: from ${result.routes[0].legs[0].departure_time.text} to ${result.routes[0].legs[0].arrival_time.text} (${result.routes[0].legs[0].duration.text})`)
+          // instructionsArray.push(
+          //   `From ${result.routes[0].legs[0].start_address} to ${result.routes[0].legs[0].end_address}`
+          // )
+          // instructionsArray.push(
+          //   `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
+          // )
           for (let i = 0; i < steps.length; i++) {
             if (steps[i].travel_mode === 'TRANSIT') {
-              console.log(
-                `step ${step}: board bus ${steps[i].transit.line.short_name}, departing at ${steps[i].transit.departure_time.text} towards ${steps[i].transit.headsign}, arriving at ${steps[i].transit.arrival_time.text}. (${steps[i].transit.num_stops} stops)`
-              )
+              const instruction = `step ${step}: board bus ${steps[i].transit?.line.short_name}, departing at ${steps[i].transit?.departure_time?.text} towards ${steps[i].transit?.headsign}, arriving at ${steps[i].transit?.arrival_time?.text}. (${steps[i].transit?.num_stops} stops)`
+              instructionsArray.push({ lat: steps[i].start_location.lat(), lng: steps[i].start_location.lng(), step: instruction })
               step++
             } else if (steps[i].travel_mode === 'WALKING') {
               for (let j = 0; j < steps[i].steps.length; j++) {
-                const cleanText = steps[i].steps[j].instructions.replace(
-                  /<\/?[^>]+(>|$)/g,
-                  ''
-                )
-                console.log(`step ${step}: ${cleanText}`)
+                if (steps[i].steps[j].instructions) {
+                  // removes HTML tags from instructions text
+                  const cleanText = steps[i].steps[j].instructions.replace(
+                    /<\/?[^>]+(>|$)/g,
+                    ''
+                  )
+                  const instruction = `step ${step}: ${cleanText}`
+                  instructionsArray.push({ lat: steps[i].steps[j].start_location.lat(), lng: steps[i].steps[j].start_location.lng(), step: instruction })
+                }
                 step++
               }
             }
           }
+          setInstructions(instructionsArray)
           directionRenderer.setDirections(result)
         }
       })
-      setOpenDrawer(false)
+      setOpenRestaurantDrawer(false)
       handleClose()
+      setOpenDirectionsDrawer(true)
     } else if (type === 'car') {
       // TODO: add directions API call for car
       console.log('car selected')
@@ -249,10 +278,12 @@ const DirectionsModal = ({
 DirectionsModal.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  setOpenDrawer: PropTypes.func.isRequired,
+  setOpenRestaurantDrawer: PropTypes.func.isRequired,
+  setOpenDirectionsDrawer: PropTypes.func.isRequired,
   currentPos: PropTypes.object.isRequired,
   restaurantLat: PropTypes.number,
   restaurantLng: PropTypes.number,
-  mapRef: PropTypes.object.isRequired
+  mapRef: PropTypes.object.isRequired,
+  setInstructions: PropTypes.func.isRequired
 }
 export default DirectionsModal

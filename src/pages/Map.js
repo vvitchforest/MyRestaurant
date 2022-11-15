@@ -6,8 +6,9 @@
 
 import React, { useEffect, useState } from 'react'
 import { IconButton } from '@mui/material'
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api'
+import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from '@react-google-maps/api'
 import RestaurantDrawer from '../components/RestaurantDrawer'
+import DirectionsDrawer from '../components/DirectionsDrawer'
 import DirectionsModal from '../components/DirectionsModal'
 import MyLocationIcon from '@mui/icons-material/MyLocation'
 import { useCookies } from 'react-cookie'
@@ -19,8 +20,11 @@ const Map = () => {
   const [libraries] = useState(['places', 'geometry'])
   const [cookies] = useCookies(['language'])
   const language = cookies.language ? cookies.language : 'en'
-  const [openDrawer, setOpenDrawer] = useState(false)
+  const [openRestaurantDrawer, setOpenRestaurantDrawer] = useState(false)
+  const [openDirectionsDrawer, setOpenDirectionsDrawer] = useState(false)
   const [modalOpen, setModalOpen] = useState(false)
+
+  // Toggle modal for DirectionsModal
   const toggleModal = () => setModalOpen(!modalOpen)
 
   const [restaurantRating, setRestaurantRating] = useState(0)
@@ -33,6 +37,21 @@ const Map = () => {
   const [restaurantLng, setRestaurantLng] = useState()
   const [distance, setDistance] = useState()
   const [restaurantWebsite, setRestaurantWebsite] = useState()
+
+  // Array of instructions for directions to a specific restaurant
+  const [instructions1, setInstructions1] = useState([])
+  const [infoPopupData, setInfoPopupData] = useState({})
+
+  console.log('length:', Object.keys(infoPopupData))
+
+  const setInstructions = (instructions) => {
+    if (instructions) setInstructions1(instructions)
+  }
+
+  const setInfoPopup = (data) => {
+    console.log('setInfoPopup:', data)
+    if (data) setInfoPopupData(data)
+  }
 
   const placesList = []
   const [placesFinal, setPlacesFinal] = useState([])
@@ -99,6 +118,7 @@ const Map = () => {
     setMap(map)
     mapRef.current = map
   }, [])
+
   // When page is refreshed unmounts map
   const onUnmount = React.useCallback(function callback (map) {
     setMap(null)
@@ -224,8 +244,12 @@ const Map = () => {
   }
 
   // Handles opening and closing of restaurant
-  const handleDrawerToggle = () => {
-    setOpenDrawer(!openDrawer)
+  const handleRestaurantDrawerToggle = () => {
+    setOpenRestaurantDrawer(!openRestaurantDrawer)
+  }
+  // Handles opening and closing of DirectionsDrawer
+  const handleDirectionsDrawerToggle = () => {
+    setOpenDirectionsDrawer(!openDirectionsDrawer)
   }
   // Opens a new tab if restaurant website exist and if not alerts the user
   const openWebsite = () => {
@@ -281,7 +305,7 @@ const Map = () => {
                       setRestaurantInfo(
                         results.place_id
                       )
-                      handleDrawerToggle()
+                      handleRestaurantDrawerToggle()
                     }}
                   >
                     {/* <InfoWindow
@@ -312,7 +336,7 @@ const Map = () => {
                       setRestaurantInfo(
                         results.place_id
                       )
-                      handleDrawerToggle()
+                      handleRestaurantDrawerToggle()
                     }}
                   >
                     {/* <InfoWindow
@@ -329,10 +353,40 @@ const Map = () => {
               position={currentPos}
             />}
           <></>
+          {instructions1.map((position) => (
+            <Marker
+              key={position.lat}
+              clickable={true}
+              icon={{
+                url: require('../map-step-icon.png'),
+                scaledSize: new window.google.maps.Size(20, 20)
+              }}
+              position={{
+                lat: position.lat,
+                lng: position.lng
+              }}
+              onClick={() => {
+                console.log(`marker step: ${position.step}`)
+                setInfoPopup(position)
+              }}>
+
+            </Marker>
+          ))}
+          {Object.keys(infoPopupData).length !== 0
+            ? (
+            <InfoWindow
+              position={{ lat: infoPopupData.lat, lng: infoPopupData.lng }}
+              options={{ maxWidth: 300 }}
+            >
+              <span>{infoPopupData.step}</span>
+            </InfoWindow>
+              )
+            : (
+                ''
+              )}
           <RestaurantDrawer
-            open={openDrawer}
-            onClose={() => setOpenDrawer(false)}
-            handleDrawerToggle={handleDrawerToggle}
+            open={openRestaurantDrawer}
+            handleDrawerToggle={handleRestaurantDrawerToggle}
             openWebsite={openWebsite}
             toggleModal={toggleModal}
             language={language}
@@ -343,14 +397,23 @@ const Map = () => {
             restaurantRating={restaurantRating}
             distance={distance}
           />
+          <DirectionsDrawer
+            open={openDirectionsDrawer}
+            handleDrawerToggle={handleDirectionsDrawerToggle}
+            language={language}
+            instructions={instructions1}
+          />
           <DirectionsModal
             open={modalOpen}
             handleClose={() => setModalOpen(false)}
-            setOpenDrawer={setOpenDrawer}
+            setOpenRestaurantDrawer={setOpenRestaurantDrawer}
+            setOpenDirectionsDrawer={setOpenDirectionsDrawer}
             currentPos={currentPos}
             restaurantLat={restaurantLat}
             restaurantLng={restaurantLng}
-            mapRef={mapRef} />
+            mapRef={mapRef}
+            setInstructions={setInstructions}
+          />
         </GoogleMap>
       )
     : (

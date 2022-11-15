@@ -26,11 +26,13 @@ import getTranslation from '../utils/Translations'
 const DirectionsModal = ({
   open,
   handleClose,
-  setOpenDrawer,
+  setOpenRestaurantDrawer,
+  setOpenDirectionsDrawer,
   currentPos,
   restaurantLat,
   restaurantLng,
-  mapRef
+  mapRef,
+  setInstructions
 }) => {
   const [cookies] = useCookies(['language'])
   const language = cookies.language ? cookies.language : 'en'
@@ -63,11 +65,34 @@ const DirectionsModal = ({
       // Draws the route to the map
       directionService.route(request, function (result, status) {
         if (status === 'OK') {
+          console.log('wtf is result:', result)
+          // console logs for steps in directions instructions for walk
+          const instructionsArray = []
+          const steps = result.routes[0].legs[0].steps
+          // instructionsArray.push(
+          //   `From ${result.routes[0].legs[0].start_address} to ${result.routes[0].legs[0].end_address}`
+          // )
+          // instructionsArray.push(
+          //   `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
+          // )
+          for (let i = 0; i < steps.length; i++) {
+            console.log(`step ${i + 1}: ${steps[i].instructions}`)
+            if (steps[i].instructions) {
+              // removes HTML tags from instructions text
+              const cleanText = steps[i].instructions.replace(
+                /<\/?[^>]+(>|$)/g,
+                ''
+              )
+              instructionsArray.push({ lat: steps[i].start_location.lat(), lng: steps[i].start_location.lng(), step: `step ${i + 1}: ${cleanText}` })
+            }
+          }
+          setInstructions(instructionsArray)
           directionRenderer.setDirections(result)
         }
       })
-      setOpenDrawer(false)
+      setOpenRestaurantDrawer(false)
       handleClose()
+      setOpenDirectionsDrawer(true)
     } else if (type === 'bus') {
       // Gets the directionService and directionRenderer
       // Renderer is used to draw the route in the map
@@ -91,11 +116,44 @@ const DirectionsModal = ({
       // Draws the route to the map
       directionService.route(request, function (result, status) {
         if (status === 'OK') {
+          console.log('wtf is result2:', result)
+          // console logs for steps in directions instructions for bus
+          const instructionsArray = []
+          const steps = result.routes[0].legs[0].steps
+          let step = 1
+          // instructionsArray.push(
+          //   `From ${result.routes[0].legs[0].start_address} to ${result.routes[0].legs[0].end_address}`
+          // )
+          // instructionsArray.push(
+          //   `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
+          // )
+          for (let i = 0; i < steps.length; i++) {
+            if (steps[i].travel_mode === 'TRANSIT') {
+              const instruction = `step ${step}: board bus ${steps[i].transit?.line.short_name}, departing at ${steps[i].transit?.departure_time?.text} towards ${steps[i].transit?.headsign}, arriving at ${steps[i].transit?.arrival_time?.text}. (${steps[i].transit?.num_stops} stops)`
+              instructionsArray.push({ lat: steps[i].start_location.lat(), lng: steps[i].start_location.lng(), step: instruction })
+              step++
+            } else if (steps[i].travel_mode === 'WALKING') {
+              for (let j = 0; j < steps[i].steps.length; j++) {
+                if (steps[i].steps[j].instructions) {
+                  // removes HTML tags from instructions text
+                  const cleanText = steps[i].steps[j].instructions.replace(
+                    /<\/?[^>]+(>|$)/g,
+                    ''
+                  )
+                  const instruction = `step ${step}: ${cleanText}`
+                  instructionsArray.push({ lat: steps[i].steps[j].start_location.lat(), lng: steps[i].steps[j].start_location.lng(), step: instruction })
+                }
+                step++
+              }
+            }
+          }
+          setInstructions(instructionsArray)
           directionRenderer.setDirections(result)
         }
       })
-      setOpenDrawer(false)
+      setOpenRestaurantDrawer(false)
       handleClose()
+      setOpenDirectionsDrawer(true)
     } else if (type === 'car') {
       // TODO: add directions API call for car
       console.log('car selected')
@@ -129,10 +187,7 @@ const DirectionsModal = ({
           }}
         >
           <Typography variant='h6'>
-            {getTranslation(
-              language,
-              'choosetraveloption'
-            )}
+            {getTranslation(language, 'choosetraveloption')}
           </Typography>
         </Box>
         <Box
@@ -199,10 +254,7 @@ const DirectionsModal = ({
               setColorCar('default')
             }}
           >
-            {getTranslation(
-              language,
-              'cancel'
-            )}
+            {getTranslation(language, 'cancel')}
           </Button>
           <Button
             variant='contained'
@@ -226,10 +278,12 @@ const DirectionsModal = ({
 DirectionsModal.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
-  setOpenDrawer: PropTypes.func.isRequired,
+  setOpenRestaurantDrawer: PropTypes.func.isRequired,
+  setOpenDirectionsDrawer: PropTypes.func.isRequired,
   currentPos: PropTypes.object.isRequired,
   restaurantLat: PropTypes.number,
   restaurantLng: PropTypes.number,
-  mapRef: PropTypes.object.isRequired
+  mapRef: PropTypes.object.isRequired,
+  setInstructions: PropTypes.func.isRequired
 }
 export default DirectionsModal

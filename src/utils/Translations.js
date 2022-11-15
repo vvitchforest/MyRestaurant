@@ -53,7 +53,8 @@ const translations = {
     showAll: 'Show all',
     noMeals: 'Cannot find any meals with this filter...',
     lunch: 'Lunch',
-    restaurantsNearby: 'Other restaurants nearby'
+    restaurantsNearby: 'Other restaurants nearby',
+    instructions: 'Instructions'
   },
   fi: {
     null: 'null',
@@ -103,7 +104,8 @@ const translations = {
     showAll: 'Näytä kaikki',
     noMeals: 'Tällä suodattimella ei löytynyt yhtään ruokalajia... ',
     lunch: 'Lounas',
-    restaurantsNearby: 'Muut ravintolat lähellä'
+    restaurantsNearby: 'Muut ravintolat lähellä',
+    instructions: 'Ohjeet'
   }
 }
 

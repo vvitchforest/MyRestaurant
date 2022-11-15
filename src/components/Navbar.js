@@ -21,7 +21,6 @@ import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
 import { Link } from 'react-router-dom'
 import NavItem from './NavItem'
-// import theme from '../theme'
 import { useDispatch } from 'react-redux'
 import * as actions from '../store/actions/index'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
@@ -45,12 +44,19 @@ const Navbar = () => {
   const dispatch = useDispatch()
   const { mode, toggleColorMode } = useContext(ColorModeContext)
 
-  console.log('colormode', mode)
-
   const navbarScrollStyle = {
     position: 'fixed',
     top: '0',
     animation: 'slide-in 500ms'
+  }
+
+  const drawerNavStyles = {
+    display: { xs: 'block', md: 'none ' },
+    '& .MuiDrawer-paper':
+    {
+      boxSizing: 'border-box',
+      width: { xs: '75%', sm: '50%' }
+    }
   }
 
   const changeLanguage = (newName) => {
@@ -90,13 +96,13 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    window.addEventListener('scroll', stickNavbar)
+    window.addEventListener('scroll', fixNavbarPosition)
     return () => {
-      window.removeEventListener('scroll', stickNavbar)
+      window.removeEventListener('scroll', fixNavbarPosition)
     }
   }, [scroll])
 
-  const stickNavbar = () => {
+  const fixNavbarPosition = () => {
     if (window !== undefined) {
       const windowHeight = window.scrollY
       windowHeight > 50 ? setPosition(navbarScrollStyle) : setPosition({ position: 'relative' })
@@ -124,7 +130,6 @@ const Navbar = () => {
           <Typography
             color="primary"
             fontWeight='bold'
-            fontFamily= 'Roboto Mono'
             variant='h6'
             sx={{ textDecoration: 'none' }}
             component={Link}
@@ -171,7 +176,7 @@ const Navbar = () => {
             <ToggleButton sx={{ px: { xs: 1.5, md: 2 }, py: { xs: 0.25, md: 0.75 } }} value='en' >EN</ToggleButton>
             <ToggleButton sx={{ px: { xs: 1.5, md: 2 }, py: { xs: 0.25, md: 0.75 } }} value='fi'>FI</ToggleButton>
           </ToggleButtonGroup>
-          <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit">
+          <IconButton sx={{ ml: { xs: 0.5, md: 1 } }} onClick={toggleColorMode} color="inherit">
             {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
           </IconButton>
         </Toolbar>
@@ -181,27 +186,33 @@ const Navbar = () => {
         open={openDrawer}
         onClose={() => setOpenDrawer(false)}
         variant='temporary'
-        sx={{
-          display: { xs: 'block', md: 'none' },
-          '& .MuiDrawer-paper': { boxSizing: 'border-box', width: { xs: '75%', sm: '50%' } }
-        }}
+        sx={drawerNavStyles}
       >
-        <Box>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Box sx={{ display: 'flex', flex: 1, p: 1, pt: 1 }}>
+            <Typography
+            color="primary"
+            fontWeight='bold'
+            variant='h6'
+            sx={{ flex: 1, alignSelf: 'center', pl: 2, textDecoration: 'none' }}
+            component={Link}
+            to='/'
+            onClick={handleDrawerToggle}
+          >
+            MyRestaurant
+          </Typography>
             <IconButton
               color='inherit'
               aria-label='close drawer'
               edge='start'
               onClick={handleDrawerToggle}
-              sx={{ display: { md: 'none' } }}
+              sx={{ display: { md: 'none' }, alignSelf: 'flex-start' }}
             >
               <CloseIcon />
             </IconButton>
           </Box>
-          <Typography variant='h6' sx={{ flexGrow: 1, pl: 2, pb: 1 }}>
-            MyRestaurant
-          </Typography>
           <Divider />
+          <Box sx={{ flex: 5 }}>
           <List sx={{ '& a': { borderRadius: 0 } }}>
             <NavItem
               text={getTranslation(
@@ -234,6 +245,7 @@ const Navbar = () => {
               onClick={() => setOpenDrawer(false)}
             />
           </List>
+          </Box>
         </Box>
       </Drawer>
     </>

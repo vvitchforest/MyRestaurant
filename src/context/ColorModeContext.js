@@ -1,25 +1,30 @@
 import React, { useState, createContext, useMemo, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { deepmerge } from '@mui/utils'
 import { createTheme, ThemeProvider } from '@mui/material'
-import { getDesignTokens, getThemedComponents } from '../theme'
+import { getDesignTokens, getComponentThemes } from '../theme'
 
+/* Context for providing color mode */
 export const ColorModeContext = createContext({
   toggleColorMode: () => {}
 })
 
-// eslint-disable-next-line react/prop-types
+/**
+ * @param {any} children
+ * @returns color mode context provider
+ */
 export const ColorModeContextProvider = ({ children }) => {
   const MODE = 'mode'
-  const systemPreference = useMediaQuery('(prefers-color-scheme: dark)') ? 'dark' : 'light'
-  const [mode, setMode] = useState(localStorage.getItem(MODE) ?? systemPreference)
+  const systemPreferenceDark = useMediaQuery('(prefers-color-scheme: dark)') ? 'dark' : 'light'
+  const [mode, setMode] = useState(localStorage.getItem(MODE) ?? systemPreferenceDark)
 
   useEffect(() => {
     localStorage.setItem(MODE, mode)
   }, [mode])
 
   console.log('current mode?', mode)
-  console.log('system prefers dark mode?', systemPreference)
+  console.log('system prefers dark mode?', systemPreferenceDark)
 
   const colorMode = useMemo(
     () => ({
@@ -30,11 +35,15 @@ export const ColorModeContextProvider = ({ children }) => {
     [mode]
   )
 
-  const theme = createTheme(deepmerge(getDesignTokens(mode), getThemedComponents(mode)))
+  const theme = createTheme(deepmerge(getDesignTokens(mode), getComponentThemes(mode)))
 
   return (
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </ColorModeContext.Provider>
   )
+}
+
+ColorModeContextProvider.propTypes = {
+  children: PropTypes.any
 }

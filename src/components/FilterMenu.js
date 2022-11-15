@@ -41,7 +41,7 @@ const FilterMenu = ({
     PaperProps: {
       style: {
         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: { xs: '50%', sm: '25%' }
+        width: { xs: '60%', sm: '40%' }
       }
     }
   }
@@ -83,7 +83,7 @@ const FilterMenu = ({
       <FormControl
         sx={{
           mt: 2,
-          width: { xs: '60%', sm: '30%' },
+          width: { xs: '60%', sm: '40%' },
           '& svg': { color: 'primary' }
         }}
       >

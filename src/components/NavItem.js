@@ -23,6 +23,7 @@ const NavItem = ({ text, icon, component, to, onClick }) => {
       to={to}
       onClick={onClick}
       selected={to === location.pathname}
+      sx={{ my: { xs: 1, md: 0 } }}
     >
       {icon}
       <ListItemText sx={ { ml: 1, mt: 0, mb: 0 } }>{text}</ListItemText>

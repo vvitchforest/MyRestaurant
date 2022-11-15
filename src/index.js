@@ -6,9 +6,7 @@ import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux'
 import userinterfaceReducer from './store/reducers/userinterface'
 import { configureStore } from '@reduxjs/toolkit'
-// import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
-// import theme from './theme'
 import { ColorModeContextProvider } from './context/ColorModeContext'
 
 const store = configureStore({

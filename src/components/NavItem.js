@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ListItem, ListItemText } from '@mui/material'
 import { useLocation } from 'react-router-dom'
-import { green } from '@mui/material/colors'
 
 /**
  * @Author Irina Konovalova
@@ -24,14 +23,10 @@ const NavItem = ({ text, icon, component, to, onClick }) => {
       to={to}
       onClick={onClick}
       selected={to === location.pathname}
-      sx={{
-        '&.Mui-selected':
-      { backgroundColor: { xs: green[100], md: green[500] }, color: { xs: 'black', md: 'white' } },
-        '&.Mui-selected:hover': { md: { backgroundColor: green[600] } }
-      }}
+      sx={{ my: { xs: 1, md: 0 } }}
     >
       {icon}
-      <ListItemText sx={ { ml: 1 } }>{text}</ListItemText>
+      <ListItemText sx={ { ml: 1, mt: 0, mb: 0 } }>{text}</ListItemText>
     </ListItem>
   )
 }

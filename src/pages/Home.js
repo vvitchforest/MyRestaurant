@@ -53,9 +53,9 @@ const Home = () => {
   return (
     <Container >
       <Tabs value={tabValue} onChange={handleTabsChange} centered sx={{ my: 2 }}>
-        <Tab label="Nokia One"/>
+        <Tab label="Nokia One" sx={{ ml: 1 }}/>
         <Tab label="Dreams Cafe"/>
-        <Tab label="Metropolia"/>
+        <Tab label="Metropolia" sx={{ mr: 1 }}/>
       </Tabs>
       {campusRestaurants.map((restaurant, index) => (
       <TabPanel value={tabValue} index={index} key={index}>

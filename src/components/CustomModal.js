@@ -26,7 +26,7 @@ const CustomModal = ({ children, title, open, handleClose }) => {
         }
       }}>
       <Box
-        style={{ backgroundColor: 'white', padding: '1rem 1.5rem', maxWidth: '100vw' }}>
+        style={{ padding: '1rem 1.5rem', maxWidth: '100vw' }}>
         <Box style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h6">{title}</Typography>
           <IconButton onClick={handleClose}>

@@ -3,9 +3,11 @@
  * Occupacy histogram component for thermal camera data to be used by Nokia restaurant.
  */
 
-import { React, useState, useEffect } from 'react'
+import { React, useState, useEffect, useContext } from 'react'
 import {
   Chart,
+  Title,
+  Font,
   Series,
   Legend,
   ValueAxis,
@@ -20,7 +22,8 @@ import {
 import { getOccupancyData } from '../utils/OccupancyData.js'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
-import { purple } from '@mui/material/colors'
+import { ColorModeContext } from '../context/ColorModeContext'
+import { getDesignTokens } from '../theme'
 
 // args should only contain width and height
 const OccupancyHistogram = (args) => {
@@ -47,6 +50,7 @@ const OccupancyHistogram = (args) => {
   const [width, setWidth] = useState()
   const [height, setHeight] = useState()
   const currentTimeQuartered = getCurrentTimeQuartered()
+  const { mode } = useContext(ColorModeContext)
 
   useEffect(() => {
     setWidth(args.width ? args.width : 300)
@@ -96,10 +100,13 @@ const OccupancyHistogram = (args) => {
   return (
     <Chart
       id='chart'
-      title={getTranslation(language, 'occupancy')}
       dataSource={occupancyData}
       customizePoint={customizePoint}
     >
+      <Title text={getTranslation(language, 'occupancy')}>
+        <Font color={getDesignTokens(mode).palette.text.primary} family='Fira Sans' size='1.25rem'>
+        </Font>
+      </Title>
       <AdaptiveLayout width={0} height={0} keepLabels={true} />
       <Size width={width} height={height} />
       <CommonSeriesSettings
@@ -107,14 +114,23 @@ const OccupancyHistogram = (args) => {
         type='bar'
         barOverlapGroup='time'
       />
-      <Series id='seriesActual' valueField='valueActual' color={purple[500]} />
+      <Series id='seriesActual' valueField='valueActual' color={getDesignTokens(mode).palette.info.main} />
       <Series
         id='seriesPrediction'
         valueField='valuePrediction'
-        color={purple[500]}
+        color={getDesignTokens(mode).palette.info.main}
       />
-      <ArgumentAxis title={getTranslation(language, 'hourofday')} />
-      <ValueAxis title={getTranslation(language, 'people')}>
+      <ArgumentAxis>
+        <Title text={getTranslation(language, 'hourofday')}>
+          <Font color={getDesignTokens(mode).palette.text.secondary} family='Montserrat'>
+          </Font>
+        </Title>
+      </ArgumentAxis>
+      <ValueAxis>
+        <Title text={getTranslation(language, 'people')}>
+          <Font color={getDesignTokens(mode).palette.text.secondary} family='Montserrat'>
+          </Font>
+        </Title>
         <VisualRange startValue={0} />
         <ConstantLine
           width={2}
@@ -122,7 +138,9 @@ const OccupancyHistogram = (args) => {
           color='#8c8cff'
           dashStyle='dash'
         >
-          <Label text={getTranslation(language, 'lessbusy')} />
+          <Label text={getTranslation(language, 'lessbusy')}>
+            <Font color={getDesignTokens(mode).palette.text.secondary} family='Montserrat'></Font>
+          </Label>
         </ConstantLine>
         <ConstantLine
           width={2}
@@ -130,7 +148,9 @@ const OccupancyHistogram = (args) => {
           color='#ff7c7c'
           dashStyle='dash'
         >
-          <Label text={getTranslation(language, 'busy')} />
+           <Label text={getTranslation(language, 'busy')}>
+            <Font color={getDesignTokens(mode).palette.text.secondary} family='Montserrat'></Font>
+          </Label>
         </ConstantLine>
       </ValueAxis>
       <Legend visible={false} />

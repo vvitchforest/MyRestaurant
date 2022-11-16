@@ -1,4 +1,4 @@
-import { grey, indigo } from '@mui/material/colors'
+import { grey, indigo, green, red } from '@mui/material/colors'
 import { alpha } from '@mui/material'
 
 /**
@@ -13,24 +13,19 @@ export const getDesignTokens = (mode) => ({
     fontFamily: [
       'Montserrat', 'Fira Sans'].join(','),
     h4: {
-      fontFamily: 'Fira Sans',
-      letterSpacing: '1px'
+      fontFamily: 'Fira Sans'
     },
     h5: {
-      fontFamily: 'Fira Sans',
-      letterSpacing: '1px'
+      fontFamily: 'Fira Sans'
     },
     h6: {
-      fontFamily: 'Fira Sans',
-      letterSpacing: '1px'
+      fontFamily: 'Fira Sans'
     },
     button: {
-      fontFamily: 'Fira Sans',
-      letterSpacing: '1px'
+      fontFamily: 'Fira Sans'
     },
     subtitle2: {
-      fontFamily: 'Fira Sans',
-      letterSpacing: '1px'
+      fontFamily: 'Fira Sans'
     }
   },
 
@@ -44,7 +39,13 @@ export const getDesignTokens = (mode) => ({
             contrastText: '#fff'
           },
           info: {
-            main: indigo[700]
+            main: indigo.A200
+          },
+          success: {
+            main: green[500]
+          },
+          error: {
+            main: red[500]
           },
           divider: grey[300],
           background: {
@@ -64,6 +65,12 @@ export const getDesignTokens = (mode) => ({
           info: {
             main: indigo.A100
           },
+          success: {
+            main: green[400]
+          },
+          error: {
+            main: red[400]
+          },
           divider: grey[700],
           background: {
             default: grey[900],
@@ -71,7 +78,7 @@ export const getDesignTokens = (mode) => ({
           },
           text: {
             primary: '#fff',
-            secondary: grey[400]
+            secondary: grey[300]
           }
         })
   }

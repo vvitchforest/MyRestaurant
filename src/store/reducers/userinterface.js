@@ -7,7 +7,8 @@ import * as actionTypes from '../actions/actionTypes'
 
 const initialState = {
   cookie: 'en',
-  expanded: false
+  expanded: false,
+  restaurants: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -30,6 +31,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         placeId: action.placeId
+      }
+    }
+
+    case actionTypes.SET_RESTAURANTS: {
+      return {
+        ...state,
+        restaurants: action.restaurants
       }
     }
 

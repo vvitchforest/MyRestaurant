@@ -25,3 +25,10 @@ export const setPlaceId = (placeId) => {
     placeId
   }
 }
+
+export const setRestaurants = (restaurants) => {
+  return {
+    type: actionTypes.SET_RESTAURANTS,
+    restaurants
+  }
+}

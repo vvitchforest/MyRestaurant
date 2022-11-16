@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { Button, IconButton } from '@mui/material'
+import { Button, IconButton, Typography } from '@mui/material'
 import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from '@react-google-maps/api'
 import RestaurantDrawer from '../components/RestaurantDrawer'
 import DirectionsDrawer from '../components/DirectionsDrawer'
@@ -382,7 +382,7 @@ const Map = () => {
             position={{ lat: infoPopupData.lat, lng: infoPopupData.lng }}
             options={{ maxWidth: 300 }}
           >
-            <span>{infoPopupData.step}</span>
+            <Typography color='black'>{infoPopupData.step}</Typography>
           </InfoWindow>
           )}
           <RestaurantDrawer
@@ -399,7 +399,7 @@ const Map = () => {
             distance={distance}
           />
           <Button
-            sx={{ margin: '10px', position: 'absolute', left: 0, bottom: 20 }}
+            sx={{ margin: '10px', backgroundColor: 'white', position: 'absolute', left: 0, bottom: 50 }}
             onClick={() => setOpenDirectionsDrawer(!openDirectionsDrawer)}>
             {getTranslation(language, 'showinstructions')}
           </Button>

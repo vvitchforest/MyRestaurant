@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import sodexoMenuService from '../services/sodexomenu'
 import { useCookies } from 'react-cookie'
-import Moment from 'moment'
+import dayjs from 'dayjs'
 
 /**
  * A custom hook for fetching and formatting current date's Sodexo restaurant data from Sodexo API
@@ -17,7 +17,7 @@ export const useSodexoData = (restaurantId) => {
   const [cookies] = useCookies(['language'])
 
   const myLanguage = cookies.language ? cookies.language : 'en'
-  const currentDateApiFormat = Moment().format('YYYY-MM-DD')
+  const currentDateApiFormat = dayjs().format('YYYY-MM-DD')
 
   useEffect(() => {
     const getSodexoMenu = async () => {

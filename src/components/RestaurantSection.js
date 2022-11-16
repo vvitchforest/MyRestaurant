@@ -7,8 +7,8 @@ import RestaurantHeader from './RestaurantHeader'
 import Notification from './Notification'
 import FilterMenu from './FilterMenu'
 import RestaurantMenu from './RestaurantMenu'
-import Moment from 'moment'
-import 'moment/locale/fi'
+import dayjs from 'dayjs'
+import 'dayjs/locale/fi'
 import { useSodexoData } from '../hooks/useSodexoData'
 import { useFoodAndCoData } from '../hooks/useFoodAndCoData'
 import { BiSad } from 'react-icons/bi'
@@ -32,8 +32,8 @@ const RestaurantSection = ({ name, address, postalcode, lunchTime, restaurantTyp
   const [filterDiet, setFilterDiet] = useState([])
 
   const myLanguage = cookies.language ? cookies.language : 'en'
-  Moment.locale(myLanguage)
-  const currentDate = Moment().format('dddd DD-MM-YYYY')
+  dayjs.locale(myLanguage)
+  const currentDate = dayjs().format('dddd DD-MM-YYYY')
 
   /* Show unfiltered menu if filter is empty.
     Else show items in which diets array contains every diet that is filterDiet state */

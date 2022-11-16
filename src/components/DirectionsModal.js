@@ -43,7 +43,7 @@ const DirectionsModal = ({
   const [colorCar, setColorCar] = useState('default')
 
   /**
-   * Gets directions for selected restaurant from current location
+   * Gets directions and sets instructions for directions for selected restaurant from current location
    * @param {string} type type of travel, eg. 'walk', 'bus'
    * @param {number} lat latitude of restaurant
    * @param {number} lng longitude of restaurant
@@ -62,19 +62,21 @@ const DirectionsModal = ({
         destination: { lat, lng },
         travelMode: 'WALKING'
       }
-      // Draws the route to the map
+      // Draws the route to the map and sets up instructions for each step along the way
       directionService.route(request, function (result, status) {
         if (status === 'OK') {
-          console.log('wtf is result:', result)
-          // console logs for steps in directions instructions for walk
+          const instructionsHeaderArray = []
           const instructionsArray = []
           const steps = result.routes[0].legs[0].steps
-          // instructionsArray.push(
-          //   `From ${result.routes[0].legs[0].start_address} to ${result.routes[0].legs[0].end_address}`
-          // )
-          // instructionsArray.push(
-          //   `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
-          // )
+
+          // splits start and end addresses, keeps only address and removes country code, city etc.
+          const startAddressSplit = (result.routes[0].legs[0].start_address).split(',')
+          const startAddress = `${startAddressSplit[0]}`
+          const endAddressSplit = (result.routes[0].legs[0].end_address).split(',')
+          const endAddress = `${endAddressSplit[0]}`
+          instructionsHeaderArray.push(
+            `From ${startAddress} to ${endAddress}`, `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
+          )
           for (let i = 0; i < steps.length; i++) {
             console.log(`step ${i + 1}: ${steps[i].instructions}`)
             if (steps[i].instructions) {
@@ -86,7 +88,7 @@ const DirectionsModal = ({
               instructionsArray.push({ lat: steps[i].start_location.lat(), lng: steps[i].start_location.lng(), step: `step ${i + 1}: ${cleanText}` })
             }
           }
-          setInstructions(instructionsArray)
+          setInstructions(instructionsHeaderArray, instructionsArray)
           directionRenderer.setDirections(result)
         }
       })
@@ -113,20 +115,24 @@ const DirectionsModal = ({
           routingPreference: 'FEWER_TRANSFERS'
         }
       }
-      // Draws the route to the map
+      // Draws the route to the map and sets up instructions for each step along the way
       directionService.route(request, function (result, status) {
         if (status === 'OK') {
-          console.log('wtf is result2:', result)
-          // console logs for steps in directions instructions for bus
+          const instructionsHeaderArray = []
           const instructionsArray = []
           const steps = result.routes[0].legs[0].steps
           let step = 1
-          // instructionsArray.push(
-          //   `From ${result.routes[0].legs[0].start_address} to ${result.routes[0].legs[0].end_address}`
-          // )
-          // instructionsArray.push(
-          //   `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
-          // )
+
+          // splits start and end addresses, keeps only address and removes country code, city etc.
+          const startAddressSplit = (result.routes[0].legs[0].start_address).split(',')
+          const startAddress = `${startAddressSplit[0]}`
+          const endAddressSplit = (result.routes[0].legs[0].end_address).split(',')
+          const endAddress = `${endAddressSplit[0]}`
+
+          instructionsHeaderArray.push(
+            `From ${startAddress} to ${endAddress}`, `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
+          )
+
           for (let i = 0; i < steps.length; i++) {
             if (steps[i].travel_mode === 'TRANSIT') {
               const instruction = `step ${step}: board bus ${steps[i].transit?.line.short_name}, departing at ${steps[i].transit?.departure_time?.text} towards ${steps[i].transit?.headsign}, arriving at ${steps[i].transit?.arrival_time?.text}. (${steps[i].transit?.num_stops} stops)`
@@ -147,7 +153,7 @@ const DirectionsModal = ({
               }
             }
           }
-          setInstructions(instructionsArray)
+          setInstructions(instructionsHeaderArray, instructionsArray)
           directionRenderer.setDirections(result)
         }
       })

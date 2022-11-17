@@ -145,7 +145,7 @@ const RestaurantCard = ({
     toggleModal()
   }
 
-  // creates table rows for opening hours
+  // creates table rows for opening hours.
   const createTableRows = (data) => {
     const tableRowsTemp = []
     for (let i = 0; data.length > i; i++) {

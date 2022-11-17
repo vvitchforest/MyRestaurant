@@ -84,13 +84,13 @@ const OccupancyHistogram = (args) => {
       // Series 1 pertains to prediction value, // Series 2 pertains to actual value
       if (arg.seriesName === 'Series 1') {
         return {
-          color: '#66BB6A',
-          hoverStyle: { color: '#66BB6A' }
+          color: getDesignTokens(mode).palette.error.main,
+          hoverStyle: getDesignTokens(mode).palette.error.dark
         }
       } else if (arg.seriesName === 'Series 2') {
         return {
-          color: '#43A047',
-          hoverStyle: { color: '#43A047' }
+          color: getDesignTokens(mode).palette.error.main,
+          hoverStyle: getDesignTokens(mode).palette.error.dark
         }
       }
     }

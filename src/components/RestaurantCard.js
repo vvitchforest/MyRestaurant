@@ -4,7 +4,7 @@
  * Card component displaying individual restaurant info. Used in RestaurantList.js
  */
 
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import {
   Box,
   Card,
@@ -33,6 +33,8 @@ import { useDispatch } from 'react-redux'
 import * as actions from '../store/actions/index'
 import CustomModal from './CustomModal'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
+import { ColorModeContext } from '../context/ColorModeContext'
+import { getDesignTokens } from '../theme'
 
 // Handles MUI Collapse component expansion when clicking "Opening hours" dropdown icon
 const ExpandMore = styled((props) => {
@@ -76,6 +78,7 @@ const RestaurantCard = ({
   const [modalOpen, setModalOpen] = useState(false)
   const toggleModal = () => setModalOpen(!modalOpen)
   const dispatch = useDispatch()
+  const { mode } = useContext(ColorModeContext)
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
@@ -204,7 +207,7 @@ const RestaurantCard = ({
             sx={{
               padding: '12px',
               fontWeight: 'bold',
-              backgroundColor: isOpen === 'open' ? '#DAF7A6' : '#FF8266'
+              backgroundColor: isOpen === 'open' ? getDesignTokens(mode).palette.success.main : getDesignTokens(mode).palette.error.main
             }}
           >
             {getTranslation(language, isOpen)}

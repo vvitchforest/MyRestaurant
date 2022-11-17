@@ -42,10 +42,12 @@ export const getDesignTokens = (mode) => ({
             main: indigo.A200
           },
           success: {
-            main: green[500]
+            main: green[300]
           },
           error: {
-            main: red[500]
+            main: red[300],
+            dark: red[600],
+            contrastText: '#000000'
           },
           divider: grey[300],
           background: {
@@ -66,10 +68,12 @@ export const getDesignTokens = (mode) => ({
             main: indigo.A100
           },
           success: {
-            main: green[400]
+            main: green[600]
           },
           error: {
-            main: red[400]
+            main: red[400],
+            dark: red[600],
+            contrastText: '#fff'
           },
           divider: grey[700],
           background: {
@@ -142,11 +146,11 @@ export const getComponentThemes = (mode) => ({
             styleOverrides: {
               root: ({ theme }) => ({
                 '& .MuiDrawer-paper': {
-                  backgroundColor: alpha(theme.palette.common.white, 0.6),
+                  backgroundColor: alpha(theme.palette.common.white, 0.8),
                   backdropFilter: 'blur(15px)'
                 },
                 '& .MuiBackdrop-root': {
-                  backgroundColor: alpha(theme.palette.common.black, 0.2)
+                  backgroundColor: alpha(theme.palette.common.black, 0.3)
                 }
               })
             }
@@ -201,11 +205,11 @@ export const getComponentThemes = (mode) => ({
             styleOverrides: {
               root: ({ theme }) => ({
                 '& .MuiDrawer-paper': {
-                  backgroundColor: alpha(theme.palette.common.black, 0.6),
+                  backgroundColor: alpha(theme.palette.common.black, 0.8),
                   backdropFilter: 'blur(15px)'
                 },
                 '& .MuiBackdrop-root': {
-                  backgroundColor: alpha(theme.palette.common.black, 0.2)
+                  backgroundColor: alpha(theme.palette.common.black, 0.3)
                 }
               })
             }
@@ -214,7 +218,7 @@ export const getComponentThemes = (mode) => ({
             styleOverrides: {
               root: ({ theme }) => ({
                 '&.MuiDialog-paper': {
-                  backgroundColor: alpha(grey[900], 0.5),
+                  backgroundColor: alpha(grey[900], 0.8),
                   backdropFilter: 'blur(15px)'
                 },
                 '&.MuiAlert-root': {

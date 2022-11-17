@@ -158,7 +158,7 @@ const Map = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '100',
+        radius: '300',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to map
@@ -355,6 +355,7 @@ const Map = () => {
              {<Marker
               icon={{ url: require('../bluecircle.png') }}
               position={currentPos}
+              zIndex={1}
             />}
           <></>
           {instructions1.map((position) => (

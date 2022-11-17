@@ -233,7 +233,6 @@ const DirectionsModal = ({
     >
       <Box
         sx={{
-          backgroundColor: 'white',
           padding: '1rem 1.5rem',
           maxWidth: '100vw'
         }}

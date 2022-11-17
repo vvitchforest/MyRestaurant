@@ -161,8 +161,29 @@ const DirectionsModal = ({
       handleClose()
       setOpenDirectionsDrawer(true)
     } else if (type === 'car') {
-      // TODO: add directions API call for car
-      console.log('car selected')
+      // Gets the directionService and directionRenderer
+      // Renderer is used to draw the route in the map
+      const directionService = new window.google.maps.DirectionsService()
+      const directionRenderer = new window.google.maps.DirectionsRenderer()
+      // Sets the directionRenderer to the map
+      directionRenderer.setMap(mapRef.current)
+      // Request directions based on current location, restaurant lat/lng
+      // and by using bus as a primary traveling mode
+      // if there's no buses will use same route as with walking
+      const request = {
+        origin: currentPos,
+        destination: { lat, lng },
+        travelMode: 'DRIVING'
+      }
+      // Draws the route to the map
+      directionService.route(request, function (result, status) {
+        if (status === 'OK') {
+          directionRenderer.setDirections(result)
+        }
+      })
+      setOpenRestaurantDrawer(false)
+      handleClose()
+      setOpenDirectionsDrawer(true)
     } else {
       console.log(type, ' not yet implemented')
     }

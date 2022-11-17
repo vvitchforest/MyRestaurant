@@ -150,7 +150,7 @@ const Map = () => {
       }
     }
     navigator.geolocation.getCurrentPosition(getPos)
-  }, [])
+  }, [navigator.geolocation])
   // Sets the map to location and gets nearbyRestaurants
   const panToLocation = () => {
     setClick(true)

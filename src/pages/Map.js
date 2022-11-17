@@ -5,13 +5,14 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { IconButton } from '@mui/material'
+import { Button, IconButton, Typography } from '@mui/material'
 import { GoogleMap, Marker, InfoWindow, useJsApiLoader } from '@react-google-maps/api'
 import RestaurantDrawer from '../components/RestaurantDrawer'
 import DirectionsDrawer from '../components/DirectionsDrawer'
 import DirectionsModal from '../components/DirectionsModal'
 import MyLocationIcon from '@mui/icons-material/MyLocation'
 import { useCookies } from 'react-cookie'
+import getTranslation from '../utils/Translations'
 
 const Map = () => {
   const [currentPos, setCurrentPos] = useState({})
@@ -39,18 +40,31 @@ const Map = () => {
   const [restaurantWebsite, setRestaurantWebsite] = useState()
 
   // Array of instructions for directions to a specific restaurant
+  const [instructionsHeader1, setInstructionsHeader1] = useState([])
   const [instructions1, setInstructions1] = useState([])
+
+  // data and opening/closing for directions instructions popup window
   const [infoPopupData, setInfoPopupData] = useState({})
+  const [infoWindowOpen, setInfoWindowOpen] = useState(false)
 
-  console.log('length:', Object.keys(infoPopupData))
-
-  const setInstructions = (instructions) => {
-    if (instructions) setInstructions1(instructions)
+  /**
+   * Sets instructions for DirectionDrawer (function passed to DirectionDrawer component)
+   * @param {array} instructionsHeader header information such as start and end address + distance and estimated time
+   * @param {array} instructions array of object containing lat, lng and step
+   */
+  const setInstructions = (instructionsHeader, instructions) => {
+    if (instructionsHeader && instructions) {
+      setInstructionsHeader1(instructionsHeader)
+      setInstructions1(instructions)
+    }
   }
 
+  // Sets data for directions instructions info popup window and opens it
   const setInfoPopup = (data) => {
-    console.log('setInfoPopup:', data)
-    if (data) setInfoPopupData(data)
+    if (data) {
+      setInfoPopupData(data)
+      setInfoWindowOpen(true)
+    }
   }
 
   const placesList = []
@@ -136,7 +150,7 @@ const Map = () => {
       }
     }
     navigator.geolocation.getCurrentPosition(getPos)
-  }, [])
+  }, [navigator.geolocation])
   // Sets the map to location and gets nearbyRestaurants
   const panToLocation = () => {
     setClick(true)
@@ -144,7 +158,7 @@ const Map = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '800',
+        radius: '100',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to map
@@ -308,11 +322,6 @@ const Map = () => {
                       handleRestaurantDrawerToggle()
                     }}
                   >
-                    {/* <InfoWindow
-                      position={{ lat: results.geometry.location.lat(), lng: results.geometry.location.lng() }}
-                      options={{ maxWidth: 300 }}>
-                      <span>{results.name}</span>
-                    </InfoWindow> */}
                   </Marker>
               )
             })
@@ -339,11 +348,6 @@ const Map = () => {
                       handleRestaurantDrawerToggle()
                     }}
                   >
-                    {/* <InfoWindow
-                    position={{ lat: results.geometry.location.lat(), lng: results.geometry.location.lng() }}
-                    options={{ maxWidth: 300 }}>
-                    <span>{results.name}</span>
-                  </InfoWindow> */}
                   </Marker>
               )
             })
@@ -372,18 +376,15 @@ const Map = () => {
 
             </Marker>
           ))}
-          {Object.keys(infoPopupData).length !== 0
-            ? (
+          {infoWindowOpen && (
             <InfoWindow
-              position={{ lat: infoPopupData.lat, lng: infoPopupData.lng }}
-              options={{ maxWidth: 300 }}
-            >
-              <span>{infoPopupData.step}</span>
-            </InfoWindow>
-              )
-            : (
-                ''
-              )}
+            onCloseClick={() => setInfoWindowOpen(false)}
+            position={{ lat: infoPopupData.lat, lng: infoPopupData.lng }}
+            options={{ maxWidth: 300 }}
+          >
+            <Typography color='black'>{infoPopupData.step}</Typography>
+          </InfoWindow>
+          )}
           <RestaurantDrawer
             open={openRestaurantDrawer}
             handleDrawerToggle={handleRestaurantDrawerToggle}
@@ -397,10 +398,16 @@ const Map = () => {
             restaurantRating={restaurantRating}
             distance={distance}
           />
+          <Button
+            sx={{ margin: '10px', backgroundColor: 'white', position: 'absolute', left: 0, bottom: 50 }}
+            onClick={() => setOpenDirectionsDrawer(!openDirectionsDrawer)}>
+            {getTranslation(language, 'showinstructions')}
+          </Button>
           <DirectionsDrawer
             open={openDirectionsDrawer}
             handleDrawerToggle={handleDirectionsDrawerToggle}
             language={language}
+            instructionsHeader={instructionsHeader1}
             instructions={instructions1}
           />
           <DirectionsModal

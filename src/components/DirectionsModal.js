@@ -43,7 +43,7 @@ const DirectionsModal = ({
   const [colorCar, setColorCar] = useState('default')
 
   /**
-   * Gets directions for selected restaurant from current location
+   * Gets directions and sets instructions for directions for selected restaurant from current location
    * @param {string} type type of travel, eg. 'walk', 'bus'
    * @param {number} lat latitude of restaurant
    * @param {number} lng longitude of restaurant
@@ -62,19 +62,21 @@ const DirectionsModal = ({
         destination: { lat, lng },
         travelMode: 'WALKING'
       }
-      // Draws the route to the map
+      // Draws the route to the map and sets up instructions for each step along the way
       directionService.route(request, function (result, status) {
         if (status === 'OK') {
-          console.log('wtf is result:', result)
-          // console logs for steps in directions instructions for walk
+          const instructionsHeaderArray = []
           const instructionsArray = []
           const steps = result.routes[0].legs[0].steps
-          // instructionsArray.push(
-          //   `From ${result.routes[0].legs[0].start_address} to ${result.routes[0].legs[0].end_address}`
-          // )
-          // instructionsArray.push(
-          //   `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
-          // )
+
+          // splits start and end addresses, keeps only address and removes country code, city etc.
+          const startAddressSplit = (result.routes[0].legs[0].start_address).split(',')
+          const startAddress = `${startAddressSplit[0]}`
+          const endAddressSplit = (result.routes[0].legs[0].end_address).split(',')
+          const endAddress = `${endAddressSplit[0]}`
+          instructionsHeaderArray.push(
+            `From ${startAddress} to ${endAddress}`, `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
+          )
           for (let i = 0; i < steps.length; i++) {
             console.log(`step ${i + 1}: ${steps[i].instructions}`)
             if (steps[i].instructions) {
@@ -86,7 +88,7 @@ const DirectionsModal = ({
               instructionsArray.push({ lat: steps[i].start_location.lat(), lng: steps[i].start_location.lng(), step: `step ${i + 1}: ${cleanText}` })
             }
           }
-          setInstructions(instructionsArray)
+          setInstructions(instructionsHeaderArray, instructionsArray)
           directionRenderer.setDirections(result)
         }
       })
@@ -113,23 +115,27 @@ const DirectionsModal = ({
           routingPreference: 'FEWER_TRANSFERS'
         }
       }
-      // Draws the route to the map
+      // Draws the route to the map and sets up instructions for each step along the way
       directionService.route(request, function (result, status) {
         if (status === 'OK') {
-          console.log('wtf is result2:', result)
-          // console logs for steps in directions instructions for bus
+          const instructionsHeaderArray = []
           const instructionsArray = []
           const steps = result.routes[0].legs[0].steps
           let step = 1
-          // instructionsArray.push(
-          //   `From ${result.routes[0].legs[0].start_address} to ${result.routes[0].legs[0].end_address}`
-          // )
-          // instructionsArray.push(
-          //   `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
-          // )
+
+          // splits start and end addresses, keeps only address and removes country code, city etc.
+          const startAddressSplit = (result.routes[0].legs[0].start_address).split(',')
+          const startAddress = `${startAddressSplit[0]}`
+          const endAddressSplit = (result.routes[0].legs[0].end_address).split(',')
+          const endAddress = `${endAddressSplit[0]}`
+
+          instructionsHeaderArray.push(
+            `From ${startAddress} to ${endAddress}`, `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
+          )
+
           for (let i = 0; i < steps.length; i++) {
             if (steps[i].travel_mode === 'TRANSIT') {
-              const instruction = `step ${step}: board bus ${steps[i].transit?.line.short_name}, departing at ${steps[i].transit?.departure_time?.text} towards ${steps[i].transit?.headsign}, arriving at ${steps[i].transit?.arrival_time?.text}. (${steps[i].transit?.num_stops} stops)`
+              const instruction = `step ${step}: Board bus ${steps[i].transit?.line.short_name}, departing at ${steps[i].transit?.departure_time?.text} towards ${steps[i].transit?.headsign}, arriving at ${steps[i].transit?.arrival_time?.text}. (${steps[i].transit?.num_stops} stops)`
               instructionsArray.push({ lat: steps[i].start_location.lat(), lng: steps[i].start_location.lng(), step: instruction })
               step++
             } else if (steps[i].travel_mode === 'WALKING') {
@@ -147,7 +153,7 @@ const DirectionsModal = ({
               }
             }
           }
-          setInstructions(instructionsArray)
+          setInstructions(instructionsHeaderArray, instructionsArray)
           directionRenderer.setDirections(result)
         }
       })
@@ -155,8 +161,60 @@ const DirectionsModal = ({
       handleClose()
       setOpenDirectionsDrawer(true)
     } else if (type === 'car') {
-      // TODO: add directions API call for car
-      console.log('car selected')
+      // Gets the directionService and directionRenderer
+      // Renderer is used to draw the route in the map
+      const directionService = new window.google.maps.DirectionsService()
+      const directionRenderer = new window.google.maps.DirectionsRenderer()
+      // Sets the directionRenderer to the map
+      directionRenderer.setMap(mapRef.current)
+      // Request directions based on current location, restaurant lat/lng
+      // and by using bus as a primary traveling mode
+      // if there's no buses will use same route as with walking
+      const request = {
+        origin: currentPos,
+        destination: { lat, lng },
+        travelMode: 'DRIVING'
+      }
+      // Draws the route to the map
+      directionService.route(request, function (result, status) {
+        if (status === 'OK') {
+          const instructionsHeaderArray = []
+          const instructionsArray = []
+          const steps = result.routes[0].legs[0].steps
+          let step = 1
+
+          // splits start and end addresses, keeps only address and removes country code, city etc.
+          const startAddressSplit = (result.routes[0].legs[0].start_address).split(',')
+          const startAddress = `${startAddressSplit[0]}`
+          const endAddressSplit = (result.routes[0].legs[0].end_address).split(',')
+          const endAddress = `${endAddressSplit[0]}`
+
+          instructionsHeaderArray.push(
+            `From ${startAddress} to ${endAddress}`, `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
+          )
+
+          for (let i = 0; i < steps.length; i++) {
+            if (steps[i].travel_mode === 'DRIVING') {
+              if (steps[i].instructions) {
+                // removes HTML tags from instructions text
+                const cleanText = steps[i].instructions.replace(
+                  /<\/?[^>]+(>|$)/g,
+                  ''
+                )
+                const instruction = `step ${step}: ${cleanText}`
+                instructionsArray.push({ lat: steps[i].start_location.lat(), lng: steps[i].start_location.lng(), step: instruction })
+              }
+              step++
+            }
+          }
+          setInstructions(instructionsHeaderArray, instructionsArray)
+          console.log('result driving:', result)
+          directionRenderer.setDirections(result)
+        }
+      })
+      setOpenRestaurantDrawer(false)
+      handleClose()
+      setOpenDirectionsDrawer(true)
     } else {
       console.log(type, ' not yet implemented')
     }

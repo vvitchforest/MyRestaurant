@@ -87,7 +87,7 @@ const Navbar = () => {
     if (newAlignment) {
       setAlignment(newAlignment)
       changeLanguage(newAlignment)
-      dispatch(actions.setLanguage(newAlignment))
+      dispatch(actions.setLanguage('fi'))
     } else {
       setAlignment('en')
       changeLanguage('en')

@@ -10,10 +10,10 @@ import { useCookies } from 'react-cookie'
 import RestaurantCard from '../components/RestaurantCard'
 import getTranslation from '../utils/Translations'
 import { CircularProgress, Box, FormControl, InputLabel, Select, OutlinedInput, MenuItem, useTheme, Chip, Container } from '@mui/material'
+import { useDispatch, useSelector } from 'react-redux'
+import * as actions from '../store/actions/index'
 
 const RestaurantsList = () => {
-  console.log('listaa')
-
   const ITEM_HEIGHT = 48
   const ITEM_PADDING_TOP = 8
   const MenuProps = {
@@ -45,6 +45,8 @@ const RestaurantsList = () => {
   const theme = useTheme()
   const [restaurantTypes, setRestaurantTypes] = useState([])
   const [placesFiltered, setPlacesFiltered] = useState([])
+  const dispatch = useDispatch()
+  const restaurants = useSelector(state => state.userinterface.restaurants)
 
   /**
    * Loads the API with API key and libraries we want to use
@@ -78,7 +80,7 @@ const RestaurantsList = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '50',
+        radius: '100',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to invisible div element
@@ -109,7 +111,7 @@ const RestaurantsList = () => {
   }
   // Waits for location and then gets the nearby restaurants
   setTimeout(function () {
-    if (checkIfPos === true) {
+    if (checkIfPos === true && restaurants.length === 0) {
       getPlacesData()
       setCheckIfPos(false)
     }
@@ -118,6 +120,7 @@ const RestaurantsList = () => {
   const createRestaurantList = (place) => {
     placesList.push(place)
     setPlacesFinal(placesList)
+    dispatch(actions.setRestaurants(placesList))
   }
   // Styling for the filter element
   const getStyles = (type, restaurantTypes, theme) => {
@@ -190,7 +193,7 @@ const RestaurantsList = () => {
         </Select>
       </FormControl>
       </Box>
-      {(isLoaded && checkPagination && restaurantTypes.length === 0) || (isLoaded && checkPagination === false && restaurantTypes.length === 0)
+      {(isLoaded && checkPagination && restaurantTypes.length === 0 && restaurants.length === 0) || (isLoaded && checkPagination === false && restaurantTypes.length === 0 && restaurants.length === 0)
         ? placesFinal.map(function (results) {
           console.log('results: ', results)
           return (
@@ -206,13 +209,13 @@ const RestaurantsList = () => {
           />
           )
         })
-        : restaurantTypes.length === 0 && <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '50px', alignItems: 'center' }}>
+        : restaurantTypes.length === 0 && restaurants.length === 0 && <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', padding: '50px', alignItems: 'center' }}>
           {getTranslation(
             language,
             'loadingrestaurants'
           )}<CircularProgress sx={{ marginTop: '50px' }}/>
           </Box>}
-          {(isLoaded && restaurantTypes.length > 0 && !restaurantTypes.includes('All'))
+          {(isLoaded && restaurantTypes.length > 0 && !restaurantTypes.includes('All') && restaurants.length === 0)
             ? placesFiltered.map(function (results) {
               console.log('results: ', results)
               return (
@@ -243,6 +246,37 @@ const RestaurantsList = () => {
             />
               )
             })}
+            {restaurants.length > 0 && !restaurantTypes.includes('All') && restaurantTypes.length === 0
+              ? restaurants.map(function (results) {
+                console.log('Redux: ', results)
+                return (
+            <RestaurantCard
+              key={results.place_id}
+              placeId={results.place_id}
+              name={results.name}
+              address={results.vicinity}
+              icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
+              rating={results.rating !== undefined ? results.rating : 0}
+              userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
+              isOpen={results.opening_hours !== undefined && results.opening_hours.isOpen() !== false ? 'open' : 'closed'}
+            />
+                )
+              })
+              : restaurants.length > 0 && restaurantTypes.length > 0 && !restaurantTypes.includes('All') && placesFiltered.map(function (results) {
+                console.log('Redux filter: ', results)
+                return (
+            <RestaurantCard
+              key={results.place_id}
+              placeId={results.place_id}
+              name={results.name}
+              address={results.vicinity}
+              icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
+              rating={results.rating !== undefined ? results.rating : 0}
+              userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
+              isOpen={results.opening_hours !== undefined && results.opening_hours.isOpen() !== false ? 'open' : 'closed'}
+            />
+                )
+              })}
     </Container>
   )
 }

@@ -54,7 +54,9 @@ const translations = {
     noMeals: 'Cannot find any meals with this filter...',
     lunch: 'Lunch',
     restaurantsNearby: 'Other restaurants nearby',
-    instructions: 'Instructions'
+    instructions: 'Instructions',
+    steps: 'steps',
+    showinstructions: 'Show instructions'
   },
   fi: {
     null: 'null',
@@ -105,7 +107,9 @@ const translations = {
     noMeals: 'Tällä suodattimella ei löytynyt yhtään ruokalajia... ',
     lunch: 'Lounas',
     restaurantsNearby: 'Muut ravintolat lähellä',
-    instructions: 'Ohjeet'
+    instructions: 'Ohjeet',
+    steps: 'Askeleet',
+    showinstructions: 'Näytä ohjeet'
   }
 }
 

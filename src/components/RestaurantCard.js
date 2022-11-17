@@ -162,6 +162,21 @@ const RestaurantCard = ({
     setTableRows(tableRowsTemp)
   }
 
+  const getCurrentDay = () => {
+    const days = [
+      'sunday',
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday'
+    ]
+    const d = new Date()
+    // getDay() returns a number, which represents the day
+    return days[d.getDay()]
+  }
+
   // Gets the website by using specific restaurants id
   const openWebsite = () => {
     const request = {
@@ -301,10 +316,10 @@ const RestaurantCard = ({
                           '&:last-child td, &:last-child th': { border: 0 }
                         }}
                       >
-                        <TableCell component='th' scope='row'>
+                        <TableCell sx={{ backgroundColor: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? 'grey' : 'white', color: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? 'white' : 'black' }}>
                           {row.day}
                         </TableCell>
-                        <TableCell align='right'>{row.hours}</TableCell>
+                        <TableCell align='right' sx={{ backgroundColor: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? 'grey' : 'white', color: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? 'white' : 'black' }}>{row.hours}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

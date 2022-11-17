@@ -160,9 +160,10 @@ const Map = () => {
     setClick(true)
     console.log('Current', currentPos)
     if (currentPos !== {}) {
+      map.setCenter(currentPos)
       const request = {
         location: currentPos,
-        radius: '300',
+        radius: '200',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to map

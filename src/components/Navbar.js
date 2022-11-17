@@ -105,7 +105,7 @@ const Navbar = () => {
   const fixNavbarPosition = () => {
     if (window !== undefined) {
       const windowHeight = window.scrollY
-      windowHeight > 50 ? setPosition(navbarScrollStyle) : setPosition({ position: 'relative' })
+      windowHeight > 10 ? setPosition(navbarScrollStyle) : setPosition({ position: 'relative' })
     }
   }
   return (

@@ -17,6 +17,7 @@ import getTranslation from '../utils/Translations'
 const Map = () => {
   const [currentPos, setCurrentPos] = useState({})
   const [checkClick, setClick] = useState(false)
+  const [checkCenter, setCenter] = useState(false)
   const [checkNextPage, setNextPage] = useState(false)
   const [libraries] = useState(['places', 'geometry'])
   const [cookies] = useCookies(['language'])
@@ -73,10 +74,10 @@ const Map = () => {
     height: '95vh',
     width: '100%'
   }
-  /* const defaultCenter = {
+  const defaultCenter = {
     lat: 60.21978930158246,
     lng: 24.757250617314764
-  } */
+  }
   const styles = {
     hide: [
       {
@@ -151,6 +152,7 @@ const Map = () => {
     }
     setInterval(function () {
       navigator.geolocation.getCurrentPosition(getPos)
+      setCenter(true)
     }, 3000)
   }, [])
   // Sets the map to location and gets nearbyRestaurants
@@ -284,7 +286,7 @@ const Map = () => {
           id='map'
           mapContainerStyle={mapStyles}
           zoom={13}
-          center={currentPos}
+          center={checkCenter === false ? defaultCenter : console.log('Dont center!')}
           options={{
             streetViewControl: false,
             clickableIcons: false,

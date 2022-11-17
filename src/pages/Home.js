@@ -2,6 +2,7 @@ import { React, useState } from 'react'
 import { Container, Box, Tabs, Tab, Fab } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
+import campusRestaurants from '../utils/CampusRestaurants'
 import TabPanel from '../components/TabPanel'
 import RestaurantSection from '../components/RestaurantSection'
 import getTranslation from '../utils/Translations'
@@ -15,35 +16,6 @@ const Home = () => {
   const [tabValue, setTabValue] = useState(0)
 
   const myLanguage = cookies.language ? cookies.language : 'en'
-
-  const campusRestaurants = [
-    {
-      id: '80',
-      name: `${getTranslation(myLanguage, 'restaurant')} Nokia One`,
-      type: 'sodexo',
-      address: 'Karakaari 7',
-      postalcode: '02610 Espoo',
-      lunchTime: '11:00-13.30'
-    },
-    {
-      id: '3202',
-      name: 'Dreams Cafe',
-      type: 'foodandco',
-      address: 'Karaportti 4',
-      postalcode: '02610 Espoo',
-      lunchTime: '10.45-13.30'
-    },
-    {
-
-      id: '3208',
-      name: 'Metropolia',
-      type: 'foodandco',
-      address: 'Karakaarenkuja 6',
-      postalcode: '02610 Espoo',
-      lunchTime: '10.45-13.30'
-    }
-
-  ]
 
   const handleTabsChange = (event, newValue) => {
     console.log(newValue)

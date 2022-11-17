@@ -59,10 +59,10 @@ const Map = () => {
     height: '95vh',
     width: '100%'
   }
-  const defaultCenter = {
+  /* const defaultCenter = {
     lat: 60.21978930158246,
     lng: 24.757250617314764
-  }
+  } */
   const styles = {
     hide: [
       {
@@ -135,8 +135,10 @@ const Map = () => {
         setCurrentPos(currentPosition)
       }
     }
-    navigator.geolocation.getCurrentPosition(getPos)
-  }, [navigator.geolocation])
+    setInterval(function () {
+      navigator.geolocation.getCurrentPosition(getPos)
+    }, 3000)
+  }, [])
   // Sets the map to location and gets nearbyRestaurants
   const panToLocation = () => {
     setClick(true)
@@ -268,7 +270,7 @@ const Map = () => {
           id='map'
           mapContainerStyle={mapStyles}
           zoom={13}
-          center={checkClick ? currentPos : defaultCenter}
+          center={currentPos}
           options={{
             streetViewControl: false,
             clickableIcons: false,

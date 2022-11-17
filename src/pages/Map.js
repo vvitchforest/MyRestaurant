@@ -153,7 +153,7 @@ const Map = () => {
     setInterval(function () {
       navigator.geolocation.getCurrentPosition(getPos)
       setCenter(true)
-    }, 3000)
+    }, 500)
   }, [])
   // Sets the map to location and gets nearbyRestaurants
   const panToLocation = () => {

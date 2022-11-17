@@ -316,10 +316,10 @@ const RestaurantCard = ({
                           '&:last-child td, &:last-child th': { border: 0 }
                         }}
                       >
-                        <TableCell sx={{ backgroundColor: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? 'grey' : 'white', color: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? 'white' : 'black' }}>
+                        <TableCell sx={{ backgroundColor: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? getDesignTokens(mode).palette.grey[700] : getDesignTokens(mode).palette.background.paper, color: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? getDesignTokens(mode).palette.grey[600] : getDesignTokens(mode).palette.text.primary }}>
                           {row.day}
                         </TableCell>
-                        <TableCell align='right' sx={{ backgroundColor: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? 'grey' : 'white', color: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? 'white' : 'black' }}>{row.hours}</TableCell>
+                        <TableCell align='right' sx={{ backgroundColor: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? getDesignTokens(mode).palette.grey[700] : getDesignTokens(mode).palette.background.paper, color: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? getDesignTokens(mode).palette.grey[600] : getDesignTokens(mode).palette.text.primary }}>{row.hours}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

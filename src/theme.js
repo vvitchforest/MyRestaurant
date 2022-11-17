@@ -49,6 +49,10 @@ export const getDesignTokens = (mode) => ({
             dark: red[600],
             contrastText: '#000000'
           },
+          grey: {
+            700: grey[600],
+            600: grey[200]
+          },
           divider: grey[300],
           background: {
             default: grey[100],
@@ -74,6 +78,9 @@ export const getDesignTokens = (mode) => ({
             main: red[400],
             dark: red[600],
             contrastText: '#fff'
+          },
+          grey: {
+            700: grey[700]
           },
           divider: grey[700],
           background: {

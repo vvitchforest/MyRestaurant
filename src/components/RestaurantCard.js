@@ -80,12 +80,11 @@ const RestaurantCard = ({
   const handleExpandClick = () => {
     setExpanded(!expanded)
   }
-  console.log('place', placeId)
   // Gets the opening hours by using specific restaurants id
   const getPlaceDetails = () => {
     const request = {
       placeId,
-      fields: ['opening_hours', 'utc_offset_minutes']
+      fields: ['opening_hours']
     }
     // Gets the Google PlacesService and sets it to invisible div element
     const service = new window.google.maps.places.PlacesService(
@@ -101,7 +100,6 @@ const RestaurantCard = ({
         if (results.opening_hours !== undefined) {
           setOpeningHours(results.opening_hours.weekday_text)
           createTableRows(openingHours)
-          console.log('open', results.opening_hours.isOpen())
         } else {
           setOpeningHours(['Not available'])
         }

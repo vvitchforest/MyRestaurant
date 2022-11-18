@@ -47,6 +47,7 @@ const RestaurantsList = () => {
   const [placesFiltered, setPlacesFiltered] = useState([])
   const dispatch = useDispatch()
   const restaurants = useSelector(state => state.userinterface.restaurants)
+  let i = 0
 
   /**
    * Loads the API with API key and libraries we want to use
@@ -80,7 +81,7 @@ const RestaurantsList = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '50',
+        radius: '60',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to invisible div element
@@ -119,10 +120,39 @@ const RestaurantsList = () => {
   // Adds the restaurants to array
   const createRestaurantList = (place) => {
     placesList.push(place)
-    setPlacesFinal(placesList)
+    getIsOpen(place.place_id)
     delete place.opening_hours
     delete place.geometry
-    dispatch(actions.setRestaurants(placesList))
+    console.log('place', place.place_id)
+  }
+  const getIsOpen = (placeId) => {
+    const request = {
+      placeId,
+      fields: ['opening_hours', 'utc_offset_minutes']
+    }
+    // Gets the Google PlacesService and sets it to invisible div element
+    const service = new window.google.maps.places.PlacesService(document.createElement('div'))
+    // Calls getDetails which is used when you want extra information from specific place
+    service.getDetails(request, callback)
+    // Makes the call to the service and if opening hours isOpen equals true,
+    // sets card to open
+    // if false or doesn't exist sets closed
+    function callback (results, status) {
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        if (results.opening_hours?.isOpen() === true) {
+          placesList[i].open = 'open'
+          setPlacesFinal(placesList)
+          i++
+        } else if (results.opening_hours?.isOpen() === false || results.opening_hours === undefined) {
+          placesList[i].open = 'closed'
+          setPlacesFinal(placesList)
+          i++
+        }
+      }
+    }
+  }
+  if (placesFinal.length > 0) {
+    dispatch(actions.setRestaurants(placesFinal))
   }
   // Styling for the filter element
   const getStyles = (type, restaurantTypes, theme) => {
@@ -195,8 +225,8 @@ const RestaurantsList = () => {
         </Select>
       </FormControl>
       </Box>
-      {(isLoaded && checkPagination && restaurantTypes.length === 0 && restaurants.length === 0) || (isLoaded && checkPagination === false && restaurantTypes.length === 0 && restaurants.length === 0)
-        ? placesFinal.map(function (results) {
+      {(isLoaded && checkPagination && restaurantTypes.length === 0 && restaurants.length > 0) || (isLoaded && checkPagination === false && restaurantTypes.length === 0 && restaurants.length > 0)
+        ? restaurants.map(function (results) {
           console.log('results: ', results)
           return (
           <RestaurantCard
@@ -207,7 +237,7 @@ const RestaurantsList = () => {
             icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
             rating={results.rating !== undefined ? results.rating : 0}
             userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
-            isOpen={results.opening_hours !== undefined && results.opening_hours.isOpen() !== false ? 'open' : 'closed'}
+            isOpen={results.open}
           />
           )
         })
@@ -217,7 +247,7 @@ const RestaurantsList = () => {
             'loadingrestaurants'
           )}<CircularProgress sx={{ marginTop: '50px' }}/>
           </Box>}
-          {(isLoaded && restaurantTypes.length > 0 && !restaurantTypes.includes('All') && restaurants.length === 0)
+          {(isLoaded && restaurantTypes.length > 0 && !restaurantTypes.includes('All') && restaurants.length > 0)
             ? placesFiltered.map(function (results) {
               console.log('results: ', results)
               return (
@@ -229,7 +259,7 @@ const RestaurantsList = () => {
               icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
               rating={results.rating !== undefined ? results.rating : 0}
               userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
-              isOpen={results.opening_hours !== undefined && results.opening_hours.isOpen() !== false ? 'open' : 'closed'}
+              isOpen={results.open}
             />
               )
             })
@@ -244,11 +274,11 @@ const RestaurantsList = () => {
               icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
               rating={results.rating !== undefined ? results.rating : 0}
               userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
-              isOpen={results.opening_hours !== undefined && results.opening_hours.isOpen() !== false ? 'open' : 'closed'}
+              isOpen={results.open}
             />
               )
             })}
-            {restaurants.length > 0 && !restaurantTypes.includes('All') && restaurantTypes.length === 0
+            {/* restaurants.length > 0 && !restaurantTypes.includes('All') && restaurantTypes.length === 0
               ? restaurants.map(function (results) {
                 console.log('Redux: ', results)
                 return (
@@ -260,7 +290,7 @@ const RestaurantsList = () => {
               icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
               rating={results.rating !== undefined ? results.rating : 0}
               userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
-              isOpen={results.opening_hours !== undefined && results.opening_hours.isOpen() !== false ? 'open' : 'closed'}
+              isOpen={results.open}
             />
                 )
               })
@@ -275,10 +305,25 @@ const RestaurantsList = () => {
               icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
               rating={results.rating !== undefined ? results.rating : 0}
               userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
-              isOpen={results.opening_hours !== undefined && results.opening_hours.isOpen() !== false ? 'open' : 'closed'}
+              isOpen={results.open}
             />
                 )
               })}
+              {restaurantTypes.includes('All') && placesFinal.map(function (results) {
+                console.log('results: ', results)
+                return (
+            <RestaurantCard
+              key={results.place_id}
+              placeId={results.place_id}
+              name={results.name}
+              address={results.vicinity}
+              icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
+              rating={results.rating !== undefined ? results.rating : 0}
+              userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
+              isOpen={results.open}
+            />
+                )
+              }) */}
     </Container>
   )
 }

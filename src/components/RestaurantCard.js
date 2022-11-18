@@ -151,18 +151,8 @@ const RestaurantCard = ({
     for (let i = 0; data.length > i; i++) {
       console.log('data[i]', data[i])
 
-      // checks opening hours for every day
-      let day = 'null'
-      if (data[i].includes('Monday')) day = getTranslation(language, 'monday')
-      else if (data[i].includes('Tuesday')) day = getTranslation(language, 'tuesday')
-      else if (data[i].includes('Wednesday')) day = getTranslation(language, 'wednesday')
-      else if (data[i].includes('Thursday')) day = getTranslation(language, 'thursday')
-      else if (data[i].includes('Friday')) day = getTranslation(language, 'friday')
-      else if (data[i].includes('Saturday')) day = getTranslation(language, 'saturday')
-      else if (data[i].includes('Sunday')) day = getTranslation(language, 'sunday')
-
       // gets characters of a string before character ':' and then translates it
-      // const day = getTranslation(language, data1.substring(0, data1.indexOf(':')).toLowerCase())
+      const day = data[i].substring(0, data[i].indexOf(':'))
       console.log('day:', day)
       // gets characters of a string after character ' '
       let hours = data[i].substring(data[i].indexOf(' ') + 1)

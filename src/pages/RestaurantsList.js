@@ -80,7 +80,7 @@ const RestaurantsList = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '300',
+        radius: '50',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to invisible div element
@@ -92,7 +92,7 @@ const RestaurantsList = () => {
       function callback (results, status, pagination) {
         console.log('wtf123')
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-          console.log('tekeekö')
+          console.log('tekeekö', results)
           for (let i = 0; i < results.length; i++) {
             createRestaurantList(results[i])
           }
@@ -120,6 +120,8 @@ const RestaurantsList = () => {
   const createRestaurantList = (place) => {
     placesList.push(place)
     setPlacesFinal(placesList)
+    delete place.opening_hours
+    delete place.geometry
     dispatch(actions.setRestaurants(placesList))
   }
   // Styling for the filter element

@@ -29,8 +29,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import PropTypes from 'prop-types'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
-import { useDispatch } from 'react-redux'
-import * as actions from '../store/actions/index'
 import CustomModal from './CustomModal'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import { ColorModeContext } from '../context/ColorModeContext'
@@ -77,21 +75,18 @@ const RestaurantCard = ({
   const [reviews, setReviews] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const toggleModal = () => setModalOpen(!modalOpen)
-  const dispatch = useDispatch()
   const { mode } = useContext(ColorModeContext)
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
-    dispatch(actions.setOpeningHours(!expanded))
-    dispatch(actions.setPlaceId(placeId))
   }
+  console.log('place', placeId)
   // Gets the opening hours by using specific restaurants id
   const getPlaceDetails = () => {
     const request = {
       placeId,
-      fields: ['opening_hours']
+      fields: ['opening_hours', 'utc_offset_minutes']
     }
-
     // Gets the Google PlacesService and sets it to invisible div element
     const service = new window.google.maps.places.PlacesService(
       document.createElement('div')
@@ -106,6 +101,7 @@ const RestaurantCard = ({
         if (results.opening_hours !== undefined) {
           setOpeningHours(results.opening_hours.weekday_text)
           createTableRows(openingHours)
+          console.log('open', results.opening_hours.isOpen())
         } else {
           setOpeningHours(['Not available'])
         }
@@ -115,7 +111,6 @@ const RestaurantCard = ({
   // Gets opening hours when collapse is expanded
   if (expanded === true) {
     getPlaceDetails()
-    dispatch(actions.setOpeningHours(false))
   }
   // Gets the reviews by using specific restaurants id
   const handleReviews = () => {

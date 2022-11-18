@@ -144,11 +144,13 @@ const RestaurantCard = ({
   const createTableRows = (data) => {
     const tableRowsTemp = []
     for (let i = 0; data.length > i; i++) {
-      const data1 = data[i]
+      console.log('data[i]', data[i])
+
       // gets characters of a string before character ':' and then translates it
-      const day = getTranslation(language, data1.substring(0, data1.indexOf(':')).toLowerCase())
+      const day = data[i].substring(0, data[i].indexOf(':'))
+      console.log('day:', day)
       // gets characters of a string after character ' '
-      let hours = data1.substring(data1.indexOf(' ') + 1)
+      let hours = data[i].substring(data[i].indexOf(' ') + 1)
       if (hours === 'Closed') {
         hours = getTranslation(language, 'closed')
       }

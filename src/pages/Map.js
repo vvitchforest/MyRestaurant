@@ -153,7 +153,7 @@ const Map = () => {
     setInterval(function () {
       navigator.geolocation.getCurrentPosition(getPos)
       setCenter(true)
-    }, 500)
+    }, 3000)
   }, [])
   // Sets the map to location and gets nearbyRestaurants
   const panToLocation = () => {
@@ -161,9 +161,10 @@ const Map = () => {
     console.log('Current', currentPos)
     if (currentPos !== {}) {
       map.setCenter(currentPos)
+      console.log('sending request')
       const request = {
         location: currentPos,
-        radius: '200',
+        radius: '100',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to map

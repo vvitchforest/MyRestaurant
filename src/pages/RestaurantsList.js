@@ -151,9 +151,9 @@ const RestaurantsList = () => {
       }
     }
   }
-  if (placesFinal.length > 0) {
+  useEffect(() => {
     dispatch(actions.setRestaurants(placesFinal))
-  }
+  }, [placesFinal.length])
   // Styling for the filter element
   const getStyles = (type, restaurantTypes, theme) => {
     return {
@@ -187,7 +187,7 @@ const RestaurantsList = () => {
   useEffect(() => {
     if (restaurantTypes.length > 0) {
       for (let i = 0; i < restaurantTypes.length; i++) {
-        filterRestaurants(placesFinal, restaurantTypes[i])
+        filterRestaurants(restaurants, restaurantTypes[i])
       }
     }
   }, [restaurantTypes])
@@ -225,7 +225,7 @@ const RestaurantsList = () => {
         </Select>
       </FormControl>
       </Box>
-      {(isLoaded && checkPagination && restaurantTypes.length === 0 && restaurants.length > 0) || (isLoaded && checkPagination === false && restaurantTypes.length === 0 && restaurants.length > 0)
+      {(isLoaded && checkPagination && restaurantTypes.length === 0 && restaurants.length > 0) || (isLoaded && checkPagination === false && restaurantTypes.length === 0 && restaurants.length > 0) || (restaurants.length > 0 && restaurantTypes.length === 0)
         ? restaurants.map(function (results) {
           console.log('results: ', results)
           return (
@@ -263,7 +263,7 @@ const RestaurantsList = () => {
             />
               )
             })
-            : restaurantTypes.includes('All') && placesFinal.map(function (results) {
+            : restaurantTypes.includes('All') && restaurants.map(function (results) {
               console.log('results: ', results)
               return (
             <RestaurantCard
@@ -278,8 +278,8 @@ const RestaurantsList = () => {
             />
               )
             })}
-            {/* restaurants.length > 0 && !restaurantTypes.includes('All') && restaurantTypes.length === 0
-              ? restaurants.map(function (results) {
+            {/* restaurants.length > 0 && !restaurantTypes.includes('All') && restaurantTypes.length === 0 &&
+              restaurants.map(function (results) {
                 console.log('Redux: ', results)
                 return (
             <RestaurantCard
@@ -293,8 +293,8 @@ const RestaurantsList = () => {
               isOpen={results.open}
             />
                 )
-              })
-              : restaurants.length > 0 && restaurantTypes.length > 0 && !restaurantTypes.includes('All') && placesFiltered.map(function (results) {
+              })}
+              {/*: restaurants.length > 0 && restaurantTypes.length > 0 && !restaurantTypes.includes('All') && placesFiltered.map(function (results) {
                 console.log('Redux filter: ', results)
                 return (
             <RestaurantCard

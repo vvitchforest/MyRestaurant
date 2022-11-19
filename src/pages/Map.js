@@ -140,6 +140,7 @@ const Map = () => {
   }, [])
 
   // Gets the users currentlocation and sets it to a variable
+  // Live updates currenLocation when it changes
   useEffect(() => {
     const getPos = (position) => {
       if (navigator.geolocation) {

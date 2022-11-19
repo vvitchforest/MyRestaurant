@@ -118,6 +118,7 @@ const RestaurantsList = () => {
     }
   }, 2000)
   // Adds the restaurants to array
+  // Deletes unused information
   const createRestaurantList = (place) => {
     placesList.push(place)
     getIsOpen(place.place_id)
@@ -135,7 +136,7 @@ const RestaurantsList = () => {
     // Calls getDetails which is used when you want extra information from specific place
     service.getDetails(request, callback)
     // Makes the call to the service and if opening hours isOpen equals true,
-    // sets card to open
+    // injects open value to restaurant object and sets it to open
     // if false or doesn't exist sets closed
     function callback (results, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
@@ -151,6 +152,7 @@ const RestaurantsList = () => {
       }
     }
   }
+  // Dispatches restaurant data to redux when data is fetched
   useEffect(() => {
     dispatch(actions.setRestaurants(placesFinal))
   }, [placesFinal.length])

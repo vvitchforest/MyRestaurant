@@ -29,8 +29,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import PropTypes from 'prop-types'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
-import { useDispatch } from 'react-redux'
-import * as actions from '../store/actions/index'
 import CustomModal from './CustomModal'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import { ColorModeContext } from '../context/ColorModeContext'
@@ -77,13 +75,10 @@ const RestaurantCard = ({
   const [reviews, setReviews] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const toggleModal = () => setModalOpen(!modalOpen)
-  const dispatch = useDispatch()
   const { mode } = useContext(ColorModeContext)
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
-    dispatch(actions.setOpeningHours(!expanded))
-    dispatch(actions.setPlaceId(placeId))
   }
   // Gets the opening hours by using specific restaurants id
   const getPlaceDetails = () => {
@@ -91,7 +86,6 @@ const RestaurantCard = ({
       placeId,
       fields: ['opening_hours']
     }
-
     // Gets the Google PlacesService and sets it to invisible div element
     const service = new window.google.maps.places.PlacesService(
       document.createElement('div')
@@ -115,7 +109,6 @@ const RestaurantCard = ({
   // Gets opening hours when collapse is expanded
   if (expanded === true) {
     getPlaceDetails()
-    dispatch(actions.setOpeningHours(false))
   }
   // Gets the reviews by using specific restaurants id
   const handleReviews = () => {
@@ -167,13 +160,13 @@ const RestaurantCard = ({
 
   const getCurrentDay = () => {
     const days = [
-      'sunday',
-      'monday',
-      'tuesday',
-      'wednesday',
-      'thursday',
-      'friday',
-      'saturday'
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
     ]
     const d = new Date()
     // getDay() returns a number, which represents the day
@@ -319,10 +312,10 @@ const RestaurantCard = ({
                           '&:last-child td, &:last-child th': { border: 0 }
                         }}
                       >
-                        <TableCell sx={{ backgroundColor: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? getDesignTokens(mode).palette.grey[700] : getDesignTokens(mode).palette.background.paper, color: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? getDesignTokens(mode).palette.grey[600] : getDesignTokens(mode).palette.text.primary }}>
+                        <TableCell sx={{ backgroundColor: getCurrentDay() === row.day ? getDesignTokens(mode).palette.grey[700] : getDesignTokens(mode).palette.background.paper, color: getCurrentDay() === row.day ? getDesignTokens(mode).palette.grey[600] : getDesignTokens(mode).palette.text.primary }}>
                           {row.day}
                         </TableCell>
-                        <TableCell align='right' sx={{ backgroundColor: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? getDesignTokens(mode).palette.grey[700] : getDesignTokens(mode).palette.background.paper, color: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? getDesignTokens(mode).palette.grey[600] : getDesignTokens(mode).palette.text.primary }}>{row.hours}</TableCell>
+                        <TableCell align='right' sx={{ backgroundColor: getCurrentDay() === row.day ? getDesignTokens(mode).palette.grey[700] : getDesignTokens(mode).palette.background.paper, color: getCurrentDay() === row.day ? getDesignTokens(mode).palette.grey[600] : getDesignTokens(mode).palette.text.primary }}>{row.hours}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

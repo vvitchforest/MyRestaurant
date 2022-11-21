@@ -74,11 +74,13 @@ const DirectionsModal = ({
           const startAddress = `${startAddressSplit[0]}`
           const endAddressSplit = (result.routes[0].legs[0].end_address).split(',')
           const endAddress = `${endAddressSplit[0]}`
+
           instructionsHeaderArray.push(
             `From ${startAddress} to ${endAddress}`, `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
           )
+
+          // Gets all instructions steps and puts them in an array
           for (let i = 0; i < steps.length; i++) {
-            console.log(`step ${i + 1}: ${steps[i].instructions}`)
             if (steps[i].instructions) {
               // removes HTML tags from instructions text
               const cleanText = steps[i].instructions.replace(
@@ -133,6 +135,7 @@ const DirectionsModal = ({
             `From ${startAddress} to ${endAddress}`, `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
           )
 
+          // Gets all instructions steps and puts them in an array
           for (let i = 0; i < steps.length; i++) {
             if (steps[i].travel_mode === 'TRANSIT') {
               const instruction = `step ${step}: Board bus ${steps[i].transit?.line.short_name}, departing at ${steps[i].transit?.departure_time?.text} towards ${steps[i].transit?.headsign}, arriving at ${steps[i].transit?.arrival_time?.text}. (${steps[i].transit?.num_stops} stops)`
@@ -193,6 +196,7 @@ const DirectionsModal = ({
             `From ${startAddress} to ${endAddress}`, `Distance: ${result.routes[0].legs[0].distance?.text}. Estimated time: ${result.routes[0].legs[0].duration?.text}`
           )
 
+          // Gets all instructions steps and puts them in an array
           for (let i = 0; i < steps.length; i++) {
             if (steps[i].travel_mode === 'DRIVING') {
               if (steps[i].instructions) {
@@ -208,7 +212,6 @@ const DirectionsModal = ({
             }
           }
           setInstructions(instructionsHeaderArray, instructionsArray)
-          console.log('result driving:', result)
           directionRenderer.setDirections(result)
         }
       })

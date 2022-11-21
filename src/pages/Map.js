@@ -51,7 +51,7 @@ const Map = () => {
   /**
    * Sets instructions for DirectionDrawer (function passed to DirectionDrawer component)
    * @param {array} instructionsHeader header information such as start and end address + distance and estimated time
-   * @param {array} instructions array of object containing lat, lng and step
+   * @param {array} instructions array of objects containing lat, lng and step
    */
   const setInstructions = (instructionsHeader, instructions) => {
     if (instructionsHeader && instructions) {
@@ -60,7 +60,7 @@ const Map = () => {
     }
   }
 
-  // Sets data for directions instructions info popup window and opens it
+  // Sets data for directions instructions info popup window and opens it (opened when clicking green dot on map)
   const setInfoPopup = (data) => {
     if (data) {
       setInfoPopupData(data)
@@ -140,6 +140,7 @@ const Map = () => {
   }, [])
 
   // Gets the users currentlocation and sets it to a variable
+  // Live updates currenLocation when it changes
   useEffect(() => {
     const getPos = (position) => {
       if (navigator.geolocation) {
@@ -153,7 +154,7 @@ const Map = () => {
     setInterval(function () {
       navigator.geolocation.getCurrentPosition(getPos)
       setCenter(true)
-    }, 3000)
+    }, 500)
   }, [])
   // Sets the map to location and gets nearbyRestaurants
   const panToLocation = () => {
@@ -161,7 +162,6 @@ const Map = () => {
     console.log('Current', currentPos)
     if (currentPos !== {}) {
       map.setCenter(currentPos)
-      console.log('sending request')
       const request = {
         location: currentPos,
         radius: '100',
@@ -377,7 +377,6 @@ const Map = () => {
                 lng: position.lng
               }}
               onClick={() => {
-                console.log(`marker step: ${position.step}`)
                 setInfoPopup(position)
               }}>
 

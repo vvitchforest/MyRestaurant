@@ -161,6 +161,7 @@ const RestaurantCard = ({
       }
       tableRowsTemp.push({ day, hours })
     }
+    console.log('tableRows', tableRows)
     setTableRows(tableRowsTemp)
   }
 

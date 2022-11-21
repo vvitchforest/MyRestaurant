@@ -84,7 +84,8 @@ const RestaurantCard = ({
   const getPlaceDetails = () => {
     const request = {
       placeId,
-      fields: ['opening_hours']
+      fields: ['opening_hours'],
+      language: 'en'
     }
     // Gets the Google PlacesService and sets it to invisible div element
     const service = new window.google.maps.places.PlacesService(
@@ -145,7 +146,7 @@ const RestaurantCard = ({
       console.log('data[i]', data[i])
 
       // gets characters of a string before character ':' and then translates it
-      const day = data[i].substring(0, data[i].indexOf(':'))
+      const day = getTranslation(language, (data[i].substring(0, data[i].indexOf(':'))).toLowerCase())
       console.log('day:', day)
       // gets characters of a string after character ' '
       let hours = data[i].substring(data[i].indexOf(' ') + 1)
@@ -160,13 +161,13 @@ const RestaurantCard = ({
 
   const getCurrentDay = () => {
     const days = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday'
+      'sunday',
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday'
     ]
     const d = new Date()
     // getDay() returns a number, which represents the day
@@ -312,10 +313,10 @@ const RestaurantCard = ({
                           '&:last-child td, &:last-child th': { border: 0 }
                         }}
                       >
-                        <TableCell sx={{ backgroundColor: getCurrentDay() === row.day ? getDesignTokens(mode).palette.grey[700] : getDesignTokens(mode).palette.background.paper, color: getCurrentDay() === row.day ? getDesignTokens(mode).palette.grey[600] : getDesignTokens(mode).palette.text.primary }}>
+                        <TableCell sx={{ backgroundColor: getTranslation(language, getCurrentDay()) === row.day ? getDesignTokens(mode).palette.grey[700] : getDesignTokens(mode).palette.background.paper, color: getTranslation(language, getCurrentDay()) === row.day ? getDesignTokens(mode).palette.grey[600] : getDesignTokens(mode).palette.text.primary }}>
                           {row.day}
                         </TableCell>
-                        <TableCell align='right' sx={{ backgroundColor: getCurrentDay() === row.day ? getDesignTokens(mode).palette.grey[700] : getDesignTokens(mode).palette.background.paper, color: getCurrentDay() === row.day ? getDesignTokens(mode).palette.grey[600] : getDesignTokens(mode).palette.text.primary }}>{row.hours}</TableCell>
+                        <TableCell align='right' sx={{ backgroundColor: getTranslation(language, getCurrentDay()) === row.day ? getDesignTokens(mode).palette.grey[700] : getDesignTokens(mode).palette.background.paper, color: getTranslation(language, getCurrentDay()) === row.day ? getDesignTokens(mode).palette.grey[600] : getDesignTokens(mode).palette.text.primary }}>{row.hours}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

@@ -29,8 +29,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import PropTypes from 'prop-types'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
-import { useDispatch } from 'react-redux'
-import * as actions from '../store/actions/index'
 import CustomModal from './CustomModal'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import { ColorModeContext } from '../context/ColorModeContext'
@@ -77,21 +75,18 @@ const RestaurantCard = ({
   const [reviews, setReviews] = useState([])
   const [modalOpen, setModalOpen] = useState(false)
   const toggleModal = () => setModalOpen(!modalOpen)
-  const dispatch = useDispatch()
   const { mode } = useContext(ColorModeContext)
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
-    dispatch(actions.setOpeningHours(!expanded))
-    dispatch(actions.setPlaceId(placeId))
   }
   // Gets the opening hours by using specific restaurants id
   const getPlaceDetails = () => {
     const request = {
       placeId,
-      fields: ['opening_hours']
+      fields: ['opening_hours'],
+      language: 'en'
     }
-
     // Gets the Google PlacesService and sets it to invisible div element
     const service = new window.google.maps.places.PlacesService(
       document.createElement('div')
@@ -115,7 +110,6 @@ const RestaurantCard = ({
   // Gets opening hours when collapse is expanded
   if (expanded === true) {
     getPlaceDetails()
-    dispatch(actions.setOpeningHours(false))
   }
   // Gets the reviews by using specific restaurants id
   const handleReviews = () => {
@@ -152,7 +146,7 @@ const RestaurantCard = ({
       console.log('data[i]', data[i])
 
       // gets characters of a string before character ':' and then translates it
-      const day = data[i].substring(0, data[i].indexOf(':'))
+      const day = getTranslation(language, (data[i].substring(0, data[i].indexOf(':'))).toLowerCase())
       console.log('day:', day)
       // gets characters of a string after character ' '
       let hours = data[i].substring(data[i].indexOf(' ') + 1)
@@ -161,6 +155,7 @@ const RestaurantCard = ({
       }
       tableRowsTemp.push({ day, hours })
     }
+    console.log('tableRows', tableRows)
     setTableRows(tableRowsTemp)
   }
 
@@ -318,10 +313,10 @@ const RestaurantCard = ({
                           '&:last-child td, &:last-child th': { border: 0 }
                         }}
                       >
-                        <TableCell sx={{ backgroundColor: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? getDesignTokens(mode).palette.grey[700] : getDesignTokens(mode).palette.background.paper, color: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? getDesignTokens(mode).palette.grey[600] : getDesignTokens(mode).palette.text.primary }}>
+                        <TableCell sx={{ backgroundColor: getTranslation(language, getCurrentDay()) === row.day ? getDesignTokens(mode).palette.grey[700] : getDesignTokens(mode).palette.background.paper, color: getTranslation(language, getCurrentDay()) === row.day ? getDesignTokens(mode).palette.grey[600] : getDesignTokens(mode).palette.text.primary }}>
                           {row.day}
                         </TableCell>
-                        <TableCell align='right' sx={{ backgroundColor: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? getDesignTokens(mode).palette.grey[700] : getDesignTokens(mode).palette.background.paper, color: getTranslation(language, getCurrentDay().toLowerCase()) === row.day ? getDesignTokens(mode).palette.grey[600] : getDesignTokens(mode).palette.text.primary }}>{row.hours}</TableCell>
+                        <TableCell align='right' sx={{ backgroundColor: getTranslation(language, getCurrentDay()) === row.day ? getDesignTokens(mode).palette.grey[700] : getDesignTokens(mode).palette.background.paper, color: getTranslation(language, getCurrentDay()) === row.day ? getDesignTokens(mode).palette.grey[600] : getDesignTokens(mode).palette.text.primary }}>{row.hours}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>

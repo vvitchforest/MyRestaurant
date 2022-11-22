@@ -1,6 +1,6 @@
 /**
  * @Author Oskar Wiiala
- * Component dor displaying directions instructions in Map.js
+ * Component for displaying directions instructions in Map.js
  */
 
 import React, { useState } from 'react'
@@ -44,7 +44,6 @@ const DirectionsDrawer = ({
   instructionsHeader,
   instructions
 }) => {
-  console.log('instructions', instructions)
   const [expanded, setExpanded] = useState(false)
 
   const handleExpandClick = () => {

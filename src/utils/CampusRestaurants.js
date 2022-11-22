@@ -1,7 +1,7 @@
 const campusRestaurants = [
   {
     id: '80',
-    name: 'Nokia One',
+    name: 'Sodexo Nokia One',
     type: 'sodexo',
     address: 'Karakaari 7',
     postalcode: '02610 Espoo',
@@ -17,7 +17,7 @@ const campusRestaurants = [
   },
   {
     id: '3208',
-    name: 'Metropolia',
+    name: 'Food & Co Metropolia',
     type: 'foodandco',
     address: 'Karakaarenkuja 6',
     postalcode: '02610 Espoo',

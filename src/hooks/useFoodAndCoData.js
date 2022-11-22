@@ -35,7 +35,6 @@ export const useFoodAndCoData = (restaurantId) => {
     getFoodAndCoMenu()
   }, [myLanguage])
 
-  console.log('foodandcomenu', menu)
   return { menu, loading, error }
 }
 

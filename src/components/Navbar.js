@@ -16,7 +16,6 @@ import CloseIcon from '@mui/icons-material/Close'
 import HomeIcon from '@mui/icons-material/Home'
 import RestaurantIcon from '@mui/icons-material/Restaurant'
 import MapIcon from '@mui/icons-material/Map'
-// import { styled } from '@mui/material/styles'
 import { useCookies } from 'react-cookie'
 import getTranslation from '../utils/Translations'
 import { Link } from 'react-router-dom'
@@ -76,12 +75,6 @@ const Navbar = () => {
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer)
   }
-
-  /* const ToggleButton = styled(MUIToggleButton)({
-    '&.Mui-selected, &.Mui-selected:hover': {
-      color: 'white'
-    }
-  }) */
 
   const handleChange = (event, newAlignment) => {
     if (newAlignment) {

@@ -31,7 +31,6 @@ export const useSodexoData = (restaurantId) => {
         const formattedMenuArray = formatMenu(menuFromAPI.courses)
         const menuObject = { ...formattedMenuArray }
         setMenu(menuObject)
-        console.log('sodexo', menuObject)
       } catch (error) {
         setError(true)
         console.log(error)

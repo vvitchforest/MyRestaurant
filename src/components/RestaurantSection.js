@@ -13,6 +13,7 @@ import { useSodexoData } from '../hooks/useSodexoData'
 import { useFoodAndCoData } from '../hooks/useFoodAndCoData'
 import { BiSad } from 'react-icons/bi'
 import { TbFaceIdError } from 'react-icons/tb'
+import { useOpeningTimes } from '../hooks/useOpeningTimes'
 
 /**
  * @Author Irina Konovalova
@@ -29,6 +30,7 @@ import { TbFaceIdError } from 'react-icons/tb'
 const RestaurantSection = ({ name, address, postalcode, lunchTime, restaurantType, id }) => {
   const [cookies] = useCookies(['language'])
   const { menu, loading, error } = restaurantType === 'sodexo' ? useSodexoData(id) : useFoodAndCoData(id)
+  const { openingHours, weeklyOpeningHours } = useOpeningTimes(name)
   const [filterDiet, setFilterDiet] = useState([])
 
   const myLanguage = cookies.language ? cookies.language : 'en'
@@ -89,7 +91,14 @@ const RestaurantSection = ({ name, address, postalcode, lunchTime, restaurantTyp
       <Card
         elevation={3}
         sx={{ width: { xs: '100%', md: '75%', lg: '60%' }, mb: 2, mt: 0.5 }}>
-        <RestaurantHeader name={name} address={address} postalcode={postalcode} lunchTime={lunchTime}/>
+        <RestaurantHeader
+          name={name}
+          address={address}
+          postalcode={postalcode}
+          openStatus={openingHours}
+          lunchTime={lunchTime}
+          weeklyOpeningTimes={weeklyOpeningHours}
+        />
         <Typography variant="subtitle2" fontSize="1.25rem" sx={{ pl: { xs: 2, sm: 5 } }}>
               {getTranslation(myLanguage, 'menu')}
         </Typography>

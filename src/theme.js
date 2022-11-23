@@ -45,7 +45,7 @@ export const getDesignTokens = (mode) => ({
             main: green[300]
           },
           error: {
-            main: red[300],
+            main: red[200],
             dark: red[600],
             contrastText: '#000000'
           },
@@ -193,7 +193,10 @@ export const getComponentThemes = (mode) => ({
                   borderRadius: '5rem',
                   '&.Mui-selected': {
                     backgroundColor: alpha(theme.palette.primary.main, 0.5),
-                    color: '#fff'
+                    color: '#fff',
+                    '&:hover': {
+                      backgroundColor: alpha(theme.palette.primary.main, 0.5)
+                    }
                   }
                 }
               })

@@ -60,6 +60,7 @@ export const useSodexoData = (restaurantId) => {
       })
     )
 
+    console.log(formattedMenuArray)
     return formattedMenuArray
   }
 

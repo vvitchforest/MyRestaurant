@@ -54,5 +54,6 @@ const formatMenu = (menu) => {
     diets: item.slice(item.indexOf('(') + 1, item.indexOf(')')).split(' ,')
   }))
 
+  console.log(formattedMenuArray)
   return formattedMenuArray
 }

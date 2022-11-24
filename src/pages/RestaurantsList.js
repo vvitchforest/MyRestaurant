@@ -162,6 +162,11 @@ const RestaurantsList = () => {
         dispatch(actions.setRestaurants(placesFinal))
         isDispatched(true)
       }, 6000)
+    } else if (isLoaded && placesFinal.length > 0 && checkPagination === true && isOpen) {
+      setTimeout(function () {
+        dispatch(actions.setRestaurants(placesFinal))
+        isDispatched(true)
+      }, 6000)
     }
   }, [placesFinal])
   // Styling for the filter element

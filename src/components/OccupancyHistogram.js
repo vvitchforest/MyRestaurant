@@ -80,8 +80,7 @@ const OccupancyHistogram = (args) => {
   // Customizes actual value and prediction value color for bar when it is at current hour
   const customizePoint = (arg) => {
     if (arg.data.time === currentTimeQuartered) {
-      console.log('arg:', arg)
-      // Series 1 pertains to prediction value, // Series 2 pertains to actual value
+      // Series 1 pertains to prediction value, Series 2 pertains to actual value
       if (arg.seriesName === 'Series 1') {
         return {
           color: getDesignTokens(mode).palette.error.main,

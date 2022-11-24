@@ -71,7 +71,7 @@ const Map = () => {
   const placesList = []
   const [placesFinal, setPlacesFinal] = useState([])
   const mapStyles = {
-    height: '95vh',
+    height: '93.2vh',
     width: '100%'
   }
   const defaultCenter = {
@@ -359,7 +359,10 @@ const Map = () => {
             })
             : console.log('nothing', 'nothing')}
              {<Marker
-              icon={{ url: require('../bluecircle.png') }}
+              icon={{
+                url: require('../current-location-icon-green3.png'),
+                scaledSize: new window.google.maps.Size(50, 40)
+              }}
               position={currentPos}
               zIndex={1}
             />}
@@ -369,7 +372,7 @@ const Map = () => {
               key={position.lat}
               clickable={true}
               icon={{
-                url: require('../map-step-icon.png'),
+                url: require('../map-step-icon-blue.png'),
                 scaledSize: new window.google.maps.Size(20, 20)
               }}
               position={{

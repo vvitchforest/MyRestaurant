@@ -62,9 +62,7 @@ const RestaurantsList = () => {
   // Gets the users currentlocation and sets it to a variable
   useEffect(() => {
     const getPos = (position) => {
-      console.log('yksikaksikolme')
       if (navigator.geolocation) {
-        console.log('yykaakoo')
         const currentPosition = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
@@ -77,7 +75,6 @@ const RestaurantsList = () => {
   }, [])
   // Gets retaurants near you based on current location and radius
   const getPlacesData = () => {
-    console.log('Current', currentPos)
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
@@ -91,9 +88,7 @@ const RestaurantsList = () => {
       // Makes the call to the service and goes through all of the results and calls createRestaurantList function
       // There can be multiple pages. If there is waits until all results are gotten before rendering
       function callback (results, status, pagination) {
-        console.log('wtf123')
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-          console.log('tekeekö', results)
           for (let i = 0; i < results.length; i++) {
             createRestaurantList(results[i])
           }
@@ -229,7 +224,6 @@ const RestaurantsList = () => {
       </Box>
       {(isLoaded && checkPagination && restaurantTypes.length === 0 && restaurants.length > 0) || (isLoaded && checkPagination === false && restaurantTypes.length === 0 && restaurants.length > 0) || (restaurants.length > 0 && restaurantTypes.length === 0)
         ? restaurants.map(function (results) {
-          console.log('results: ', results)
           return (
           <RestaurantCard
             key={results.place_id}
@@ -251,7 +245,6 @@ const RestaurantsList = () => {
           </Box>}
           {(isLoaded && restaurantTypes.length > 0 && !restaurantTypes.includes('All') && restaurants.length > 0)
             ? placesFiltered.map(function (results) {
-              console.log('results: ', results)
               return (
             <RestaurantCard
               key={results.place_id}
@@ -266,7 +259,6 @@ const RestaurantsList = () => {
               )
             })
             : restaurantTypes.includes('All') && restaurants.map(function (results) {
-              console.log('results: ', results)
               return (
             <RestaurantCard
               key={results.place_id}

@@ -45,6 +45,8 @@ const RestaurantsList = () => {
   const theme = useTheme()
   const [restaurantTypes, setRestaurantTypes] = useState([])
   const [placesFiltered, setPlacesFiltered] = useState([])
+  const [dispatched, isDispatched] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
   const dispatch = useDispatch()
   const restaurants = useSelector(state => state.userinterface.restaurants)
   let i = 0
@@ -81,7 +83,7 @@ const RestaurantsList = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '60',
+        radius: '250',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to invisible div element
@@ -144,18 +146,24 @@ const RestaurantsList = () => {
           placesList[i].open = 'open'
           setPlacesFinal(placesList)
           i++
-        } else if (results.opening_hours?.isOpen() === false || results.opening_hours === undefined) {
+        } else if (results.opening_hours?.isOpen() === false || results?.opening_hours === undefined) {
           placesList[i].open = 'closed'
           setPlacesFinal(placesList)
           i++
         }
       }
     }
+    setIsOpen(true)
   }
   // Dispatches restaurant data to redux when data is fetched
   useEffect(() => {
-    dispatch(actions.setRestaurants(placesFinal))
-  }, [placesFinal.length])
+    if (isLoaded && placesFinal.length > 0 && checkPagination === false && isOpen) {
+      setTimeout(function () {
+        dispatch(actions.setRestaurants(placesFinal))
+        isDispatched(true)
+      }, 6000)
+    }
+  }, [placesFinal])
   // Styling for the filter element
   const getStyles = (type, restaurantTypes, theme) => {
     return {
@@ -195,7 +203,7 @@ const RestaurantsList = () => {
   }, [restaurantTypes])
 
   return (
-    <Container sx={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+    <Container sx={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'column', mb: 5 }}>
       <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', pt: '12px', pb: '12px' }}>
           <FormControl sx={{ width: { xs: '90%', sm: '65%', md: '50%', lg: '40%' } }}>
         <InputLabel id="demo-multiple-chip-label">Select type</InputLabel>
@@ -227,7 +235,7 @@ const RestaurantsList = () => {
         </Select>
       </FormControl>
       </Box>
-      {(isLoaded && checkPagination && restaurantTypes.length === 0 && restaurants.length > 0) || (isLoaded && checkPagination === false && restaurantTypes.length === 0 && restaurants.length > 0) || (restaurants.length > 0 && restaurantTypes.length === 0)
+      {(isLoaded && checkPagination && restaurantTypes.length === 0 && restaurants.length > 0 && dispatched === true) || (isLoaded && checkPagination === false && restaurantTypes.length === 0 && restaurants.length > 0 && dispatched === true) || (restaurants.length > 0 && restaurantTypes.length === 0)
         ? restaurants.map(function (results) {
           console.log('results: ', results)
           return (

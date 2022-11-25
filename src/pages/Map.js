@@ -360,7 +360,7 @@ const Map = () => {
             : console.log('nothing', 'nothing')}
              {<Marker
               icon={{
-                url: require('../current-location-icon-green3.png'),
+                url: require('../current-location-icon-green4.png'),
                 scaledSize: new window.google.maps.Size(50, 40)
               }}
               position={currentPos}

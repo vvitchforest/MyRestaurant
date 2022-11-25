@@ -80,7 +80,7 @@ const RestaurantsList = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '50',
+        radius: '2000',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to invisible div element
@@ -137,31 +137,21 @@ const RestaurantsList = () => {
     // if false or doesn't exist sets closed
     function callback (results, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        if (results.opening_hours?.isOpen() === true) {
-          placesList[i].open = 'open'
-          setPlacesFinal(placesList)
-          i++
-        } else if (results.opening_hours?.isOpen() === false || results?.opening_hours === undefined) {
-          placesList[i].open = 'closed'
-          setPlacesFinal(placesList)
-          i++
-        }
+        placesList[i].open = results.opening_hours?.isOpen() ? 'open' : 'closed'
+        setPlacesFinal(placesList)
+        i++
       }
+      setIsOpen(true)
     }
-    setIsOpen(true)
   }
   // Dispatches restaurant data to redux when data is fetched
   useEffect(() => {
-    if (isLoaded && placesFinal.length > 0 && checkPagination === false && isOpen) {
+    if (isLoaded && placesFinal.length > 0 && (checkPagination === true || checkPagination === false) && isOpen) {
       setTimeout(function () {
+        console.log('am i here')
         dispatch(actions.setRestaurants(placesFinal))
         isDispatched(true)
-      }, 6000)
-    } else if (isLoaded && placesFinal.length > 0 && checkPagination === true && isOpen) {
-      setTimeout(function () {
-        dispatch(actions.setRestaurants(placesFinal))
-        isDispatched(true)
-      }, 6000)
+      }, checkPagination ? 6500 : 6000)
     }
   }, [placesFinal])
   // Styling for the filter element

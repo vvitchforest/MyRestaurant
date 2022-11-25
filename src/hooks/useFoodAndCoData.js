@@ -51,8 +51,9 @@ const formatMenu = (menu) => {
 
   const formattedMenuArray = flattenedMenuArray?.map((item) => ({
     dish: item.slice(0, item.indexOf(' (')),
-    diets: item.slice(item.indexOf('(') + 1, item.indexOf(')')).split(' ,')
+    diets: item.slice(item.indexOf('(') + 1, item.indexOf(')')).split(', ')
   }))
 
+  console.log(formattedMenuArray)
   return formattedMenuArray
 }

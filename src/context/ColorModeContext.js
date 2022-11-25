@@ -23,9 +23,6 @@ export const ColorModeContextProvider = ({ children }) => {
     localStorage.setItem(MODE, mode)
   }, [mode])
 
-  console.log('current mode?', mode)
-  console.log('system prefers dark mode?', systemPreferenceDark)
-
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () =>

@@ -98,7 +98,10 @@ const Navbar = () => {
   const fixNavbarPosition = () => {
     if (window !== undefined) {
       const windowHeight = window.scrollY
-      windowHeight > 10 ? setPosition(navbarScrollStyle) : setPosition({ position: 'relative' })
+      console.log('href:', window.location.href)
+      if (!window.location.href.includes('/map')) {
+        windowHeight > 10 ? setPosition(navbarScrollStyle) : setPosition({ position: 'relative' })
+      }
     }
   }
   return (

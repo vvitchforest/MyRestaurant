@@ -109,7 +109,7 @@ export const getComponentThemes = (mode) => ({
           MuiAppBar: {
             styleOverrides: {
               root: ({ theme }) => ({
-                backgroundColor: alpha(theme.palette.common.white, 0.5),
+                backgroundColor: alpha(theme.palette.common.white, 0.7),
                 backdropFilter: 'blur(15px)',
                 color: theme.palette.text.primary
               })
@@ -167,7 +167,7 @@ export const getComponentThemes = (mode) => ({
           MuiAppBar: {
             styleOverrides: {
               root: ({ theme }) => ({
-                backgroundColor: alpha(theme.palette.common.black, 0.5),
+                backgroundColor: alpha(theme.palette.common.black, 0.7),
                 backdropFilter: 'blur(15px)',
                 color: theme.palette.text.primary
               })

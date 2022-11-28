@@ -65,6 +65,29 @@ This project is a React application made during the Innovation Project course fo
 3. End location B
 4. Click to view all directions instructions in a drawer, including start and end addresses, estimated time and distance of travel
 
+## Installation and deploy to localhost:3000
+
+1. Download code to desired location
+2. Create .env file in top of file hierarchy (same level as src or public folders) with variables:
+```
+REACT_APP_GOOGLE_MAPS_API_KEY=<insert-your-google-maps-api-key-here>
+REACT_APP_REVERSE_PROXY_URL=<insert-your-reverse-proxy-api-key-here>
+```
+
+Heroku app proxy url is only required for Dreams Cafe, so it is not necessary for overall app functionality.
+
+Next, run
+```
+npm install
+npm start
+```
+
+Congratulations, your app should now be up and running in localhost:3000
+
+## Deploy to server
+
+Dunno how to do dis
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

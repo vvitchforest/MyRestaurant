@@ -1,10 +1,69 @@
-# Test image
+# Description
+
+This project is a React application made during the Innovation Project course for Nokia. It is meant to be used internally by Nokia employees. The functionalities of this application are to view the daily menu for Nokia One, Dreams Cafe and Metropolia campus restaurants. Occupancy data (currently faked) are also available for Nokia One. Informtaion about other restaurants within a 2 km radius is also one of the core functionalities. The app also supports directions and instructions to other restaurants.
+
+## Navigation
+
+![appbar](https://github.com/vvitchforest/MyRestaurant/blob/master/public/appbar.png)
+
 1. Button to home page
 2. Navigation
 3. Language selector
 4. Dark/light mode selector
-![appbar](https://github.com/vvitchforest/MyRestaurant/blob/master/public/appbar.png)
 
+## Home page
+
+![home](https://github.com/vvitchforest/MyRestaurant/blob/master/public/home.png)
+
+1. Tab bar selection of restaurant
+2. View opening hours by clicking dropdown
+3. Occupancy data for restaurant. Only for Nokia One
+4. Filter diets by selecting type in dropdown
+5. View information, such as allergies
+6. Button links to Restaurants-page
+
+## Nearby restaurants as a list
+
+![restaurants](https://github.com/vvitchforest/MyRestaurant/blob/master/public/restaurants.png)
+
+1. Filter restaurants by selecting type in dropdown
+2. Link to restaurant web-page if available
+3. Amount of ratings. Click to see 5 latest reviews.
+4. View opening hours by clicking dropdown
+
+## Nearby restaurants in map
+
+### Get nearby restaurants
+
+![map1](https://github.com/vvitchforest/MyRestaurant/blob/master/public/map1.png)
+
+1. User's current location
+2. Restaurant (click icon to view the information of that restaurant)
+3. Pan to user's current location and activate nearby restaurants search
+4. Show directions instructions drawer (displays directions instructions of last restaurant with which directions have been requested to)
+
+### View info about selected restaurant
+
+![map2](https://github.com/vvitchforest/MyRestaurant/blob/master/public/map2.png)
+
+1. Link to restaurant web-page if available
+2. Click to display "get directions" modal
+
+### Modal for handling directions fetch
+
+![map3](https://github.com/vvitchforest/MyRestaurant/blob/master/public/map3.png)
+
+1. Select desired method for getting directions by clicking any of the three icons
+2. Accept/cancel directions fetch
+
+### Map after directions fetch
+
+![map4](https://github.com/vvitchforest/MyRestaurant/blob/master/public/map4.png)
+
+1. User's current location (updates every 500 milliseconds) and starting location A
+2. Click blue circle icon to display a popup of a specific instruction step, such as "turn left" or "board bus"
+3. End location B
+4. Click to view all directions instructions in a drawer, including start and end addresses, estimated time and distance of travel
 
 # Getting Started with Create React App
 

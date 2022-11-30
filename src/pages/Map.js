@@ -159,12 +159,11 @@ const Map = () => {
   // Sets the map to location and gets nearbyRestaurants
   const panToLocation = () => {
     setClick(true)
-    console.log('Current', currentPos)
     if (currentPos !== {}) {
       map.setCenter(currentPos)
       const request = {
         location: currentPos,
-        radius: '100',
+        radius: '2000',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to map
@@ -201,7 +200,6 @@ const Map = () => {
    * @param {*} place an individual restaurant with all available data
    */
   const createMarker = (place) => {
-    console.log('Place', place)
     placesList.push(place)
     setPlacesFinal(placesList)
   }
@@ -213,7 +211,6 @@ const Map = () => {
   const setRestaurantInfo = (
     placeId
   ) => {
-    console.log('PlaceId', placeId)
     const request = {
       placeId,
       fields: ['name', 'rating', 'formatted_phone_number', 'formatted_address', 'opening_hours', 'utc_offset_minutes', 'geometry', 'website']
@@ -237,7 +234,6 @@ const Map = () => {
      */
     function callback (results, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        console.log('Res', results)
         setRestaurantName(results.name)
         setRestaurantAddress(results.formatted_address)
         setRestaurantRating(results.rating)

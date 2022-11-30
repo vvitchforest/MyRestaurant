@@ -108,7 +108,7 @@ const RestaurantCard = ({
     }
   }
   // Gets opening hours when collapse is expanded
-  if (expanded === true) {
+  if (expanded) {
     getPlaceDetails()
   }
   // Gets the reviews by using specific restaurants id
@@ -143,11 +143,8 @@ const RestaurantCard = ({
   const createTableRows = (data) => {
     const tableRowsTemp = []
     for (let i = 0; data.length > i; i++) {
-      console.log('data[i]', data[i])
-
       // gets characters of a string before character ':' and then translates it
       const day = getTranslation(language, (data[i].substring(0, data[i].indexOf(':'))).toLowerCase())
-      console.log('day:', day)
       // gets characters of a string after character ' '
       let hours = data[i].substring(data[i].indexOf(' ') + 1)
       if (hours === 'Closed') {
@@ -155,7 +152,6 @@ const RestaurantCard = ({
       }
       tableRowsTemp.push({ day, hours })
     }
-    console.log('tableRows', tableRows)
     setTableRows(tableRowsTemp)
   }
 

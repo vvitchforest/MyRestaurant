@@ -77,7 +77,7 @@ const OccupancyHistogram = (args) => {
     setOccupancyData(getOccupancyData(getCurrentDay()))
   }, [])
 
-  // Customizes actual value and prediction value color for bar when it is at current hour
+  // Customizes actual value color and prediction value color for bar when it is at current hour
   const customizePoint = (arg) => {
     if (arg.data.time === currentTimeQuartered) {
       // Series 1 pertains to prediction value, Series 2 pertains to actual value

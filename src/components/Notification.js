@@ -14,8 +14,8 @@ const Notification = ({ alert }) => {
   return (
     <Box mt={2}>
       <Alert
-        severity={alert.variant}
-        icon={alert.icon}
+        severity={alert?.variant}
+        icon={alert?.icon}
         sx={{
           p: 2,
           m: { xs: 2, sm: 5 },
@@ -25,7 +25,7 @@ const Notification = ({ alert }) => {
           '& svg': { fontSize: '2.25rem' }
         }}
       >
-        <Typography fontSize="1.25rem">{alert?.message}</Typography>
+        <Typography>{alert?.message}</Typography>
       </Alert>
     </Box>
   )

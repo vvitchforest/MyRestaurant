@@ -6,10 +6,12 @@ import {
   Grid,
   Typography,
   Divider,
-  IconButton
+  IconButton,
+  Alert
 } from '@mui/material'
 import InfoIcon from '@mui/icons-material/Info'
 import CustomModal from '../components/CustomModal'
+// import Notification from '../components/Notification'
 import { useCookies } from 'react-cookie'
 
 /**
@@ -34,11 +36,12 @@ const RestaurantMenuItem = ({
 }) => {
   const [cookies] = useCookies(['language'])
   const [modalOpen, setModalOpen] = useState(false)
+  const myLanguage = cookies.language ? cookies.language : 'en'
   const toggleModal = () => setModalOpen(!modalOpen)
 
   return (
     <>
-      <ListItem sx={{ pl: { xs: 2, sm: 5 } }}>
+      <ListItem sx={{ px: { xs: 2, sm: 5 } }}>
         <Box sx={{ width: '100%' }}>
           <Grid container sx={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Grid item xs>
@@ -62,7 +65,6 @@ const RestaurantMenuItem = ({
               </Typography>
             </Grid>
           </Grid>
-
           <Grid
             container
             sx={{ display: 'flex', justifyContent: 'space-between' }}
@@ -90,16 +92,21 @@ const RestaurantMenuItem = ({
                 </IconButton>
               )}
             </Grid>
+            <Grid item xs={12}>
+              <Divider sx={{ mt: { xs: 0.5, sm: 1 } }}/>
+            </Grid>
           </Grid>
         </Box>
       </ListItem>
-      <Divider sx={{ ml: { xs: 2, sm: 5 }, mr: 2 }}/>
       <CustomModal
         open={modalOpen}
         handleClose={() => setModalOpen(false)}
-        title={cookies.language === 'en' ? 'Allergies' : 'Allergiat'}
+        title={myLanguage === 'en' ? 'Allergies' : 'Allergiat'}
       >
-        <Typography>{dietInfo}</Typography>
+      {dietInfo
+        ? <Typography>{dietInfo}</Typography>
+        : <Alert severity='info'>{myLanguage === 'en' ? 'No allergies information to show.' : 'Ei näytettäviä allergiatietoja.'}</Alert>
+      }
       </CustomModal>
     </>
   )

@@ -13,7 +13,6 @@ export const useFoodAndCoData = (restaurantId) => {
   const [menu, setMenu] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
-
   const [cookies] = useCookies(['language'])
 
   const myLanguage = cookies.language ? cookies.language : 'en'
@@ -50,10 +49,9 @@ const formatMenu = (menu) => {
     SetMenuItem => SetMenuItem.Components).flat()
 
   const formattedMenuArray = flattenedMenuArray?.map((item) => ({
-    dish: item.slice(0, item.indexOf(' (')),
-    diets: item.slice(item.indexOf('(') + 1, item.indexOf(')')).split(', ')
+    dish: item?.slice(0, item?.indexOf(' (')),
+    diets: item?.slice(item?.indexOf('(') + 1, item?.indexOf(')')).split(', ')
   }))
 
-  console.log(formattedMenuArray)
   return formattedMenuArray
 }

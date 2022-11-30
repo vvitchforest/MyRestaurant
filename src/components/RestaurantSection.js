@@ -21,13 +21,14 @@ import { useOpeningTimes } from '../hooks/useOpeningTimes'
  * @param {string} name name of the campus restaurant
  * @param {string} address address of the campus restaurant
  * @param {string} postalcode postal code of the restaurant
+ * @param {any} logo restaurant logo either sodexo or foodandco
  * @param {string} lunchTime lunch time at the restaurant
  * @param {string} restaurantType whether a restaurant is of type sodexo or foodandco
  * @param {string} id id of the restaurant
  * @returns section displaying restaurant info, menu and menu filter (& possible notifications)
  */
 
-const RestaurantSection = ({ name, address, postalcode, lunchTime, restaurantType, id }) => {
+const RestaurantSection = ({ name, address, postalcode, logo, lunchTime, restaurantType, id }) => {
   const [cookies] = useCookies(['language'])
   const { menu, loading, error } = restaurantType === 'sodexo' ? useSodexoData(id) : useFoodAndCoData(id)
   const { openingHours, weeklyOpeningHours } = useOpeningTimes(name)
@@ -87,14 +88,15 @@ const RestaurantSection = ({ name, address, postalcode, lunchTime, restaurantTyp
   }
 
   return (
-    <Box display="flex" justifyContent="center" sx={ { pb: 6 }}>
+    <Box display="flex" justifyContent="center" sx={ { pb: { xs: 2, sm: 4 } }}>
       <Card
         elevation={3}
-        sx={{ width: { xs: '100%', md: '75%', lg: '60%' }, mb: 2, mt: 0.5 }}>
+        sx={{ width: { xs: '100%', md: '75%', lg: '60%' }, mt: 0.5 }}>
         <RestaurantHeader
           name={name}
           address={address}
           postalcode={postalcode}
+          logo={logo}
           openStatus={openingHours}
           lunchTime={lunchTime}
           weeklyOpeningTimes={weeklyOpeningHours}
@@ -115,6 +117,7 @@ RestaurantSection.propTypes = {
   name: PropTypes.string,
   address: PropTypes.string,
   postalcode: PropTypes.string,
+  logo: PropTypes.any,
   lunchTime: PropTypes.string,
   restaurantType: PropTypes.string,
   id: PropTypes.string

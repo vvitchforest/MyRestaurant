@@ -36,8 +36,8 @@ const RestaurantMenu = ({ menu, restaurantType }) => {
         {Object.values(menu).map((item, index) => (
           <RestaurantMenuItem
             key={index}
-            menuItem={item.dish}
-            dietCodes={item.diets}
+            menuItem={item?.dish}
+            dietCodes={item?.diets}
         />
         ))}
       </List>

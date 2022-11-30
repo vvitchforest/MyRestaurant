@@ -53,14 +53,13 @@ export const useSodexoData = (restaurantId) => {
     const formattedMenuArray = Object.values(menu).map(menuItem =>
       ({
         dish: cookies.language === 'en' ? menuItem?.title_en : menuItem?.title_fi,
-        diets: menuItem?.recipes?.hideAll?.dietcodes.split(', '),
+        diets: menuItem?.recipes?.hideAll?.dietcodes?.split(', '),
         title: menuItem?.category,
         price: menuItem?.price,
         allergens: menuItem?.additionalDietInfo?.allergens
       })
     )
 
-    console.log(formattedMenuArray)
     return formattedMenuArray
   }
 

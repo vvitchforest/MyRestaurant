@@ -7,14 +7,13 @@ import RestaurantsList from './pages/RestaurantsList'
 import Map from './pages/Map'
 
 function App () {
-  console.log('appi')
   return (
     <Router>
       <Navbar />
       <Routes>
         <Route path="/restaurants" element={<RestaurantsList />} />
         <Route path="/map" element={<Map/>} />
-        <Route path="/" element={<Home />} />
+        <Route path="/" exact element={<Home />} />
       </Routes>
     </Router>
   )

@@ -11,6 +11,7 @@ export const ColorModeContext = createContext({
 })
 
 /**
+ * @Author Irina Konovalova
  * @param {any} children
  * @returns color mode context provider
  */

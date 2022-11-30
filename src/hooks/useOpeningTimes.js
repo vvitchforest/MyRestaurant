@@ -3,9 +3,9 @@ import { useJsApiLoader } from '@react-google-maps/api'
 import { useCookies } from 'react-cookie'
 
 /**
- * A custom hook for fetching data from Google Places API
+ * A custom hook for fetching (opening times) data from Google Places API
  * @Author Irina Konovalova
- * @param {string} restaurantName
+ * @param {string} restaurantName name of the restaurant for API query
  * @returns states reflecting opening status and opening hours of a restaurant
  */
 
@@ -45,7 +45,11 @@ export const useOpeningTimes = (restaurantName) => {
           service.getDetails(getDetailsQuery, (results, status) => {
             if (status === window.google.maps.places.PlacesServiceStatus.OK) {
               setOpeningHours(results?.opening_hours?.isOpen())
-              setWeeklyOpeningHours(results?.opening_hours?.weekday_text)
+              const formattedOpeningTimes = results?.opening_hours?.weekday_text?.map((item) => ({
+                dayOfTheWeek: item?.substring(0, item?.indexOf(':')),
+                timeOpen: item?.substring(item?.indexOf(' ') + 1)
+              }))
+              setWeeklyOpeningHours(formattedOpeningTimes)
             }
           })
         }

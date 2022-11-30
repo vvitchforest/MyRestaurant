@@ -39,7 +39,8 @@ export const getDesignTokens = (mode) => ({
             contrastText: '#fff'
           },
           info: {
-            main: indigo.A200
+            main: indigo.A200,
+            contrastText: '#fff'
           },
           success: {
             main: green[300]
@@ -69,7 +70,8 @@ export const getDesignTokens = (mode) => ({
             main: indigo.A100
           },
           info: {
-            main: indigo.A100
+            main: indigo.A100,
+            contrastText: '#fff'
           },
           success: {
             main: green[600]
@@ -134,7 +136,10 @@ export const getComponentThemes = (mode) => ({
                   '&.Mui-selected': {
                     backgroundColor: theme.palette.primary.main,
                     color: theme.palette.primary.contrastText,
-                    border: `1px solid ${theme.palette.primary.main}`
+                    border: `1px solid ${theme.palette.primary.main}`,
+                    '&:hover': {
+                      backgroundColor: theme.palette.primary.main
+                    }
                   }
                 }
               })
@@ -161,6 +166,24 @@ export const getComponentThemes = (mode) => ({
                 }
               })
             }
+          },
+          MuiPaper: {
+            styleOverrides: {
+              root: {
+                '&.MuiCard-root': {
+                  borderRadius: '1rem'
+                }
+              }
+            }
+          },
+          MuiList: {
+            styleOverrides: {
+              root: {
+                '&>*:last-child .MuiDivider-root': {
+                  display: 'none'
+                }
+              }
+            }
           }
         }
       : {
@@ -179,12 +202,12 @@ export const getComponentThemes = (mode) => ({
                 '&.MuiListItem-root': {
                   '&.MuiListItem-button': {
                     '&.Mui-selected': {
-                      backgroundColor: alpha(theme.palette.primary.main, 0.5)
+                      backgroundColor: alpha(theme.palette.primary.main, 0.7)
                     }
                   }
                 },
                 '&.MuiFab-root': {
-                  backgroundColor: alpha(theme.palette.primary.main, 0.5),
+                  backgroundColor: alpha(theme.palette.primary.main, 0.7),
                   color: '#fff',
                   backdropFilter: 'blur(10px)',
                   letterSpacing: '2px'
@@ -192,10 +215,10 @@ export const getComponentThemes = (mode) => ({
                 '&.MuiToggleButton-root': {
                   borderRadius: '5rem',
                   '&.Mui-selected': {
-                    backgroundColor: alpha(theme.palette.primary.main, 0.5),
+                    backgroundColor: alpha(theme.palette.primary.main, 0.7),
                     color: '#fff',
                     '&:hover': {
-                      backgroundColor: alpha(theme.palette.primary.main, 0.5)
+                      backgroundColor: alpha(theme.palette.primary.main, 0.7)
                     }
                   }
                 }
@@ -234,9 +257,20 @@ export const getComponentThemes = (mode) => ({
                 '&.MuiAlert-root': {
                   backgroundColor: alpha(theme.palette.primary.main, 0.1),
                   backdropFilter: 'blur(15px)'
-
+                },
+                '&.MuiCard-root': {
+                  borderRadius: '1rem'
                 }
               })
+            }
+          },
+          MuiList: {
+            styleOverrides: {
+              root: {
+                '&>*:last-child .MuiDivider-root': {
+                  display: 'none'
+                }
+              }
             }
           }
         })

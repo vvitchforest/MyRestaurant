@@ -25,6 +25,7 @@ import * as actions from '../store/actions/index'
 import Brightness4Icon from '@mui/icons-material/Brightness4'
 import Brightness7Icon from '@mui/icons-material/Brightness7'
 import { ColorModeContext } from '../context/ColorModeContext'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 /**
  * @Author Irina Konovalova, Oskar Wiiala
@@ -42,6 +43,8 @@ const Navbar = () => {
 
   const dispatch = useDispatch()
   const { mode, toggleColorMode } = useContext(ColorModeContext)
+
+  const galaxyFold = useMediaQuery('(max-width:340px)')
 
   const navbarScrollStyle = {
     position: 'fixed',
@@ -126,8 +129,9 @@ const Navbar = () => {
           <Typography
             color="primary"
             fontWeight='bold'
-            variant='h6'
-            sx={{ textDecoration: 'none' }}
+            variant='subtitle2'
+            sx={{ textDecoration: 'none', ml: 1, fontSize: '1.25rem' }}
+            style={ galaxyFold ? { display: 'none' } : { display: 'flex' }}
             component={Link}
             to='/'
           >

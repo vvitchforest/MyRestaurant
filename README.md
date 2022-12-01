@@ -12,7 +12,7 @@ This project is a React application made during the Innovation Project course fo
 APIs:  
   Google Places API  
   Google Maps JavaScript API  
-  Google directions API  
+  Google Directions API  
   Sodexo API  
   Foodandco API  
    

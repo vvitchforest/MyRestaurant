@@ -64,9 +64,7 @@ const RestaurantsList = () => {
   // Gets the users currentlocation and sets it to a variable
   useEffect(() => {
     const getPos = (position) => {
-      console.log('yksikaksikolme')
       if (navigator.geolocation) {
-        console.log('yykaakoo')
         const currentPosition = {
           lat: position.coords.latitude,
           lng: position.coords.longitude
@@ -79,11 +77,10 @@ const RestaurantsList = () => {
   }, [])
   // Gets retaurants near you based on current location and radius
   const getPlacesData = () => {
-    console.log('Current', currentPos)
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '250',
+        radius: '500',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to invisible div element
@@ -93,20 +90,18 @@ const RestaurantsList = () => {
       // Makes the call to the service and goes through all of the results and calls createRestaurantList function
       // There can be multiple pages. If there is waits until all results are gotten before rendering
       function callback (results, status, pagination) {
-        console.log('wtf123')
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-          console.log('tekeekö', results)
           for (let i = 0; i < results.length; i++) {
-            createRestaurantList(results[i])
+            setTimeout(function () {
+              createRestaurantList(results[i])
+            }, 500 * i)
           }
           if (pagination && pagination.hasNextPage) {
-            console.log('paginaatio')
-            pagination.nextPage()
             setTimeout(function () {
+              pagination.nextPage()
               setCheckPagination(true)
-            }, 6000)
-          } else {
-            setCheckPagination(false)
+            }, 15000)
+            setCheckPagination(true)
           }
         }
       }
@@ -126,7 +121,7 @@ const RestaurantsList = () => {
     getIsOpen(place.place_id)
     delete place.opening_hours
     delete place.geometry
-    console.log('place', place.place_id)
+    delete place.permanently_closed
   }
   const getIsOpen = (placeId) => {
     const request = {
@@ -142,18 +137,15 @@ const RestaurantsList = () => {
     // if false or doesn't exist sets closed
     function callback (results, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        if (results.opening_hours?.isOpen() === true) {
-          placesList[i].open = 'open'
-          setPlacesFinal(placesList)
-          i++
-        } else if (results.opening_hours?.isOpen() === false || results?.opening_hours === undefined) {
-          placesList[i].open = 'closed'
-          setPlacesFinal(placesList)
-          i++
-        }
+        placesList[i].open = results.opening_hours?.isOpen() ? 'open' : 'closed'
+        setPlacesFinal(placesList)
+        console.log('i', i)
+        i++
+      } else {
+        console.log('Not ok', 'Not ok')
       }
+      setIsOpen(true)
     }
-    setIsOpen(true)
   }
   // Dispatches restaurant data to redux when data is fetched
   useEffect(() => {
@@ -161,12 +153,12 @@ const RestaurantsList = () => {
       setTimeout(function () {
         dispatch(actions.setRestaurants(placesFinal))
         isDispatched(true)
-      }, 6000)
+      }, 10000)
     } else if (isLoaded && placesFinal.length > 0 && checkPagination === true && isOpen) {
       setTimeout(function () {
         dispatch(actions.setRestaurants(placesFinal))
         isDispatched(true)
-      }, 6000)
+      }, 45000)
     }
   }, [placesFinal])
   // Styling for the filter element
@@ -242,7 +234,6 @@ const RestaurantsList = () => {
       </Box>
       {(isLoaded && checkPagination && restaurantTypes.length === 0 && restaurants.length > 0 && dispatched === true) || (isLoaded && checkPagination === false && restaurantTypes.length === 0 && restaurants.length > 0 && dispatched === true) || (restaurants.length > 0 && restaurantTypes.length === 0)
         ? restaurants.map(function (results) {
-          console.log('results: ', results)
           return (
           <RestaurantCard
             key={results.place_id}
@@ -264,7 +255,6 @@ const RestaurantsList = () => {
           </Box>}
           {(isLoaded && restaurantTypes.length > 0 && !restaurantTypes.includes('All') && restaurants.length > 0)
             ? placesFiltered.map(function (results) {
-              console.log('results: ', results)
               return (
             <RestaurantCard
               key={results.place_id}
@@ -279,7 +269,6 @@ const RestaurantsList = () => {
               )
             })
             : restaurantTypes.includes('All') && restaurants.map(function (results) {
-              console.log('results: ', results)
               return (
             <RestaurantCard
               key={results.place_id}
@@ -293,52 +282,6 @@ const RestaurantsList = () => {
             />
               )
             })}
-            {/* restaurants.length > 0 && !restaurantTypes.includes('All') && restaurantTypes.length === 0 &&
-              restaurants.map(function (results) {
-                console.log('Redux: ', results)
-                return (
-            <RestaurantCard
-              key={results.place_id}
-              placeId={results.place_id}
-              name={results.name}
-              address={results.vicinity}
-              icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
-              rating={results.rating !== undefined ? results.rating : 0}
-              userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
-              isOpen={results.open}
-            />
-                )
-              })}
-              {/*: restaurants.length > 0 && restaurantTypes.length > 0 && !restaurantTypes.includes('All') && placesFiltered.map(function (results) {
-                console.log('Redux filter: ', results)
-                return (
-            <RestaurantCard
-              key={results.place_id}
-              placeId={results.place_id}
-              name={results.name}
-              address={results.vicinity}
-              icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
-              rating={results.rating !== undefined ? results.rating : 0}
-              userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
-              isOpen={results.open}
-            />
-                )
-              })}
-              {restaurantTypes.includes('All') && placesFinal.map(function (results) {
-                console.log('results: ', results)
-                return (
-            <RestaurantCard
-              key={results.place_id}
-              placeId={results.place_id}
-              name={results.name}
-              address={results.vicinity}
-              icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
-              rating={results.rating !== undefined ? results.rating : 0}
-              userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
-              isOpen={results.open}
-            />
-                )
-              }) */}
     </Container>
   )
 }

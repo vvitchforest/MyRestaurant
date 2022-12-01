@@ -189,7 +189,7 @@ const RestaurantCard = ({
     function callback (results, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         if (results.website !== undefined) {
-          console.log(typeof results.website, results.website)
+          // does not work on safari :(
           window.open(results.website, '_blank', 'noopener,noreferrer')
         } else {
           window.alert('Not available')

@@ -66,7 +66,7 @@ APIs:
 
 ## Nearby restaurants as a list
 
-![restaurants](https://github.com/vvitchforest/MyRestaurant/blob/master/public/restaurants.png)
+![restaurants](https://github.com/vvitchforest/MyRestaurant/blob/master/public/restaurants-image.png)
 
 1. Filter restaurants by selecting type in dropdown
 2. Link to restaurant web-page if available

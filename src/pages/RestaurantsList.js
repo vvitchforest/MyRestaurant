@@ -139,10 +139,7 @@ const RestaurantsList = () => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         placesList[i].open = results.opening_hours?.isOpen() ? 'open' : 'closed'
         setPlacesFinal(placesList)
-        console.log('i', i)
         i++
-      } else {
-        console.log('Not ok', 'Not ok')
       }
       setIsOpen(true)
     }
@@ -151,7 +148,6 @@ const RestaurantsList = () => {
   useEffect(() => {
     if (isLoaded && placesFinal.length > 0 && (checkPagination === true || checkPagination === false) && isOpen) {
       setTimeout(function () {
-        console.log('am i here')
         dispatch(actions.setRestaurants(placesFinal))
         isDispatched(true)
       }, 10000)
@@ -187,7 +183,6 @@ const RestaurantsList = () => {
    * @param {*} type selected restaurant types from filter
    */
   const filterRestaurants = (arr, type) => {
-    console.log('restaurants', arr.filter((el) => el.types.includes(type.toLowerCase())))
     return setPlacesFiltered(arr.filter((el) => el.types.includes(type.toLowerCase())))
   }
   // Calls filterRestaurants if restaurantTypes changes
@@ -204,14 +199,14 @@ const RestaurantsList = () => {
     <Container sx={{ width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'column', mb: 5 }}>
       <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%', pt: '12px', pb: '12px' }}>
           <FormControl sx={{ width: { xs: '90%', sm: '65%', md: '50%', lg: '40%' } }}>
-        <InputLabel id="demo-multiple-chip-label">Select type</InputLabel>
+        <InputLabel id="demo-multiple-chip-label"> {language === 'en' ? 'Filter restaurants' : 'Suodata ravintoloita'}</InputLabel>
         <Select
           labelId="demo-multiple-chip-label"
           id="demo-multiple-chip"
           multiple
           value={restaurantTypes}
           onChange={handleChange}
-          input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+          input={<OutlinedInput id="select-multiple-chip" label={language === 'en' ? 'Filter restaurants' : 'Suodata ravintoloita'} />}
           renderValue={(selected) => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
               {selected.map((value) => (

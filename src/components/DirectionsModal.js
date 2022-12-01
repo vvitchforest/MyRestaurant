@@ -207,8 +207,6 @@ const DirectionsModal = ({
       setOpenRestaurantDrawer(false)
       handleClose()
       setOpenDirectionsDrawer(true)
-    } else {
-      console.log(type, ' not yet implemented')
     }
   }
 

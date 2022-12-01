@@ -13,7 +13,6 @@ const getMenuEn = async (date, id) => {
 
 const getMenuFi = async (date, id) => {
   const response = await axios.get(`https://www.sodexo.fi/ruokalistat/output/daily_json/${id}/${date}`)
-  console.log('response', response)
   return response.data
 }
 

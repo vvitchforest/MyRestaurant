@@ -3,7 +3,7 @@
  * Drawer for displaying a specific restaurant's info in Map.js
  */
 
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import {
   Box,
@@ -17,6 +17,8 @@ import getTranslation from '../utils/Translations'
 import DirectionsIcon from '@mui/icons-material/Directions'
 import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu'
 import CloseIcon from '@mui/icons-material/Close'
+import { ColorModeContext } from '../context/ColorModeContext'
+import { getDesignTokens } from '../theme'
 
 /**
  * @param {boolean} open is drawer open or not
@@ -45,13 +47,12 @@ const RestaurantDrawer = ({
   restaurantRating,
   distance
 }) => {
+  const { mode } = useContext(ColorModeContext)
   const restaurantOpenStyle = {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    ml: '12px',
-    mr: '12px',
-    backgroundColor: restaurantBusinessStatus === 'open' ? '#DAF7A6' : '#FF8266'
+    backgroundColor: restaurantBusinessStatus === 'open' ? getDesignTokens(mode).palette.success.main : getDesignTokens(mode).palette.error.main
   }
 
   return (
@@ -79,9 +80,7 @@ const RestaurantDrawer = ({
       >
         <Box
           sx={{
-            flex: 1,
-            pl: '12px',
-            pr: '12px'
+            flex: 1
           }}
         >
           <CardMedia

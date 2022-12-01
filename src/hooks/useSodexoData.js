@@ -33,7 +33,6 @@ export const useSodexoData = (restaurantId) => {
         setMenu(menuObject)
       } catch (error) {
         setError(true)
-        console.log(error)
       }
       setLoading(false)
     }

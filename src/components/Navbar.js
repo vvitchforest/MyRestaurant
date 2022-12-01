@@ -68,11 +68,10 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    console.log('navbar useEffect runs')
     if (!cookies.language) {
       changeLanguage('en')
       handleChange('en')
-    } else console.log('language already set')
+    }
   }, [])
 
   const handleDrawerToggle = () => {
@@ -101,7 +100,6 @@ const Navbar = () => {
   const fixNavbarPosition = () => {
     if (window !== undefined) {
       const windowHeight = window.scrollY
-      console.log('href:', window.location.href)
       if (!window.location.href.includes('/map')) {
         windowHeight > 10 ? setPosition(navbarScrollStyle) : setPosition({ position: 'relative' })
       }

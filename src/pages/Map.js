@@ -284,7 +284,7 @@ const Map = () => {
           id='map'
           mapContainerStyle={mapStyles}
           zoom={13}
-          center={checkCenter === false ? defaultCenter : console.log('Dont center!')}
+          center={checkCenter === false && defaultCenter}
           options={{
             streetViewControl: false,
             clickableIcons: false,
@@ -301,9 +301,33 @@ const Map = () => {
           >
             <MyLocationIcon />
           </IconButton>
-          {console.log(map)}
-          {checkClick
-            ? placesFinal.map(function (results) {
+          {checkClick && placesFinal.map(function (results) {
+            return (
+                <Marker
+                  clickable={true}
+                  icon={{
+                    url: require('../restaurant icon.png'),
+                    scaledSize: new window.google.maps.Size(50, 42)
+                  }}
+                  key={results.place_id}
+                  position={{
+                    lat: results.geometry.location.lat(),
+                    lng: results.geometry.location.lng()
+                  }}
+                  onClick={() => {
+                    setRestaurantIcon(results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png')
+                    setRestaurantInfo(
+                      results.place_id
+                    )
+                    handleRestaurantDrawerToggle()
+                  }}
+                >
+                </Marker>
+            )
+          })
+          }
+          {checkNextPage &&
+            placesFinal.map(function (results) {
               return (
                   <Marker
                     clickable={true}
@@ -327,33 +351,7 @@ const Map = () => {
                   </Marker>
               )
             })
-            : console.log('nothing', 'nothing')}
-          {checkNextPage
-            ? placesFinal.map(function (results) {
-              return (
-                  <Marker
-                    clickable={true}
-                    icon={{
-                      url: require('../restaurant icon.png'),
-                      scaledSize: new window.google.maps.Size(50, 42)
-                    }}
-                    key={results.place_id}
-                    position={{
-                      lat: results.geometry.location.lat(),
-                      lng: results.geometry.location.lng()
-                    }}
-                    onClick={() => {
-                      setRestaurantIcon(results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png')
-                      setRestaurantInfo(
-                        results.place_id
-                      )
-                      handleRestaurantDrawerToggle()
-                    }}
-                  >
-                  </Marker>
-              )
-            })
-            : console.log('nothing', 'nothing')}
+            }
              {<Marker
               icon={{
                 url: require('../current-location-icon-green4.png'),

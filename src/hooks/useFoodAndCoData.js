@@ -27,7 +27,6 @@ export const useFoodAndCoData = (restaurantId) => {
         setMenu(menuObject)
       } catch (error) {
         setError(true)
-        console.log(error.message)
       }
       setLoading(false)
     }

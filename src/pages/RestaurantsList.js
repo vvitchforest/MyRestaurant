@@ -39,7 +39,7 @@ const RestaurantsList = () => {
   const [currentPos, setCurrentPos] = useState({})
   const placesList = []
   const [checkIfPos, setCheckIfPos] = useState(false)
-  const [checkPagination, setCheckPagination] = useState()
+  const [checkPagination, setCheckPagination] = useState(false)
   const [placesFinal, setPlacesFinal] = useState([])
   const [libraries] = useState(['places', 'geometry'])
   const theme = useTheme()

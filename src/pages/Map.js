@@ -271,7 +271,7 @@ const Map = () => {
   const openWebsite = () => {
     if (restaurantWebsite !== undefined) {
       return (
-        window.open(restaurantWebsite)
+        window.open(restaurantWebsite, '_blank', 'noopener,noreferrer')
       )
     } else {
       window.alert('Not available')

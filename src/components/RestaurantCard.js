@@ -191,7 +191,8 @@ const RestaurantCard = ({
     function callback (results, status) {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         if (results.website !== undefined) {
-          window.open(results.website)
+          console.log(typeof results.website, results.website)
+          window.open(results.website, '_blank', 'noopener,noreferrer')
         } else {
           window.alert('Not available')
         }

@@ -4,6 +4,42 @@
 
 This project is a React application made during the Innovation Project course for Nokia. It is meant to be used internally by Nokia employees. The functionalities of this application are to view the daily menu for Nokia One, Dreams Cafe and Metropolia campus restaurants. Occupancy data (currently faked) are also available for Nokia One. Information about other restaurants within a 2 km radius is also one of the core functionalities. The app also supports directions and instructions to other restaurants with real-time location updates.
 
+### Technologies used
+APIs:
+  Google Places API
+  Google Maps JavaScript API
+  Google directions API
+  Sodexo API
+  Foodandco API
+  
+ NPM packages:
+  "@emotion/react": "^11.10.4",
+  "@emotion/styled": "^11.10.4",
+  "@mui/icons-material": "^5.10.6",
+  "@mui/material": "^5.10.6",
+  "@react-google-maps/api": "^2.13.1",
+  "@reduxjs/toolkit": "^1.8.6",
+  "@testing-library/jest-dom": "^5.16.5",
+  "@testing-library/react": "^13.4.0",
+  "@testing-library/user-event": "^13.5.0",
+  "axios": "^0.27.2",
+  "classnames": "^2.3.2", <----------- not used but did not uninstall due to fears of pipeline bugs
+  "dayjs": "^1.11.6",
+  "devextreme": "22.1.5",
+  "devextreme-react": "22.1.5",
+  "focus-trap-react": "^10.0.0", <----------- not used but did not uninstall due to fears of pipeline bugs
+  "moment": "^2.29.4", <----------- not used but did not uninstall due to fears of pipeline bugs
+  "react": "^18.2.0",
+  "react-cookie": "^4.1.1",
+  "react-dom": "^18.2.0",
+  "react-icons": "^4.6.0",
+  "react-redux": "^8.0.4",
+  "react-router-dom": "^6.4.1",
+  "react-scripts": "^5.0.1",
+  "redux": "^4.2.0",
+  "redux-thunk": "^2.4.1",
+  "web-vitals": "^2.1.4"
+
 ## Navigation
 
 ![appbar](https://github.com/vvitchforest/MyRestaurant/blob/master/public/appbar.png)

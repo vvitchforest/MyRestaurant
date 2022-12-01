@@ -80,7 +80,7 @@ const RestaurantsList = () => {
     if (currentPos !== {}) {
       const request = {
         location: currentPos,
-        radius: '2000',
+        radius: '500',
         type: ['restaurant']
       }
       // Gets the Google PlacesService and sets it to invisible div element
@@ -92,16 +92,16 @@ const RestaurantsList = () => {
       function callback (results, status, pagination) {
         if (status === window.google.maps.places.PlacesServiceStatus.OK) {
           for (let i = 0; i < results.length; i++) {
-            createRestaurantList(results[i])
+            setTimeout(function () {
+              createRestaurantList(results[i])
+            }, 500 * i)
           }
           if (pagination && pagination.hasNextPage) {
-            console.log('paginaatio')
-            pagination.nextPage()
             setTimeout(function () {
+              pagination.nextPage()
               setCheckPagination(true)
-            }, 6000)
-          } else {
-            setCheckPagination(false)
+            }, 15000)
+            setCheckPagination(true)
           }
         }
       }
@@ -121,7 +121,7 @@ const RestaurantsList = () => {
     getIsOpen(place.place_id)
     delete place.opening_hours
     delete place.geometry
-    console.log('place', place.place_id)
+    delete place.permanently_closed
   }
   const getIsOpen = (placeId) => {
     const request = {
@@ -139,7 +139,10 @@ const RestaurantsList = () => {
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         placesList[i].open = results.opening_hours?.isOpen() ? 'open' : 'closed'
         setPlacesFinal(placesList)
+        console.log('i', i)
         i++
+      } else {
+        console.log('Not ok', 'Not ok')
       }
       setIsOpen(true)
     }
@@ -151,7 +154,12 @@ const RestaurantsList = () => {
         console.log('am i here')
         dispatch(actions.setRestaurants(placesFinal))
         isDispatched(true)
-      }, checkPagination ? 6500 : 6000)
+      }, 10000)
+    } else if (isLoaded && placesFinal.length > 0 && checkPagination === true && isOpen) {
+      setTimeout(function () {
+        dispatch(actions.setRestaurants(placesFinal))
+        isDispatched(true)
+      }, 45000)
     }
   }, [placesFinal])
   // Styling for the filter element
@@ -275,52 +283,6 @@ const RestaurantsList = () => {
             />
               )
             })}
-            {/* restaurants.length > 0 && !restaurantTypes.includes('All') && restaurantTypes.length === 0 &&
-              restaurants.map(function (results) {
-                console.log('Redux: ', results)
-                return (
-            <RestaurantCard
-              key={results.place_id}
-              placeId={results.place_id}
-              name={results.name}
-              address={results.vicinity}
-              icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
-              rating={results.rating !== undefined ? results.rating : 0}
-              userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
-              isOpen={results.open}
-            />
-                )
-              })}
-              {/*: restaurants.length > 0 && restaurantTypes.length > 0 && !restaurantTypes.includes('All') && placesFiltered.map(function (results) {
-                console.log('Redux filter: ', results)
-                return (
-            <RestaurantCard
-              key={results.place_id}
-              placeId={results.place_id}
-              name={results.name}
-              address={results.vicinity}
-              icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
-              rating={results.rating !== undefined ? results.rating : 0}
-              userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
-              isOpen={results.open}
-            />
-                )
-              })}
-              {restaurantTypes.includes('All') && placesFinal.map(function (results) {
-                console.log('results: ', results)
-                return (
-            <RestaurantCard
-              key={results.place_id}
-              placeId={results.place_id}
-              name={results.name}
-              address={results.vicinity}
-              icon={results.photos !== undefined ? results.photos[0].getUrl() : 'https://i.ibb.co/M2NLtMx/image-not-available-wide3.png'}
-              rating={results.rating !== undefined ? results.rating : 0}
-              userRatingsTotal={results.user_ratings_total !== undefined ? results.user_ratings_total : 0}
-              isOpen={results.open}
-            />
-                )
-              }) */}
     </Container>
   )
 }

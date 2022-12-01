@@ -1,5 +1,5 @@
 # Link to app
-https://users.metropolia.fi/~irinakon/my-restaurant
+https://users.metropolia.fi/~irinakon/my-restaurant  
 ![qrcode](https://github.com/vvitchforest/MyRestaurant/blob/master/public/my-restaurant-qr.png)
 
 # Description

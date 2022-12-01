@@ -147,3 +147,12 @@ RewriteRule ^ index.html [L]
 ```
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+## Bugs
+
+1. Link to a specific restaurant's web page might not work on safari on mobile
+2. Your location might not be accurate on pc or laptop
+3. Your phone's dark mode setting might override the website's dark mode setting
+4. Switching to the inspect tool in map might cause the restaurant drawer to not show up
+5. React redux might not immediately work when recently deployed to a website, casuing restaurants in restaurants page to never load. Fix is to just wait a few minutes
+

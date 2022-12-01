@@ -174,6 +174,7 @@ const RestaurantCard = ({
 
   // Gets the website by using specific restaurants id
   const openWebsite = () => {
+    const windowReference = window.open()
     const request = {
       placeId,
       fields: ['website']
@@ -192,7 +193,8 @@ const RestaurantCard = ({
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
         if (results.website !== undefined) {
           console.log(typeof results.website, results.website)
-          window.open(results.website, '_blank', 'noopener,noreferrer')
+          // window.open(results.website, '_blank', 'noopener,noreferrer')
+          windowReference.location = results.website
         } else {
           window.alert('Not available')
         }

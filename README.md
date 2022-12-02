@@ -126,8 +126,13 @@ npm start
 
 Congratulations, your app should now be up and running in localhost:3000
 
-## link to folder structure and React Component diagram
-https://drive.google.com/file/d/1zUceDf1e7FIFU9rJZZGua-fycjaOx2tX/view?usp=share_link
+## link to folder structure, React Component diagram and data flow diagram
+
+Folder structure and react component diagram:  
+https://drive.google.com/file/d/1zUceDf1e7FIFU9rJZZGua-fycjaOx2tX/view?usp=share_link  
+  
+data flow diagram:  
+https://drive.google.com/file/d/1s7NwtZPjLemQzzSHHiIYTEXG42OEC1ub/view?usp=share_link  
 
 ## Deploy to server
 
